@@ -1,0 +1,24 @@
+body {
+	margin:0;
+}
+#channels{
+	float: left; 
+	width: 19%;
+	border: 1px solid; 
+}
+#users{ 
+	float: right; 
+	width: 19%; 
+	border: 1px solid;
+}
+#messages{
+	display: inline-block; 
+	width: 61.4%;
+	border-top: 1px solid;
+}
+#wrap {
+	height: 99%;
+}
+#wrap > div {
+	height: 100%;
+}

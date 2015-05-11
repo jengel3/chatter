@@ -1,0 +1,34 @@
+{
+  "name": "Chatter",
+  "version": "1.0.0",
+  "authors": [
+    "Jake"
+  ],
+  "description": "IRC client in NodeJS",
+  "main": "index.js",
+  "keywords": [
+    "irc",
+    "nodejs",
+    "react",
+    "irc",
+    "client",
+    "sockets"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.1.4",
+    "backbone": "~1.1.2",
+    "requirejs": "~2.1.17",
+    "backbone.marionette": "~2.4.1",
+    "jquery-popup-overlay": "~1.6.0",
+    "backbone.localStorage": "~1.1.16"
+  }
+}

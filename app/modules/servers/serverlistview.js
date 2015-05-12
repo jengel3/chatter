@@ -1,6 +1,6 @@
 define(["app", "backbone", "underscore"], function(Chatter, Backbone, _) {
     var ServerListView = Backbone.View.extend({
-        template: _.template('<div class="server" data-id=<%= id %>><%= title %></div>'),
+        template: _.template('<li class="server" data-id=<%= id %>><%= title %></li>'),
 
         events: {
             'click server': 'clicked'

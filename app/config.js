@@ -22,6 +22,9 @@ requirejs.config({
     },
     marionette: {
      exports: 'Marionette'
-   }
+    },
+    "jquery-popup-overlay": {
+      deps: "jquery"
+    }
  }
 });

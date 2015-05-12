@@ -67,11 +67,17 @@ gulp.task('uglify', ['rjs'], function() {
 });
 
 gulp.task('css', ['clean'], function () {
-   gulp.src(['./app/styles/*'])
+   gulp.src(['./app/styles/*.css'])
   .pipe(rename('app.css'))
   .pipe(minifyCSS())
   .pipe(gulp.dest('./dist/css/'));
 });
 
-gulp.task('compile', ['clean', 'rjs', 'css']);
+
+gulp.task('fonts', ['clean'], function () {
+   gulp.src(['./app/styles/fonts/**'], { "base" : "./app/styles/fonts/" })
+   .pipe(gulp.dest('./dist/css/fonts/'));
+});
+
+gulp.task('compile', ['clean', 'rjs', 'css', 'fonts']);
 gulp.task('default', ['compile', 'serve', 'watch']);

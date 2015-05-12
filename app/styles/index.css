@@ -1,24 +1,56 @@
-body {
-	margin:0;
+@font-face {
+  font-family: 'Lato';
+  font-weight: 400;
+  font-style: normal;
+  src: url('fonts/Lato-regular/Lato-regular.eot');
+  src: url('fonts/Lato-regular/Lato-regular.eot?#iefix') format('embedded-opentype'),
+       local('Lato Regular'),
+       local('Lato-regular'),
+       url('fonts/Lato-regular/Lato-regular.woff2') format('woff2'),
+       url('fonts/Lato-regular/Lato-regular.woff') format('woff'),
+       url('fonts/Lato-regular/Lato-regular.ttf') format('truetype'),
+       url('fonts/Lato-regular/Lato-regular.svg#Lato') format('svg');
 }
-#channels{
-	float: left; 
-	width: 19%;
-	border: 1px solid; 
+
+body { 
+  font-family: 'Lato', sans-serif;
+  color: #666;
 }
-#users{ 
-	float: right; 
-	width: 19%; 
-	border: 1px solid;
-}
-#messages{
-	display: inline-block; 
-	width: 61.4%;
-	border-top: 1px solid;
-}
+
 #wrap {
-	height: 99%;
+	padding: 5px;
+	width: 100%;
 }
-#wrap > div {
-	height: 100%;
+#channels {
+	width: 16%;
+	float: left;
+	padding: 0px 15px;
+}
+#content {
+	width: 54%; 
+	float: left;
+	padding: 5px 15px;
+	margin: 0px 5px 5px 5px;
+}
+
+#users {
+	width: 16%;
+	padding: 5px 15px;
+	float: left;
+}
+
+#channels {
+	background: #f8f8f8;
+}
+
+#users {
+	background: #f0efef;
+}
+
+#channels, #content, #users {
+	margin-bottom: 5px;
+}
+
+#channels, #content, #users {
+	border: solid 1px #ccc;
 }

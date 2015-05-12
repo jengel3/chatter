@@ -13,5 +13,7 @@ requirejs(["app", "router", "modules/servers/serverlist", "modules/servers/serve
 	Chatter.servers = servers;
 
 	var view = new ServerListView({collection: servers});
-	$('#channels').append(view.render().el);
+	$('#channels').append('<ul></ul>').append(view.render().el);
+
+	// $('#add_server').popup();
 });

@@ -1,42 +1,70 @@
 @font-face {
-  font-family: 'Lato';
-  font-weight: 400;
-  font-style: normal;
-  src: url('fonts/Lato-regular/Lato-regular.eot');
-  src: url('fonts/Lato-regular/Lato-regular.eot?#iefix') format('embedded-opentype'),
-       local('Lato Regular'),
-       local('Lato-regular'),
-       url('fonts/Lato-regular/Lato-regular.woff2') format('woff2'),
-       url('fonts/Lato-regular/Lato-regular.woff') format('woff'),
-       url('fonts/Lato-regular/Lato-regular.ttf') format('truetype'),
-       url('fonts/Lato-regular/Lato-regular.svg#Lato') format('svg');
+	font-family: 'Lato';
+	font-weight: 400;
+	font-style: normal;
+	src: url('fonts/Lato-regular/Lato-regular.eot');
+	src: url('fonts/Lato-regular/Lato-regular.eot?#iefix') format('embedded-opentype'),
+	local('Lato Regular'),
+	local('Lato-regular'),
+	url('fonts/Lato-regular/Lato-regular.woff2') format('woff2'),
+	url('fonts/Lato-regular/Lato-regular.woff') format('woff'),
+	url('fonts/Lato-regular/Lato-regular.ttf') format('truetype'),
+	url('fonts/Lato-regular/Lato-regular.svg#Lato') format('svg');
 }
 
 body { 
-  font-family: 'Lato', sans-serif;
-  color: #666;
+	font-family: 'Lato', sans-serif;
+	color: #666;
+}
+
+#header {
+	display: block;
+	position: absolute;
+	top:0px;
+	left:0px;
+	right:0px;
+	height:20px;
 }
 
 #wrap {
-	padding: 5px;
-	width: 100%;
+	display: block;
+	position: absolute;
+	top: 20px;
+	right:0px;
+	left:0px;
+	bottom:0px;
 }
 #channels {
-	width: 16%;
-	float: left;
-	padding: 0px 15px;
+	display: block;
+	position: absolute;
+	width: 250px;
+	top:0px;
+	bottom:0px;
+	left:0px;
 }
+
 #content {
-	width: 54%; 
-	float: left;
-	padding: 5px 15px;
-	margin: 0px 5px 5px 5px;
+	display: block;
+	position: absolute;
+	top:0px;
+	left:250px;
+	bottom:0px;
+	right:200px;
 }
 
 #users {
-	width: 16%;
-	padding: 5px 15px;
-	float: left;
+	display: block;
+	position: absolute;
+	width: 200px;
+	top:0px;
+	right:0px;
+	bottom:0px;
+}
+
+
+#content {
+	border-top: 1px solid #ccc;
+	border-bottom: 1px solid #ccc;
 }
 
 #channels {
@@ -47,10 +75,19 @@ body {
 	background: #f0efef;
 }
 
-#channels, #content, #users {
-	margin-bottom: 5px;
-}
 
-#channels, #content, #users {
+#channels, #users {
 	border: solid 1px #ccc;
 }
+
+ul {
+	list-style-type: none;
+}
+/*
+#channels > ul {
+	padding-left: 0px;
+}
+
+.server > ul {
+	padding-left: 10px;
+}*/

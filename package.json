@@ -3,10 +3,18 @@
   "version": "1.0.0",
   "description": "IRC client written in nw.js and Backbone",
   "main": "index.html",
-  "private": true,
+  "private": false,
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Jake0oo0/chatter"
+  },
+  "issues": {
+    "url": "https://github.com/Jake0oo0/chatter/issues"
+  },
   "window": {
     "title": "Chatter",
-    "toolbar": true,
+    "toolbar": false,
     "frame": true,
     "width": 900,
     "height": 600,

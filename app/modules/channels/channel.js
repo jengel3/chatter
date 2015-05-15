@@ -1,6 +1,6 @@
-define(["app", "backbone"], function(Chatter, Backbone) {
+define(["app", "backbone", "localstorage"], function(Chatter, Backbone, LocalStorage) {
 	var Channel = Backbone.Model.extend({
-		attributeId: "name",
+		attributeId: "id",
 		defaults: {
 			name: "",
 			topic: "",

@@ -15,7 +15,7 @@
   "window": {
     "title": "Chatter",
     "toolbar": false,
-    "frame": true,
+    "frame": false,
     "width": 900,
     "height": 600,
     "min_width": 750,

@@ -12,6 +12,20 @@
 	url('fonts/Lato-regular/Lato-regular.svg#Lato') format('svg');
 }
 
+@font-face {
+	font-family: 'Lato';
+	font-weight: 700;
+	font-style: normal;
+	src: url('fonts/Lato-700/Lato-700.eot');
+	src: url('fonts/Lato-700/Lato-700.eot?#iefix') format('embedded-opentype'),
+	local('Lato Bold'),
+	local('Lato-700'),
+	url('fonts/Lato-700/Lato-700.woff2') format('woff2'),
+	url('fonts/Lato-700/Lato-700.woff') format('woff'),
+	url('fonts/Lato-700/Lato-700.ttf') format('truetype'),
+	url('fonts/Lato-700/Lato-700.svg#Lato') format('svg');
+}
+
 body { 
 	font-family: 'Lato', sans-serif;
 	color: #666;
@@ -33,38 +47,35 @@ body {
 	right:0px;
 	left:0px;
 	bottom:0px;
+	border-top: 1px solid #ccc;
 }
+
 #channels {
 	display: block;
 	position: absolute;
-	width: 250px;
+	width: 175px;
 	top:0px;
 	bottom:0px;
 	left:0px;
+	z-index:10;
 }
 
 #content {
 	display: block;
 	position: absolute;
 	top:0px;
-	left:250px;
+	left:175px;
 	bottom:0px;
-	right:200px;
+	right:0;
 }
 
 #users {
-	display: block;
+	display: none;
 	position: absolute;
-	width: 200px;
+	width: 150px;
 	top:0px;
 	right:0px;
 	bottom:0px;
-}
-
-
-#content {
-	border-top: 1px solid #ccc;
-	border-bottom: 1px solid #ccc;
 }
 
 #channels {
@@ -75,19 +86,85 @@ body {
 	background: #f0efef;
 }
 
+#users, #channels {
+	border-right: solid 1px #ccc;
+	border-left: solid 1px #ccc;
 
-#channels, #users {
-	border: solid 1px #ccc;
 }
 
 ul {
 	list-style-type: none;
 }
-/*
+
 #channels > ul {
-	padding-left: 0px;
+	margin:0;
+	padding:0;
 }
 
-.server > ul {
-	padding-left: 10px;
-}*/
+.server ul {
+	padding-left: 25px;
+}
+
+.server span {
+	background: #d3d3d3;
+	color: #000;
+	display: block;
+	position: relative;
+	height: 40px;
+	line-height: 40px;
+	padding-left: 15px;
+	font-weight: 700;
+}
+
+.server ul li {
+	padding: 5px 0px 5px 0px;
+}
+
+#buttons {
+	position: absolute;
+	display: inline-block;
+	top:0;
+	right:0;
+	height: 20px;
+	max-height: 20px;
+	width:60px;
+	margin-right:3px;
+}
+
+#buttons div {
+	border-radius: 50%;
+	height:15px;
+	width:15px;
+	margin-top:2px;
+	margin-left:3px;
+	float:right;
+	-webkit-app-region: no-drag;
+}
+
+#buttons .close {
+	background-color: red;
+}
+
+#buttons .minimize {
+	background-color: darkgreen;
+}
+
+#buttons .maximize {
+	background-color: orange;
+}
+
+textarea.message {
+	position:absolute;
+	display:block;
+	bottom:0;
+	left:0;
+	right: 0;
+	resize:none;
+	border-bottom: none;
+	border-right:none;
+	border-left:none;
+	border-top:1px solid #ccc;
+	font-family: 'Lato';
+	font-size:16px;
+	box-sizing: border-box;
+}

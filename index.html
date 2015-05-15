@@ -5,30 +5,35 @@
 	<title>Chatter</title>
 
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
 </head>
 <body>
 	<div id="header" style="-webkit-app-region: drag">
+		<div id='buttons'>
+			<div title='Close' class='close'></div>
+			<div title='Minimize' class='minimize'></div>
+			<div title='Maximize' class='maximize'></div>
+		</div>
 	</div>
 	<div id="wrap">
 		<div id="channels">
 			<ul>
 <!-- 				<li class='server'>
-					Esper
+					<span class='server-title'>Esper</span>
 					<ul>
 						<li>Overcast</li>
 						<li>Node</li>
 					</ul>
 				</li>
 				<li class='server'>
-					Freenode
+					<span class='server-title'>Freenode</span>
 					<ul>
 						<li>Sponge</li>
 						<li>Pizza</li>
 					</ul>
 				</li>
 				<li class='server'>
-					Snoo
+					<span class='server-title'>Overcast</span>
 					<ul>
 						<li>Programming</li>
 						<li>AskReddit</li>
@@ -37,9 +42,14 @@
 			</ul>
 		</div>
 		<div id="content"></div>
-		<div id="users"></div>
 	</div>
 
+	<script type='text/template' id='channel-template'>
+		<div class='channel' data-id='<%= id %>'>
+			<textarea class='message'></textarea>
+			<div class='users'></div>
+		</div>
+	</script>
 	<link href='dist/css/app.css' rel='stylesheet' />
 	<!-- build:[src] /source.min.js -->
 	<script src="vendor/components/requirejs/require.js" data-main="app/config"></script>

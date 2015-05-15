@@ -13,19 +13,6 @@ define(["app", "backbone", "underscore", "modules/channels/channellist", "module
             return this;
         },
 
-        loadChannels: function() {
-            this.collection.each(function(server){
-                var list = new ChannelList();
-                list.fetch();
-                var results = new ChannelList(list.where({server: server.attributes.id}));
-                results.each(function(channel) {
-                    $('li.server[data-id='+ server.id + ']').find('ul').append('<li data-channel-id="' + channel.id + '">' + channel.get('name') + '</li>');
-                    var chView = new ChannelView({channel: channel});
-                    chView.render();
-                });
-            }, this);
-        },
-
         clicked: function(e) {
             e.preventDefault();
             e.stopPropagation();

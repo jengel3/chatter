@@ -46,7 +46,13 @@
 
 	<script type='text/template' id='channel-template'>
 		<div class='channel' data-id='<%= id %>'>
-			<textarea class='message'></textarea>
+			<div class='top-wrap'>
+				<div class='channel-name'><%= name %>: </div>
+				<div class='topic'><%= topic %></div>
+			</div>
+			<div class='input-wrap'>
+				<textarea class='message'></textarea>
+			</div>
 			<div class='users'></div>
 		</div>
 	</script>

@@ -6,6 +6,7 @@ requirejs(["app", "router", "modules/servers/serverlist", "modules/servers/serve
 		Chatter.start();
 
 		window.Chatter.Store = {};
+		window.Chatter.Active = {server: null, channel: null};
 
 		document.addEventListener('keydown', function(event){
 			if( event.keyCode == 123 ) { gui.Window.get().showDevTools(); }
@@ -25,24 +26,25 @@ requirejs(["app", "router", "modules/servers/serverlist", "modules/servers/serve
 		});
 
 		var servers = new ServerList();
-		var server = new Server({title: "Esper", host: "irc.esper.net", port: 6667, nick: "ChatterTest"})
+		var server = new Server({title: "Freenode", host: "chat.freenode.net", port: 6667, nick: "ChatterTest"})
 		servers.add(server);
 		server.save();
 
-		var channel = new Channel({name: "#help", server: server.id});
+		var channel = new Channel({name: "#chatterr", server: server.id});
+		var ch = new Channel({name: "#chatterrr", server: server.id});
 		var channels = new ChannelList();
 		channels.add(channel);
+		channels.add(ch);
 		channel.save();
+		ch.save();
 
 		var view = new ServerListView({collection: servers});
 		$('#channels ul').append(view.render().el);
-		view.loadChannels();
 
 		servers.each(function(server) {
 			console.log("Attempting connect")
 			if (server.get('connect')) {
 				server.connect();
-				
 			}
 		});
 	});

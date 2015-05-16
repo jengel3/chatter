@@ -24,8 +24,8 @@ define(["app", "backbone", "underscore"], function(Chatter, Backbone, _) {
 				if (message.trim() !== "") {
 					console.log("sending..")
 					client.say(channel.get('name'), message);
-					$(msg).val('');
 					$(msg).caretToStart();
+					$(msg).val('');
 				}
 			}
 		}

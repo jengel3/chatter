@@ -59,7 +59,7 @@ define(["app", "modules/channels/channellist", "modules/channels/channelview", "
 			console.log("Joined channel", ch)
 			var col = new ChannelList();
 			col.fetch();
-			var channel = col.findWhere({name: ch});
+			var channel = col.findWhere({name: ch, server: self.attrs.id});
 			if (channel) {
 				console.log("Already exists");
 			} else {

@@ -194,8 +194,24 @@ textarea.message {
 	border-right:none;
 	resize:none;
 	-webkit-flex: 1;
-    clear: both;
-    position: relative;
-    outline: none;
-    padding:5px;
+	clear: both;
+	position: relative;
+	outline: none;
+	padding:5px;
+}
+
+.messages {
+	position: absolute;
+	display: block;
+	top: 30px;
+	left: 0;
+	right: 150px;
+	bottom: 30px;
+}
+
+.message {
+	display: inline-block;
+	position: absolute;
+	left: 0;
+	padding-left: 20px;
 }

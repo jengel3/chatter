@@ -3,7 +3,8 @@ define(["app", "backbone", "underscore", "modules/channels/channellist", "module
         template: _.template('<li class="server" data-id=<%= id %>><span class="server-title"><%= title %></span><ul></ul></li>'),
 
         events: {
-            'click server': 'clicked'
+            'click .server': 'clicked',
+            'click .server ul li': 'channel'
         },
 
         render: function(){
@@ -18,8 +19,23 @@ define(["app", "backbone", "underscore", "modules/channels/channellist", "module
             e.stopPropagation();
             var id = $(e.currentTarget).attr('data-id');
             var server = this.collection.get(id);
-            console.log(server.get('id'))
-            console.log(server.get('title'));
+            return false;
+        },
+
+        channel: function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            var id = $(e.currentTarget).attr('data-channel-id');
+            var channels = new ChannelList();
+            channels.fetch();
+            var channel = channels.get(id);
+            console.log(channel.attributes.server);
+            this.collection.fetch();
+            var server = this.collection.get(channel.attributes.server);
+            Chatter.Active.channel = channel;
+            Chatter.Active.server = server;
+            $('#content div.channel-wrap:not([data-channel="' + id +'"])').hide();
+            $('#content div[data-channel="' + id +'"]').show();
             return false;
         }
     });

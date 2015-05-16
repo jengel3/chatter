@@ -16,7 +16,7 @@ var rm = require('gulp-rimraf');
 var NwBuilder = require('node-webkit-builder');
 
 // Build nwjs application
-gulp.task('build', ['clean'], function() {
+gulp.task('build', function() {
   var nw = new NwBuilder({
     appName: pkg.window.title,
     appVersion: pkg.version,
@@ -32,7 +32,7 @@ gulp.task('build', ['clean'], function() {
   return nw.build().catch(gutil.log);
 });
 
-gulp.task('serve', shell.task([
+gulp.task('serve', ['compile'], shell.task([
   'node node_modules/nw/bin/nw . --debug'
   ]));
 
@@ -41,11 +41,8 @@ gulp.task('watch', function () {
   gulp.watch(['app/modules/**/*', 'app/styles/*.css', 'app/*'], ['compile']);
 });
 
-gulp.task('clean', function() {
-  return gulp.src('dist/*').pipe(rm());
-});
 
-gulp.task('rjs', ['clean'], function() {
+gulp.task('rjs', function() {
    rjs({
     mainConfigFile: "app/config.js",
     include: ["main"],
@@ -66,7 +63,7 @@ gulp.task('uglify', ['rjs'], function() {
   .pipe(gulp.dest('dist/js/'));
 });
 
-gulp.task('css', ['clean'], function () {
+gulp.task('css', function () {
    gulp.src(['./app/styles/*.css'])
   .pipe(rename('app.css'))
   .pipe(minifyCSS())
@@ -74,10 +71,10 @@ gulp.task('css', ['clean'], function () {
 });
 
 
-gulp.task('fonts', ['clean'], function () {
+gulp.task('fonts', function () {
    gulp.src(['./app/styles/fonts/**'], { "base" : "./app/styles/fonts/" })
    .pipe(gulp.dest('./dist/css/fonts/'));
 });
 
-gulp.task('compile', ['clean', 'rjs', 'css', 'fonts']);
+gulp.task('compile', ['rjs', 'css']);
 gulp.task('default', ['compile', 'serve', 'watch']);

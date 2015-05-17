@@ -30,9 +30,20 @@
 		</div>
 		<div class='messages'></div>
 		<div class='input-wrap'>
-			<textarea class='message'></textarea>
+			<input class='message-input'></input>
 		</div>
-		<div class='users'></div>
+		<div class='users'><ul></ul></div>
+	</script>
+
+	<script type='text/template' id='server-template'>
+		<div class='top-wrap'>
+			<div class='channel-name'><%= title %></div>
+			<div class='topic'>(<%= host %>:<%= port %>)</div>
+		</div>
+		<div class='messages'></div>
+		<div class='input-wrap'>
+			<input class='message-input'></input>
+		</div>
 	</script>
 	<link href='dist/css/app.css' rel='stylesheet' />
 	<!-- build:[src] /source.min.js -->

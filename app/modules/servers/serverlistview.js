@@ -19,6 +19,9 @@ define(["app", "backbone", "underscore", "modules/channels/channellist", "module
             e.stopPropagation();
             var id = $(e.currentTarget).attr('data-id');
             var server = this.collection.get(id);
+            var active = Chatter.Active.server;
+            $('#content > div').hide();
+            $('#content > div[data-server="' + id +'"]').show();
             return false;
         },
 
@@ -29,15 +32,14 @@ define(["app", "backbone", "underscore", "modules/channels/channellist", "module
             var channels = new ChannelList();
             channels.fetch();
             var channel = channels.get(id);
-            console.log(channel.attributes.server);
             this.collection.fetch();
             var server = this.collection.get(channel.attributes.server);
             Chatter.Active.channel = channel;
             Chatter.Active.server = server;
-            $('#content div.channel-wrap:not([data-channel="' + id +'"])').hide();
+            $('#content > div').hide();
             $('#content div[data-channel="' + id +'"]').show();
             return false;
         }
     });
-    return ServerListView;
+return ServerListView;
 });

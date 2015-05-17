@@ -15,7 +15,7 @@ var glob = require('glob-array');
 var rm = require('gulp-rimraf');
 var NwBuilder = require('node-webkit-builder');
 
-// Build nwjs application
+// Build nwjs app
 gulp.task('build', function() {
   var nw = new NwBuilder({
     appName: pkg.window.title,

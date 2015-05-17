@@ -80,6 +80,7 @@ body {
 
 #channels {
 	background: #f8f8f8;
+	-webkit-user-select:none;
 }
 
 .users {
@@ -160,11 +161,19 @@ ul {
 	bottom:0px;
 	right:150px;
 	display: -webkit-flex;
+	border-top:1px solid #ccc;
 }
 
-textarea {
-	font-family: 'Lato';
-	font-size:16px;
+.server-wrap .input-wrap {
+	right: 0;
+}
+
+.server-wrap .top-wrap {
+	right:0;
+}
+
+.server-wrap .messages {
+	right:0;
 }
 
 .top-wrap {
@@ -188,30 +197,55 @@ textarea {
 	display: inline-block;
 }
 
-textarea.message {
-	border-bottom:none;
-	border-left:none;
-	border-right:none;
+input.message-input {
+	border: none;
 	resize:none;
 	-webkit-flex: 1;
 	clear: both;
 	position: relative;
 	outline: none;
 	padding:5px;
+	height:50px;
+	box-shadow:none;
+	font-size:1em;
+	box-sizing: border-box;
 }
 
 .messages {
-	position: absolute;
 	display: block;
 	top: 30px;
-	left: 0;
 	right: 150px;
-	bottom: 30px;
+	left:0;
+	bottom: 50px;
+	position: absolute;
+	overflow-x:hidden;
 }
 
 .message {
-	display: inline-block;
-	position: absolute;
-	left: 0;
+	display: block;
 	padding-left: 20px;
+	padding-right:20px;
+	position: relative;
+	word-wrap: break-word;
+	margin: 3px 0px 0 0;
+}
+
+.author {
+	font-weight: 700;
+}
+
+.rank.operator {
+	color: green;
+}
+
+.rank.voiced {
+	color: orange;
+}
+
+.users ul {
+	padding-left:5px;
+}
+
+.users .user {
+	margin: 3px 0 0 0;
 }

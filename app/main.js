@@ -59,6 +59,7 @@ requirejs(["app", "router", "modules/servers/serverlist", "modules/servers/serve
 				var client = Chatter.Store[key];
 				client.disconnect("Refreshing environment!", function() {
 					if (key === keys[keys.length - 1]) {
+						console.log("Disconnected a client.")
 						if (callback) callback();
 						if (close) win.close(true);
 					}

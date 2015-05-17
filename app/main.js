@@ -1,8 +1,8 @@
 requirejs(["app", "router", "modules/servers/serverlist", "modules/servers/server", 
 	"modules/servers/serverlistview", "modules/channels/channelview", 
-	"modules/channels/channellist", "modules/channels/channel", "jquery", "jquery.caret"], 
+	"modules/channels/channellist", "modules/channels/channel"], 
 	function(Chatter, Router, ServerList, Server, ServerListView, ChannelView, 
-		ChannelList, Channel, $, caret) {
+		ChannelList, Channel) {
 		var gui = require('nw.gui');
 		Chatter.router = new Router();
 

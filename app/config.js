@@ -7,8 +7,7 @@ requirejs.config({
 		"underscore": "../vendor/components/underscore/underscore",
 		"marionette": "../vendor/components/backbone.marionette/lib/backbone.marionette",
     "jquery-popup-overlay": "../vendor/components/jquery-popup-overlay/jquery.popupoverlay",
-    "localstorage": "../vendor/components/backbone.localStorage/backbone.localStorage",
-    "jquery.caret": "../vendor/jquery.caret"
+    "localstorage": "../vendor/components/backbone.localStorage/backbone.localStorage"
   },
   deps: ['main'],
   shim: {
@@ -26,9 +25,6 @@ requirejs.config({
     },
     "jquery-popup-overlay": {
       deps: "jquery"
-    },
-    "jquery.caret": {
-      deps: ["jquery"]
     }
  }
 });

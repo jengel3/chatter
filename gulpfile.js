@@ -16,20 +16,19 @@ var rm = require('gulp-rimraf');
 var NwBuilder = require('node-webkit-builder');
 
 // Build nwjs app
-gulp.task('build', function() {
+gulp.task('build', ['compile', 'fonts'], function() {
   var nw = new NwBuilder({
     appName: pkg.window.title,
     appVersion: pkg.version,
-    buildDir: 'dist',
-    files: ['package.json', 'src/**'],
-    macIcns: 'src/img/icon.icns',
-    platforms: ['win','osx'],
-    version: '0.10.1'
+    buildDir: 'build',
+    files: ['package.json', 'app/**', 'dist/**', 'vendor/components/**/*', 'index.html', 'node_modules/**/*'],
+    platforms: ['win64'],
+    version: '0.12.1'
   });
 
-  nw.on('log', gutil.log);
+  nw.on('log', console.log);
 
-  return nw.build().catch(gutil.log);
+  return nw.build().catch(console.log);
 });
 
 gulp.task('serve', ['compile'], shell.task([

@@ -3,3 +3,5 @@ vendor/components/
 dist/**/*
 *.log
 cache/
+build/**/*
+*.nw

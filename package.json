@@ -40,7 +40,8 @@
     "read-all-stream": "^2.1.2",
     "requirejs": "^2.1.17",
     "slate-irc": "^0.8.1",
-    "unique-stream": "^2.0.2"
+    "unique-stream": "^2.0.2",
+    "vinyl-fs": "^1.0.0"
   },
   "devDependencies": {
     "glob": "^5.0.5",

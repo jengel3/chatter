@@ -21,7 +21,12 @@ gulp.task('build', ['compile', 'fonts'], function() {
     appName: pkg.window.title,
     appVersion: pkg.version,
     buildDir: 'build',
-    files: ['package.json', 'app/**', 'dist/**', 'vendor/components/**/*', 'index.html', 'node_modules/**/*'],
+    files: ['package.json', 'app/**', 'dist/**', 'vendor/components/**/*', 'index.html', 
+    "node_modules/**", "!node_modules/gulp*/**", "!node_modules/bower/**", 
+    "!node_modules/duplexify/**", "!node_modules/node-webkit-builder/**", 
+    "!node_modules/browserify/**", "!node_modules/*glob*/**", 
+    "!node_modules/read-all-stream/**", "!node_modules/nw/nwjs/chatter*",
+    "!node_modules/unique-stream/**", "!node_modules/vinyl-fs/**", "!node_modules/rimraf/**", "!node_modules/nw/**"],
     platforms: ['win64'],
     version: '0.12.1'
   });

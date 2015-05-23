@@ -8,11 +8,9 @@
   "main": "index.js",
   "keywords": [
     "irc",
-    "nodejs",
-    "react",
-    "irc",
-    "client",
-    "sockets"
+    "backbone",
+    "nwjs",
+    "node-webkit"
   ],
   "license": "MIT",
   "private": true,

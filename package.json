@@ -29,7 +29,8 @@
   "keywords": [
     "irc",
     "nodejs",
-    "client"
+    "nw.js",
+    "backbone"
   ],
   "author": "Jake",
   "dependencies": {

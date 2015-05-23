@@ -48,15 +48,15 @@ requirejs(["app", "router", "modules/servers/serverlist", "modules/servers/serve
 			win.hide();
 		});
 
-    $('.maximize').click(function(e) {
-      if (Chatter.display === "maximized") {
-        Chatter.display = "normal";
-        win.unmaximize();
-      } else {
-        Chatter.display = "maximized";
-        win.maximize();
-      }
-    });
+		$('.maximize').click(function(e) {
+			if (Chatter.display === "maximized") {
+				Chatter.display = "normal";
+				win.unmaximize();
+			} else {
+				Chatter.display = "maximized";
+				win.maximize();
+			}
+		});
 
 		tray.on('click', function() {
 			if (Chatter.display === "minimized") {
@@ -68,8 +68,8 @@ requirejs(["app", "router", "modules/servers/serverlist", "modules/servers/serve
 			}
 		});
 
-    tray.tooltip = "Chatter";
-    tray.icon = "resources/tray.png";
+		tray.tooltip = "Chatter";
+		tray.icon = "resources/tray.png";
 
 		Chatter.Commands = Command;
 		Chatter.Commands.add = Command.add;
@@ -107,17 +107,17 @@ requirejs(["app", "router", "modules/servers/serverlist", "modules/servers/serve
 			win.showDevTools();
 		});
 
-    Chatter.Commands.add("topic", function(client, data, args) {
-      if (args.length === 0 || !Chatter.Active.channel) return;
-      var topic = args.join(' ');
-      client.send('topic', Chatter.Active.channel.get('name'), topic);
-    });
+		Chatter.Commands.add("topic", function(client, data, args) {
+			if (args.length === 0 || !Chatter.Active.channel) return;
+			var topic = args.join(' ');
+			client.send('topic', Chatter.Active.channel.get('name'), topic);
+		});
 
-    Chatter.Commands.add("me", function(client, data, args) {
-      if (args.length === 0 || !Chatter.Active.channel) return;
-      var action = args.join(' ');
-      client.action(Chatter.Active.channel.get('name'), action);
-    });
+		Chatter.Commands.add("me", function(client, data, args) {
+			if (args.length === 0 || !Chatter.Active.channel) return;
+			var action = args.join(' ');
+			client.action(Chatter.Active.channel.get('name'), action);
+		});
 
 		win.on('new-win-policy', function (frame, url, policy) {
 			policy.ignore();

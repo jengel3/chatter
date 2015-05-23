@@ -71,6 +71,13 @@ requirejs(["app", "router", "modules/servers/serverlist", "modules/servers/serve
 		tray.tooltip = "Chatter";
 		tray.icon = "resources/tray.png";
 
+		//https://github.com/nwjs/nw.js/issues/1955
+		if (process.platform === "darwin") {
+			var mb = new gui.Menu({type: 'menubar'});
+			mb.createMacBuiltin('Chatter');
+			win.menu = mb;
+		}
+
 		Chatter.Commands = Command;
 		Chatter.Commands.add = Command.add;
 

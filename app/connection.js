@@ -1,4 +1,4 @@
-define(["app", "modules/channels/channellist", "modules/channels/channelview", "modules/channels/channel", "modules/servers/serverview"], function (Chatter, ChannelList, ChannelView, Channel, ServerView) {
+define(["app", "modules/channels/channellist", "modules/channels/channelview", "modules/channels/channel", "modules/servers/serverview", "moment"], function (Chatter, ChannelList, ChannelView, Channel, ServerView, moment) {
   var irc = require('irc');
   var Connection = function (server) {
     var self = this;
@@ -64,9 +64,9 @@ define(["app", "modules/channels/channellist", "modules/channels/channelview", "
       var rank = names[username];
       var added = '<li class="user">';
       if (rank === '@') {
-        added += '<span class="operator">@</span>'
+        added += '<span class="rank operator">@</span>'
       } else if (rank === '+') {
-        added += '<span class="voiced">+</span>'
+        added += '<span class="rank voiced">+</span>'
       }
       added += username + '</li>'
       users_new += added;
@@ -115,7 +115,7 @@ define(["app", "modules/channels/channellist", "modules/channels/channelview", "
       var lines = motd.split(/\n/);
       for (var x = 0; x < lines.length; x++) {
         var line = lines[x];
-        $(messages).append('<div class="message">' + line + '</div>')
+        $(messages).append('<div class="message">' + line + '</div>');
         $(messages).scrollTop(($(messages).height() * 2));
       }
     });
@@ -123,19 +123,19 @@ define(["app", "modules/channels/channellist", "modules/channels/channelview", "
     self.client.addListener('message', function (from, to, message) {
       var channel = self.findChannel(to);
 
-      var messages = $('#content div.channel-wrap[data-channel="' + channel.id + '"] .messages');
-      $(messages).append('<div class="message"><span class="author">' + from + ': </span>' + message + '</div>')
-      $(messages).scrollTop(($(messages).height() * 2));
+      channel.addMessage('<span class="author">' + from + ': </span>' + message);
+    });
 
+    self.client.addListener('action', function (from, to, text, message) {
+      var channel = self.findChannel(to);
+
+      channel.addMessage('* ' + from + ' ' + text);
     });
 
     self.client.addListener('selfMessage', function (to, message) {
       var channel = self.findChannel(to);
 
-      var messages = $('#content div.channel-wrap[data-channel="' + channel.id + '"] .messages');
-      $(messages).append('<div class="message"><span class="author">' + self.nick + ': </span>' + message + '</div>')
-      $(messages).scrollTop(($(messages).height() * 2));
-
+      channel.addMessage('<span class="author">' + self.nick + ': </span>' + message);
     });
 
     self.client.addListener('topic', function (chan, topic, nick, message) {
@@ -144,10 +144,10 @@ define(["app", "modules/channels/channellist", "modules/channels/channelview", "
 
       var wrapper = $('#content div.channel-wrap[data-channel="' + channel.id + '"]');
       $(wrapper).find('.topic').text(topic);
+      $(wrapper).find('.topic').attr('title', topic);
 
-      var messages = $(wrapper).find('.messages');
-      $(messages).append('<div class="message"> *' + nick + ' set the topic to: ' + topic + '</div>')
-      $(messages).scrollTop(($(messages).height() * 2));
+
+      channel.addMessage('*' + nick + ' set the topic to: ' + topic);
     });
 
 
@@ -169,7 +169,7 @@ define(["app", "modules/channels/channellist", "modules/channels/channelview", "
         var newnames = channel.get('names');
         newnames[nick] = "";
         self.renderNames(chan, newnames);
-        channel.addMessage('<div class="message"> *' + nick + ' has joined ' + chan + '</div>');
+        channel.addMessage('*' + nick + ' has joined ' + chan);
       }
     });
 
@@ -177,7 +177,7 @@ define(["app", "modules/channels/channellist", "modules/channels/channelview", "
       var channel = self.findChannel(chan);
 
       if (nick !== self.nick) {
-        channel.addMessage('<div class="message"> *' + nick + ' has left ' + chan + '</div>')
+        channel.addMessage('*' + nick + ' has left ' + chan)
         self.removeUser(nick, channel);
       } else {
         var wrap = $('#content div.channel-wrap[data-channel="' + channel.id + '"]');
@@ -199,7 +199,7 @@ define(["app", "modules/channels/channellist", "modules/channels/channelview", "
         for (var x = 0; x < chans.length; x++) {
           var ch = chans[x];
           var channel = self.channels.findWhere({name: ch});
-          channel.addMessage('<div class="message"> *' + nick + ' has quit ' + ch + ': ' + reason + '</div>')
+          channel.addMessage('*' + nick + ' has quit ' + ch + ': ' + reason)
         }
       }
     });

@@ -181,22 +181,20 @@ ul {
 .top-wrap {
 	position:absolute;
 	display:block;
-	left:0px;
-	top:0px;
+	left:0;
+	top:0;
 	right:150px;
 	height: 30px;
 	line-height: 30px;
 	border-bottom: 1px solid #ccc;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }
 
 .channel-name {
-	display: inline-block;
 	font-weight: 700;
-	padding-left:20px;
-}
-
-.topic {
-	display: inline-block;
+	padding-left:10px;
 }
 
 input.message-input {
@@ -251,4 +249,22 @@ input.message-input {
 
 .users .user {
 	margin: 3px 0 0 0;
+}
+
+
+.users::-webkit-scrollbar-track {
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+	border-radius: 10px;
+	background-color: #F5F5F5;
+}
+
+.users::-webkit-scrollbar {
+	width: 9px;
+	background-color: #F5F5F5;
+}
+
+.users::-webkit-scrollbar-thumb {
+	border-radius: 10px;
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+	background-color: #CBCBCB;
 }

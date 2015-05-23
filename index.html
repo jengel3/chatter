@@ -25,8 +25,8 @@
 
 	<script type='text/template' id='channel-template'>
 		<div class='top-wrap'>
-			<div class='channel-name'><%= name %>: </div>
-			<div class='topic'><%= topic %></div>
+			<span class='channel-name'><%= name %>: </span>
+			<span class='topic' title='<%= topic %>'><%= topic %></span>
 		</div>
 		<div class='messages'></div>
 		<div class='input-wrap'>
@@ -37,8 +37,8 @@
 
 	<script type='text/template' id='server-template'>
 		<div class='top-wrap'>
-			<div class='channel-name'><%= title %></div>
-			<div class='topic'>(<%= host %>:<%= port %>)</div>
+			<span class='channel-name'><%= title %></span>
+			<span class='topic'>(<%= host %>:<%= port %>)</span>
 		</div>
 		<div class='messages'></div>
 		<div class='input-wrap'>

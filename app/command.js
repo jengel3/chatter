@@ -22,8 +22,10 @@ define(["app", "underscore"], function (Chatter, _) {
       var command = commands[x];
       if (command.matcher === cmd) {
         cmd = command;
+        break;
       }
     }
+    if (!cmd) return false;
     return cmd.handler(client, data, args.slice(1));
   };
 

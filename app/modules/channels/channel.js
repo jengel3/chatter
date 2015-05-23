@@ -1,4 +1,4 @@
-define(["app", "backbone", "jquery"], function(Chatter, Backbone, $) {
+define(["app", "backbone", "jquery", "moment"], function(Chatter, Backbone, $, moment) {
 	var uuid = require('node-uuid');
 	var Channel = Backbone.Model.extend({
 		idAttribute: "uuid",
@@ -20,7 +20,8 @@ define(["app", "backbone", "jquery"], function(Chatter, Backbone, $) {
 		},
 		addMessage: function(message) {
 			var msgs = $(this.getMessages());
-			$(msgs).append(message);
+			var date = moment().format('MM/DD/YYYY hh:mm');
+			$(msgs).append('<div class="message"><span class="timestamp">' + date + '</span> => ' + message + '</div>');
 			$(msgs).scrollTop(($(msgs).height() * 2));
 		},
 		focus: function() {

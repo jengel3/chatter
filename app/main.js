@@ -110,7 +110,13 @@ requirejs(["app", "router", "modules/servers/serverlist", "modules/servers/serve
     Chatter.Commands.add("topic", function(client, data, args) {
       if (args.length === 0 || !Chatter.Active.channel) return;
       var topic = args.join(' ');
-      client.send('topic', Chatter.Active.channel.get('name'), topic)
+      client.send('topic', Chatter.Active.channel.get('name'), topic);
+    });
+
+    Chatter.Commands.add("me", function(client, data, args) {
+      if (args.length === 0 || !Chatter.Active.channel) return;
+      var action = args.join(' ');
+      client.action(Chatter.Active.channel.get('name'), action);
     });
 
 		win.on('new-win-policy', function (frame, url, policy) {

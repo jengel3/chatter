@@ -29,6 +29,7 @@
     "requirejs": "~2.1.17",
     "backbone.marionette": "~2.4.1",
     "jquery-popup-overlay": "~1.6.0",
-    "backbone.localStorage": "~1.1.16"
+    "backbone.localStorage": "~1.1.16",
+    "moment": "~2.10.3"
   }
 }

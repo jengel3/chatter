@@ -1,4 +1,4 @@
-define(["app", "modules/channels/channellist", "modules/channels/channelview", "modules/channels/channel", "modules/servers/serverview", "command"], function (Chatter, ChannelList, ChannelView, Channel, ServerView, Commands) {
+define(["app", "modules/channels/channellist", "modules/channels/channelview", "modules/channels/channel", "modules/servers/serverview"], function (Chatter, ChannelList, ChannelView, Channel, ServerView) {
   var irc = require('irc');
   var Connection = function (server) {
     var self = this;
@@ -7,12 +7,12 @@ define(["app", "modules/channels/channellist", "modules/channels/channelview", "
     self.nick = server.attributes.nick;
 
     self.channels = new ChannelList();
-    channels.fetch();
-
 
     self.setup();
 
-    self.connect(function (inst) {
+    Chatter.Connections[self.server.id] = self;
+
+    self.connect(function() {
       console.debug("Successfully connected to " + self.server.attributes.title);
       self.join();
     })
@@ -20,20 +20,14 @@ define(["app", "modules/channels/channellist", "modules/channels/channelview", "
 
   Connection.prototype.findChannel = function(ch) {
     var self = this;
-    var channel = channels.findWhere({name: ch, server: self.server.id});
+    var channel = self.channels.findWhere({name: ch});
     return channel;
   };
 
   Connection.prototype.join = function () {
     var self = this;
-    var list = new ChannelList();
-    list.fetch();
-    var results = new ChannelList(list.where({
-      server: self.attrs.id
-    }));
-
-    results.each(function (channel) {
-      self.client.join(channel.get('name') + ' ', function () {})
+    _.each(self.server.get('channels'), function (channel, index, list) {
+      self.client.join(channel + ' ', function () {})
     });
     Chatter.Active.server = self.server;
   };
@@ -41,7 +35,7 @@ define(["app", "modules/channels/channellist", "modules/channels/channelview", "
   Connection.prototype.connect = function (callback) {
     var self = this;
     self.client.connect(function () {
-      callback(self);
+      callback();
     });
   };
 
@@ -56,16 +50,13 @@ define(["app", "modules/channels/channellist", "modules/channels/channelview", "
   }
 
 
-  function renderNames(channel, names) {
-    var col = new ChannelList();
-    col.fetch();
-    var channel = col.findWhere({
-      name: ch,
-      server: self.server.id
-    });
+  Connection.prototype.renderNames = function(chan, names) {
+    var self = this;
+    var channel = self.findChannel(chan);
     var sorted = Object.keys(names).sort(function (a, b) {
       return toPriority(names[a]) - toPriority(names[b])
     });
+    channel.set('names', names);
     var users = $('#content div.channel-wrap[data-channel="' + channel.id + '"] .users ul');
     var users_new = ''
     for (var x = 0; x < sorted.length; x++) {
@@ -81,7 +72,14 @@ define(["app", "modules/channels/channellist", "modules/channels/channelview", "
       users_new += added;
     }
     $(users).html(users_new);
-  }
+  };
+
+  Connection.prototype.removeUser = function(user, channel) {
+    var self = this;
+    var names = channel.get('names');
+    delete names[user];
+    self.renderNames(channel.get('name'), names);
+  };
 
   Connection.prototype.setup = function () {
     var self = this;
@@ -93,11 +91,11 @@ define(["app", "modules/channels/channellist", "modules/channels/channelview", "
       realName: self.attrs.real_name
     }
     self.client = new irc.Client(self.attrs.host, self.attrs.nick, options);
-    Chatter.Store[self.server.attributes.id] = self.client;
+    Chatter.Clients[self.server.attributes.id] = self.client;
 
     self.client.addListener('error', function (message) {
       var messages = $('#content div.server-wrap[data-server="' + self.server.id + '"] .messages');
-      $(messages).append('<div class="message"><span class="err-msg">Chatter Error: </span>' + message + '</div>')
+      $(messages).append('<div class="message"><span class="err-msg">Chatter Error: </span>' + message.command + '</div>')
       $(messages).scrollTop(($(messages).height() * 2));
     });
 
@@ -109,7 +107,7 @@ define(["app", "modules/channels/channellist", "modules/channels/channelview", "
     });
 
     self.client.addListener('names', function (ch, names) {
-      renderNames(ch, names);
+      self.renderNames(ch, names);
     });
 
     self.client.addListener('motd', function (motd) {
@@ -123,12 +121,7 @@ define(["app", "modules/channels/channellist", "modules/channels/channelview", "
     });
 
     self.client.addListener('message', function (from, to, message) {
-      var col = new ChannelList();
-      col.fetch();
-      var channel = col.findWhere({
-        name: to,
-        server: self.server.id
-      });
+      var channel = self.findChannel(to);
 
       var messages = $('#content div.channel-wrap[data-channel="' + channel.id + '"] .messages');
       $(messages).append('<div class="message"><span class="author">' + from + ': </span>' + message + '</div>')
@@ -137,12 +130,7 @@ define(["app", "modules/channels/channellist", "modules/channels/channelview", "
     });
 
     self.client.addListener('selfMessage', function (to, message) {
-      var col = new ChannelList();
-      col.fetch();
-      var channel = col.findWhere({
-        name: to,
-        server: self.server.id
-      });
+      var channel = self.findChannel(to);
 
       var messages = $('#content div.channel-wrap[data-channel="' + channel.id + '"] .messages');
       $(messages).append('<div class="message"><span class="author">' + self.nick + ': </span>' + message + '</div>')
@@ -150,15 +138,9 @@ define(["app", "modules/channels/channellist", "modules/channels/channelview", "
 
     });
 
-    self.client.addListener('topic', function (channel, topic, nick, message) {
-      var col = new ChannelList();
-      col.fetch();
-      var channel = col.findWhere({
-        name: channel,
-        server: self.attrs.id
-      });
+    self.client.addListener('topic', function (chan, topic, nick, message) {
+      var channel = self.findChannel(chan);
       channel.set('topic', topic);
-      channel.save();
 
       var wrapper = $('#content div.channel-wrap[data-channel="' + channel.id + '"]');
       $(wrapper).find('.topic').text(topic);
@@ -169,93 +151,58 @@ define(["app", "modules/channels/channellist", "modules/channels/channelview", "
     });
 
 
-    self.client.addListener('join', function (ch, nick, message) {
-      var col = new ChannelList();
-      col.fetch();
-      var channel = col.findWhere({
-        name: ch,
-        server: self.server.id
-      });
+    self.client.addListener('join', function (chan, nick, message) {
+      var channel = self.findChannel(chan);
       if (nick === self.nick) {
         if (!channel) {
-          channel = new Channel({
-            name: ch,
-            server: self.server.id
-          });
-          col.add(channel);
-          channel.save();
+          channel = new Channel({name: chan});
+          self.channels.add(channel);
         }
-        $('li.server[data-id=' + self.server.id + ']').find('ul').append('<li data-channel-id="' + channel.id + '">' + ch + '</li>');
+        self.server.addChannel(chan);
+        $('li.server[data-id=' + self.server.id + ']').find('ul').append('<li data-channel-id="' + channel.id + '">' + chan + '</li>');
         var chView = new ChannelView({
           model: channel
         });
-        if ($('#content > div').length >= 1) {
-          $('#content > div').hide();
-        }
         $('#content').append(chView.render().el)
-        $('#content > div').last().find('.messages').focus();
-        Chatter.Active.channel = channel;
+        channel.focus();
       } else {
-
-        var messages = $('#content div.channel-wrap[data-channel="' + channel.id + '"] .messages');
-
-        $(messages).append('<div class="message"> *' + nick + ' has joined ' + ch + '</div>')
-        $(messages).scrollTop(($(messages).height() * 2));
+        var newnames = channel.get('names');
+        newnames[nick] = "";
+        self.renderNames(chan, newnames);
+        channel.addMessage('<div class="message"> *' + nick + ' has joined ' + chan + '</div>');
       }
     });
-self.client.addListener('part', function (ch, nick, reason, message) {
-  var col = new ChannelList();
-  col.fetch();
-  var channel = col.findWhere({
-    name: ch,
-    server: self.server.id
-  });
 
-  if (nick !== self.nick) {
+    self.client.addListener('part', function (chan, nick, reason, message) {
+      var channel = self.findChannel(chan);
 
-    var messages = $('#content div.channel-wrap[data-channel="' + channel.id + '"] .messages');
+      if (nick !== self.nick) {
+        channel.addMessage('<div class="message"> *' + nick + ' has left ' + chan + '</div>')
+        self.removeUser(nick, channel);
+      } else {
+        var wrap = $('#content div.channel-wrap[data-channel="' + channel.id + '"]');
+        $('#channels li[data-channel-id="' + channel.id + '"]').remove();
+        self.channels.remove(channel);
 
-    $(messages).append('<div class="message"> *' + nick + ' has left ' + ch + '</div>')
-    $(messages).scrollTop(($(messages).height() * 2));
-  } else {
-    var wrap = $('#content div.channel-wrap[data-channel="' + channel.id + '"]');
-    $('#channels li[data-channel-id="' + channel.id + '"]').remove();
-    channel.destroy();
-    var first = col.findWhere({
-      server: self.server.id
+        var first = self.channels.first();
+        wrap.remove();
+        first.focus();
+      }
     });
 
-    var next = $('#content div.channel-wrap[data-channel="' + first.id + '"]');
-    Chatter.Active.channel = next;
-    wrap.remove();
-    next.show();
+    self.client.addListener('setNick', function (newNick) {
+      self.nick = newNick;
+    });
 
-    next.find('.messages').focus();
-  }
-});
-
-self.client.addListener('setNick', function (newNick) {
-  self.nick = newnick;
-
-});
-
-self.client.addListener('quit', function (nick, reason, channels, message) {
-  if (nick !== self.nick) {
-    var col = new ChannelList();
-    col.fetch();
-    for (var x = 0; x < channels.length; x++) {
-      var ch = channels[x];
-      var channel = col.findWhere({
-        name: ch,
-        server: self.server.id
-      });
-      var messages = $('#content div.channel-wrap[data-channel="' + channel.id + '"] .messages');
-
-      $(messages).append('<div class="message"> *' + nick + ' has quit ' + ch + ': ' + reason + '</div>')
-      $(messages).scrollTop(($(messages).height() * 2));
-    }
-  }
-});
-};
-return Connection;
+    self.client.addListener('quit', function (nick, reason, chans, message) {
+      if (nick !== self.nick) {
+        for (var x = 0; x < chans.length; x++) {
+          var ch = chans[x];
+          var channel = self.channels.findWhere({name: ch});
+          channel.addMessage('<div class="message"> *' + nick + ' has quit ' + ch + ': ' + reason + '</div>')
+        }
+      }
+    });
+  };
+  return Connection;
 });

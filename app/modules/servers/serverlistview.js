@@ -28,16 +28,13 @@ define(["app", "backbone", "underscore", "modules/channels/channellist", "module
         channel: function(e) {
             e.preventDefault();
             e.stopPropagation();
-            var id = $(e.currentTarget).attr('data-channel-id');
-            var channels = new ChannelList();
-            channels.fetch();
+            var id = $(e.currentTarget).data('channel-id');
+            var serverId = $(e.currentTarget).parents('li.server').data('id');
+            var connection = Chatter.Connections[serverId];
+            var channels = connection.channels;
             var channel = channels.get(id);
-            this.collection.fetch();
-            var server = this.collection.get(channel.attributes.server);
-            Chatter.Active.channel = channel;
-            Chatter.Active.server = server;
-            $('#content > div').hide();
-            $('#content div[data-channel="' + id +'"]').show();
+            channel.focus();
+            Chatter.Active.server = connection.server;
             return false;
         }
     });

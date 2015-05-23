@@ -1,14 +1,36 @@
-define(["app", "backbone", "localstorage"], function(Chatter, Backbone, LocalStorage) {
+define(["app", "backbone", "jquery"], function(Chatter, Backbone, $) {
+	var uuid = require('node-uuid');
 	var Channel = Backbone.Model.extend({
-		attributeId: "id",
+		idAttribute: "uuid",
 		defaults: {
 			name: "",
 			topic: "",
-			users: "",
 			current: false,
 			server: 0,
 			names: {},
 			channels: []
+		},
+		initialize: function() {
+			if (!this.uuid) {
+				this.set('uuid', uuid.v4())
+			}
+		},
+		getMessages: function() {
+			return $('#content div.channel-wrap[data-channel="' + this.id + '"] .messages');
+		},
+		addMessage: function(message) {
+			var msgs = $(this.getMessages());
+			$(msgs).append(message);
+			$(msgs).scrollTop(($(msgs).height() * 2));
+		},
+		focus: function() {
+			$('#content > div').hide();
+			var wrap = $('#content div.channel-wrap[data-channel="' + this.id + '"]');
+			Chatter.Active.channel = this;
+			wrap.show()
+			setTimeout(function() {
+				wrap.find('.message-input').focus();
+			}, 1);
 		}
 	});	
 	return Channel;

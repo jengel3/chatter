@@ -47,37 +47,37 @@ gulp.task('watch', function () {
 
 
 gulp.task('rjs', function() {
-   rjs({
-    mainConfigFile: "app/config.js",
-    include: ["main"],
-    out: "source.js",
-    baseUrl: "app",
-    wrap: true,
-  })
-  .pipe(gulp.dest('./dist/js/'))
-  .pipe(rename('source.min.js'))
-  .pipe(uglify())
-  .pipe(gulp.dest('./dist/js/'));
+ rjs({
+  mainConfigFile: "app/config.js",
+  include: ["main"],
+  out: "source.js",
+  baseUrl: "app",
+  wrap: true,
+})
+ .pipe(gulp.dest('./dist/js/'))
+ .pipe(rename('source.min.js'))
+ .pipe(uglify())
+ .pipe(gulp.dest('./dist/js/'));
 });
 
 gulp.task('uglify', ['rjs'], function() {
-   gulp.src('dist/js/*.js')
-  .pipe(rename('source.min.js'))
-  .pipe(uglify())
-  .pipe(gulp.dest('dist/js/'));
+ gulp.src('dist/js/*.js')
+ .pipe(rename('source.min.js'))
+ .pipe(uglify())
+ .pipe(gulp.dest('dist/js/'));
 });
 
 gulp.task('css', function () {
-   gulp.src(['./app/styles/*.css'])
-  .pipe(rename('app.css'))
-  .pipe(minifyCSS())
-  .pipe(gulp.dest('./dist/css/'));
+ gulp.src(['./app/styles/*.css'])
+ .pipe(rename('app.css'))
+ .pipe(minifyCSS())
+ .pipe(gulp.dest('./dist/css/'));
 });
 
 
 gulp.task('fonts', function () {
-   gulp.src(['./app/styles/fonts/**'], { "base" : "./app/styles/fonts/" })
-   .pipe(gulp.dest('./dist/css/fonts/'));
+ gulp.src(['./app/styles/fonts/**'], { "base" : "./app/styles/fonts/" })
+ .pipe(gulp.dest('./dist/css/fonts/'));
 });
 
 gulp.task('compile', ['rjs', 'css']);

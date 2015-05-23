@@ -149,11 +149,11 @@ ul {
 }
 
 #buttons .minimize {
-	background-color: darkgreen;
+	background-color: orange;
 }
 
 #buttons .maximize {
-	background-color: orange;
+	background-color: darkgreen;
 }
 
 .input-wrap {

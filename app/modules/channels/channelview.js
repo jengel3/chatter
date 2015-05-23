@@ -9,15 +9,15 @@ define(["app", "backbone", "underscore"], function(Chatter, Backbone, _) {
 			var dict = this.model.toJSON();
 			var html = this.template(dict);
 			this.$el.html(html);
-			this.$el.attr('data-channel', this.model.get('id'));
+			this.$el.attr('data-channel', this.model.id);
 			return this;
 		},
 		entered: function(e) {
 			if (Chatter.Active.channel && Chatter.Active.server && e.which === 13) {
 				var server = Chatter.Active.server;
 				var channel = Chatter.Active.channel;
-				var client = Chatter.Store[server.attributes.id];
-				var msg = $('#content .channel-wrap[data-channel="' + channel.attributes.id + '"] .message-input');
+				var client = Chatter.Clients[server.id];
+				var msg = $('#content .channel-wrap[data-channel="' + channel.id + '"] .message-input');
 				var message = $(msg).val();
 				if (message.trim() !== "") {
 					if (message.slice()[0] === '/') {

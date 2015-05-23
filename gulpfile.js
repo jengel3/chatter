@@ -9,8 +9,6 @@ var uglify = require('gulp-uglify');
 var minifyCSS = require('gulp-minify-css');
 var rjs = require('gulp-requirejs');
 
-var browserify = require('browserify');;
-
 var glob = require('glob-array');
 var rm = require('gulp-rimraf');
 var NwBuilder = require('node-webkit-builder');
@@ -23,8 +21,7 @@ gulp.task('build', ['compile', 'fonts'], function() {
     buildDir: 'build',
     files: ['package.json', 'app/**', 'dist/**', 'vendor/components/**/*', 'index.html', 
     "node_modules/**", "!node_modules/gulp*/**", "!node_modules/bower/**", 
-    "!node_modules/duplexify/**", "!node_modules/node-webkit-builder/**", 
-    "!node_modules/browserify/**", "!node_modules/*glob*/**", 
+    "!node_modules/duplexify/**", "!node_modules/node-webkit-builder/**", "!node_modules/*glob*/**", 
     "!node_modules/read-all-stream/**", "!node_modules/nw/nwjs/chatter*",
     "!node_modules/unique-stream/**", "!node_modules/vinyl-fs/**", "!node_modules/rimraf/**", "!node_modules/nw/**"],
     platforms: ['win64', 'linux64'],

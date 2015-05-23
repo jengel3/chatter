@@ -5,6 +5,9 @@
   "main": "index.html",
   "private": false,
   "license": "MIT",
+  "scripts": {
+    "postinstall": "./node_modules/bower/bin/bower install"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/Jake0oo0/chatter"

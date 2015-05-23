@@ -97,6 +97,9 @@ define(["app", "modules/channels/channellist", "modules/channels/channelview", "
       var messages = $('#content div.server-wrap[data-server="' + self.server.id + '"] .messages');
       $(messages).append('<div class="message"><span class="err-msg">Chatter Error: </span>' + message.command + '</div>')
       $(messages).scrollTop(($(messages).height() * 2));
+      if (Chatter.Active.channel) {
+        Chatter.Active.channel.addMessage('<div class="message"><span class="err-msg">Chatter Error: </span>' + message.command + '</div>');
+      }
     });
 
     self.client.addListener('registered', function (message) {
@@ -199,7 +202,9 @@ define(["app", "modules/channels/channellist", "modules/channels/channelview", "
         for (var x = 0; x < chans.length; x++) {
           var ch = chans[x];
           var channel = self.channels.findWhere({name: ch});
-          channel.addMessage('*' + nick + ' has quit ' + ch + ': ' + reason)
+          if (channel.get('names')[nick]) {
+            channel.addMessage('*' + nick + ' has quit ' + ch + ': ' + reason);
+          }
         }
       }
     });

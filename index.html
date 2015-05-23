@@ -28,11 +28,11 @@
 			<span class='channel-name'><%= name %>: </span>
 			<span class='topic' title='<%= topic %>'><%= topic %></span>
 		</div>
-		<div class='messages'></div>
+		<div class='messages scroll'></div>
 		<div class='input-wrap'>
 			<input class='message-input'></input>
 		</div>
-		<div class='users'><ul></ul></div>
+		<div class='users scroll'><ul></ul></div>
 	</script>
 
 	<script type='text/template' id='server-template'>
@@ -40,7 +40,7 @@
 			<span class='channel-name'><%= title %></span>
 			<span class='topic'>(<%= host %>:<%= port %>)</span>
 		</div>
-		<div class='messages'></div>
+		<div class='messages scroll'></div>
 		<div class='input-wrap'>
 			<input class='message-input'></input>
 		</div>

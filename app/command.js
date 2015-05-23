@@ -1,0 +1,31 @@
+define(["app", "underscore"], function (Chatter, _) {
+  var Commands = {};
+
+  Commands.list = [];
+
+  Commands.add = function(matcher, handler) {
+    var self = this;
+
+    Commands.list.push({
+      matcher: matcher,
+      handler: handler
+    });
+
+  };
+
+  Commands.handle = function(client, data) {
+    var commands = Commands.list;
+    var args = data.message.substring(1).split(' ');
+    var cmd = args[0];
+
+    for (var x = 0; x < commands.length; x++) {
+      var command = commands[x];
+      if (command.matcher === cmd) {
+        cmd = command;
+      }
+    }
+    return cmd.handler(client, data, args.slice(1));
+  };
+
+  return Commands;
+});

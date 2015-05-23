@@ -1,8 +1,8 @@
 requirejs(["app", "router", "modules/servers/serverlist", "modules/servers/server", 
 	"modules/servers/serverlistview", "modules/channels/channelview", 
-	"modules/channels/channellist", "modules/channels/channel"], 
+	"modules/channels/channellist", "modules/channels/channel", "command"], 
 	function(Chatter, Router, ServerList, Server, ServerListView, ChannelView, 
-		ChannelList, Channel) {
+		ChannelList, Channel, Command) {
 		var gui = require('nw.gui');
 		Chatter.router = new Router();
 
@@ -28,21 +28,43 @@ requirejs(["app", "router", "modules/servers/serverlist", "modules/servers/serve
 			gui.Window.get().close();
 		});
 
+		Chatter.Commands = Command;
+		Chatter.Commands.add = Command.add;
+
+		Chatter.Commands.add("join", function(client, data, args) {
+			client.join(args.join(' ') + ' ');
+		});
+
+		Chatter.Commands.add("part", function(client, data, args) {
+			var channel = null;
+			var message = null;
+			if (args.length == 1) {
+				channel = args[0];
+			} else {
+				channel = Chatter.Active.channel.get('name');
+			}
+			if (args.length > 1) {
+				message = args.slice(1).join(' ');
+			}
+			client.part(channel, message, function() {
+				console.log("Left channel");
+			});
+		});
+
+		Chatter.Commands.add("nick", function(client, data, args) {
+			if (args.length === 1) {
+				var nick = args[0];
+				client.send('nick', nick);
+			}
+		});
+
+		win.on('new-win-policy', function (frame, url, policy) {
+			policy.ignore();
+		});
+
 		var servers = new ServerList();
-		var server = new Server({title: "Freenode", host: "chat.freenode.net", port: 6667, nick: "JakeTestrator", password: "testing", real_name: "Bot Tester"})
-		//var server = new Server({title: "Esper", host: "irc.esper.net", port: 6667, nick: "JakeTesting"})
-
-		servers.add(server);
-		server.save();
-
-		var channel = new Channel({name: "#chatter", server: server.id});
-		var ch = new Channel({name: "#crafatar", server: server.id});
-		var channels = new ChannelList();
-		channels.add(channel);
-		channels.add(ch);
-		channel.save();
-		ch.save();
-
+		servers.fetch();
+		
 		var view = new ServerListView({collection: servers});
 		$('#channels ul').append(view.render().el);
 
@@ -76,6 +98,5 @@ requirejs(["app", "router", "modules/servers/serverlist", "modules/servers/serve
 		win.on('close', function() {
 			Chatter.disconnect(true);
 		});
-
 
 	});

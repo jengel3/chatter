@@ -6,7 +6,9 @@ define(["app", "backbone", "localstorage"], function(Chatter, Backbone, LocalSto
 			topic: "",
 			users: "",
 			current: false,
-			server: 0
+			server: 0,
+			names: {},
+			channels: []
 		}
 	});	
 	return Channel;

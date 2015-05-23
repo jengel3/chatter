@@ -20,12 +20,17 @@ define(["app", "backbone", "underscore"], function(Chatter, Backbone, _) {
 				var msg = $('#content .channel-wrap[data-channel="' + channel.attributes.id + '"] .message-input');
 				var message = $(msg).val();
 				if (message.trim() !== "") {
-					client.say(channel.get('name'), message);
+					if (message.slice()[0] === '/') {
+						var data = {
+							receiver: channel, 
+							message: message,
+							nick: client.nick
+						}
+						Chatter.Commands.handle(client, data);
+					} else {
+						client.say(channel.get('name'), message);
+					}
 					$(msg).val('');
-
-					var messages = $('#content div.channel-wrap[data-channel="' + channel.id +'"] .messages');
-					$(messages).append('<div class="message"><span class="author">' + Chatter.Store[server.id].nick + ': </span>' + message + '</div>');
-					$(messages).scrollTop(($(messages).height()*2));
 				}
 			}
 		}

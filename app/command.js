@@ -15,7 +15,7 @@ define(["app", "underscore"], function (Chatter, _) {
 
   Commands.handle = function(client, data) {
     var commands = Commands.list;
-    var args = data.message.substring(1).split(' ');
+    var args = data.message.substring(1).split(" ");
     var cmd = args[0];
 
     for (var x = 0; x < commands.length; x++) {

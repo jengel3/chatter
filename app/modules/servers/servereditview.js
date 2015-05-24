@@ -5,7 +5,8 @@ define(["app", "backbone", "underscore", "modules/servers/server"], function(Cha
 		id: 'server_popup',
 		events: {
 			'click .close': 'closed',
-			'click .save': 'saved'
+			'click .save': 'saved',
+			'click .delete': 'destroy'
 		},
 
 		initialize: function() {
@@ -41,8 +42,50 @@ define(["app", "backbone", "underscore", "modules/servers/server"], function(Cha
 				Chatter.servers.fetch();
 				Chatter.servers.add(self.model);
 				self.model.save();
+				Chatter.Views.servers.reset(Chatter.servers);
+				if (self.model.get('shouldConnect')) {
+					self.model.connect();
+				}
 			}
-			$('#server_popup').popup('hide');
+			$("#server_popup").popup("hide");
+		},
+
+		destroy: function (e) {
+			var self = this;
+			e.preventDefault();
+			e.stopPropagation();
+			var connection = Chatter.Connections[this.model.id];
+			var server = self.model;
+			if (connection.connected) {
+				for (var i = 0; i < connection.views.length; i++) {
+					var view = connection.views[i];
+					view.remove();
+				};
+				connection.client.disconnect('Disconnected from server', function() {
+					delete Chatter.Connections[self.model.id];
+					delete Chatter.Clients[self.model.id];
+					server.destroy();
+					Chatter.servers.fetch();
+					Chatter.Views.servers.reset(Chatter.servers);
+					$('#channels ul').html(Chatter.Views.servers.el);
+					console.debug("Disconnected from a server.")
+					if (Chatter.servers.length > 0) {
+						var focusable = Chatter.servers.first();
+						Chatter.Active.server = focusable;
+						var connection = Chatter.Connections[focusable.id];
+						var channel = connection.channels.first();
+						if (channel) {
+							Chatter.Active.channel = channel;
+							channel.focus();
+						}
+					} else {
+						Chatter.Active.server = null;
+						Chatter.Active.channel = null;
+					}
+				});
+			}
+			$("#server_popup").popup("hide");
+			self.cleanup();
 		},
 
 		parse: function(attr, value) {
@@ -58,7 +101,7 @@ define(["app", "backbone", "underscore", "modules/servers/server"], function(Cha
 			var self = this;
 			e.preventDefault();
 			e.stopPropagation();
-			$('#server_popup').popup('hide');
+			$("#server_popup").popup("hide");
 		},
 
 		cleanup: function() {
@@ -68,5 +111,5 @@ define(["app", "backbone", "underscore", "modules/servers/server"], function(Cha
 			}, 1);
 		}
 	});
-	return ServerEditView;
+return ServerEditView;
 });

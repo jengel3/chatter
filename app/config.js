@@ -10,20 +10,20 @@ requirejs.config({
     "localstorage": "../vendor/components/backbone.localStorage/backbone.localStorage",
     "moment": "../vendor/components/moment/moment"
   },
-  deps: ['main'],
+  deps: ["main"],
   shim: {
     jquery: {
-      exports: '$'
+      exports: "$"
     },
     underscore: {
-      exports: '_'
+      exports: "_"
     },
     backbone: {
-      exports: 'Backbone'
+      exports: "Backbone"
     },
     marionette: {
-     exports: 'Marionette'
+     exports: "Marionette"
     },
-    "jquery-popup-overlay": ['jquery']
+    "jquery-popup-overlay": ["jquery"]
  }
 });

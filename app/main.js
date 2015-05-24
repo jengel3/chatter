@@ -4,16 +4,17 @@ requirejs(["app", "router", "modules/servers/serverlist", "modules/servers/serve
 	"modules/servers/servereditview"], 
 	function(Chatter, Router, ServerList, Server, ServerListView, ChannelView, 
 		ChannelList, Channel, Command, $, popup, ServerEditView) {
-		var gui = require('nw.gui');
+		var gui = require("nw.gui");
 		Chatter.router = new Router();
 
 		Chatter.start();
 		var win = gui.Window.get();
 		Chatter.Clients = {};
 		Chatter.Connections = {};
+		Chatter.Views = {};
 		Chatter.Active = {server: null, channel: null};
 
-		document.addEventListener('keydown', function(event){
+		document.addEventListener("keydown", function(event){
 			if( event.keyCode == 123 ) { gui.Window.get().showDevTools(); }
 			if( event.keyCode == 116 ) { Chatter.reload(); }
 			if( event.keyCode == 122 ) { 
@@ -25,22 +26,22 @@ requirejs(["app", "router", "modules/servers/serverlist", "modules/servers/serve
 					win.enterFullscreen();
 				}
 			}
-			if( event.keyCode == 121 && !$('#server_popup').length) { 
+			if( event.keyCode == 121 && !$("#server_popup").length) { 
 				var view = new ServerEditView({model: Chatter.Active.server});
-				var el = $('body').append(view.render().el);
-				$('#server_popup').popup({
+				var el = $("body").append(view.render().el);
+				$("#server_popup").popup({
 					detach: false,
 					onclose: function() {
 						view.cleanup();
 					}
 				});
-				$('#server_popup').popup('show');
+				$("#server_popup").popup("show");
 			}
 		});
 
-		$('.server').click(function(e) {
-			var list = $(e.target).parent().find('ul');
-			if ($(list).is(':visible')) {
+		$(".server").click(function(e) {
+			var list = $(e.target).parent().find("ul");
+			if ($(list).is(":visible")) {
 				$(list).slideUp();
 			} else {
 				$(list).slideDown();
@@ -49,7 +50,7 @@ requirejs(["app", "router", "modules/servers/serverlist", "modules/servers/serve
 
 		Chatter.display = "normal";
 
-		var tray = new gui.Tray({ title: 'Chatter', icon: 'resources/tray.png' });
+		var tray = new gui.Tray({ title: 'Chatter', icon: './dist/images/chatter.png' });
 		$('.close').click(function(e) {
 			Chatter.display = "closed";
 			win.close();
@@ -81,7 +82,6 @@ requirejs(["app", "router", "modules/servers/serverlist", "modules/servers/serve
 		});
 
 		tray.tooltip = "Chatter";
-		tray.icon = "resources/tray.png";
 
 		//https://github.com/nwjs/nw.js/issues/1955
 		if (process.platform === "darwin") {
@@ -157,9 +157,11 @@ requirejs(["app", "router", "modules/servers/serverlist", "modules/servers/serve
 			var server = new Server({host: 'chat.freenode.net', port: 6667, title: "Freenode", nick: "JakeTestrator", real_name: "Jake", channels: ['#programming', '#linux', '#chatter']})
 			server.save();
 			Chatter.servers.add(server);
+			Chatter.servers.fetch();
 		}
 
-		var view = new ServerListView({collection: servers});
+		var view = new ServerListView({collection: Chatter.servers});
+		Chatter.Views.servers = view;
 		$('#channels ul').append(view.render().el);
 
 		Chatter.servers.each(function(server) {
@@ -171,16 +173,24 @@ requirejs(["app", "router", "modules/servers/serverlist", "modules/servers/serve
 
 		Chatter.disconnect = function(close, callback) {
 			var keys = Object.keys(Chatter.Clients);
-			keys.forEach(function (key) { 
-				var client = Chatter.Clients[key];
-				client.disconnect("Refreshing environment!", function() {
-					if (key === keys[keys.length - 1]) {
+			// check keys length, callback if no servers
+			if (keys.length > 0) {
+				keys.forEach(function (key) { 
+					var client = Chatter.Clients[key];
+					client.disconnect("Refreshing environment!", function() {
 						console.debug("Disconnected a client.")
-						if (callback) callback();
-						if (close) win.close(true);
-					}
-				});
-			});
+						if (key === keys[keys.length - 1]) {
+							done();
+						}
+					});
+				}); 
+			} else {
+				done()
+			}
+			function done() {
+				if (callback) callback();
+				if (close) win.close(true);
+			}
 		}
 
 		Chatter.reload = function() {

@@ -1,5 +1,5 @@
 define(["app", "backbone", "localstorage", "underscore", "connection"], function(Chatter, Backbone, LocalStorage, _, Connection) {
-	var irc = require('irc');
+	var irc = require("irc");
 	var Server = Backbone.Model.extend({
 		idAttribute: "id",
 		localStorage: new Backbone.LocalStorage("servers"),
@@ -12,23 +12,23 @@ define(["app", "backbone", "localstorage", "underscore", "connection"], function
 			server_user: "",
 			server_pass: "",
 			shouldConnect: true,
-			channels: ['#chatter']
+			channels: ["#chatter"]
 		},
 		connect: function() {
 			this.connection = new Connection(this);
 		}, 
 		addChannel: function(chan) {
-			var chans = this.get('channels');
+			var chans = this.get("channels");
 			if (chans.indexOf(chan) === -1) {
 				chans.push(chan);
-				this.set('channels', chans);
+				this.set("channels", chans);
 				return chan;
 			}
 			return null;
 		},
 		removeChannel: function(chan) {
 			var removed = _.without(self.channels, chan);
-			self.set('channels', removed)
+			self.set("channels", removed)
 			return removed;
 		}
 	});	

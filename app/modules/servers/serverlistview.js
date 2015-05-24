@@ -1,10 +1,10 @@
 define(["app", "backbone", "underscore", "modules/channels/channellist", "modules/channels/channelview"], function(Chatter, Backbone, _, ChannelList, ChannelView) {
     var ServerListView = Backbone.View.extend({
-        template: _.template('<li class="server" data-id=<%= id %>><span class="server-title"><%= title %></span><ul></ul></li>'),
+        template: _.template('<li class="server" data-id=<%= id %>><span class="server-title"><span class="slider">&times; </span><%= title %></span><ul></ul></li>'),
 
         events: {
-            'click .server': 'clicked',
-            'click .server ul li': 'channel'
+            "click .server": "server",
+            "click .server ul li": "channel"
         },
 
         render: function(){
@@ -14,10 +14,18 @@ define(["app", "backbone", "underscore", "modules/channels/channellist", "module
             return this;
         },
 
-        clicked: function(e) {
+        reset: function(collection) {
+            this.collection = collection;
+            this.$el.html("");
+            this.$el.empty();
+            this.delegateEvents();
+            return this.render();
+        },
+
+        server: function(e) {
             e.preventDefault();
             e.stopPropagation();
-            var id = $(e.currentTarget).attr('data-id');
+            var id = $(e.currentTarget).data('id');
             var server = this.collection.get(id);
             var active = Chatter.Active.server;
             $('#content > div').hide();

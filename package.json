@@ -24,7 +24,8 @@
     "min_width": 750,
     "min_height": 450,
     "resizable": true,
-    "position": "center"
+    "position": "center",
+    "icon": "./dist/images/chatter.png"
   },
   "keywords": [
     "irc",

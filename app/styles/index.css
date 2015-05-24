@@ -108,7 +108,7 @@ ul {
 	padding-left: 25px;
 }
 
-.server span {
+.server .server-title {
 	background: #d3d3d3;
 	color: #000;
 	display: block;
@@ -343,6 +343,11 @@ input {
 .popup button.save {
 	background-color:darkgreen;
 }
+
+.popup button.delete {
+	background-color:orange;
+}
+
 
 #server_popup, #server_popup_wrapper, #server_popup_background {
 	transition: all 0.3s;

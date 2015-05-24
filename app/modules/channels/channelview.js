@@ -1,15 +1,15 @@
 define(["app", "backbone", "underscore"], function(Chatter, Backbone, _) {
 	var ChannelView = Backbone.View.extend({
 		template: _.template($("#channel-template").html()),
-		className: 'channel-wrap',
+		className: "channel-wrap",
 		events: {
-			'keypress .message-input': 'entered'
+			"keypress .message-input": "entered"
 		},
 		render: function(){
 			var dict = this.model.toJSON();
 			var html = this.template(dict);
 			this.$el.html(html);
-			this.$el.attr('data-channel', this.model.id);
+			this.$el.attr("data-channel", this.model.id);
 			return this;
 		},
 		entered: function(e) {
@@ -17,7 +17,7 @@ define(["app", "backbone", "underscore"], function(Chatter, Backbone, _) {
 				var server = Chatter.Active.server;
 				var channel = Chatter.Active.channel;
 				var client = Chatter.Clients[server.id];
-				var msg = $('#content .channel-wrap[data-channel="' + channel.id + '"] .message-input');
+				var msg = $("#content .channel-wrap[data-channel=\"" + channel.id + "\"] .message-input");
 				var message = $(msg).val();
 				if (message.trim() !== "") {
 					if (message.slice()[0] === '/') {
@@ -25,12 +25,12 @@ define(["app", "backbone", "underscore"], function(Chatter, Backbone, _) {
 							receiver: channel, 
 							message: message,
 							nick: client.nick
-						}
+						};
 						Chatter.Commands.handle(client, data);
 					} else {
-						client.say(channel.get('name'), message);
+						client.say(channel.get("name"), message);
 					}
-					$(msg).val('');
+					$(msg).val("");
 				}
 			}
 		}

@@ -123,7 +123,7 @@ define(["app", "modules/channels/channellist", "modules/channels/channelview", "
       }
     });
 
-    self.client.addListener('message', function (from, to, message) {
+    self.client.addListener('message#', function (from, to, message) {
       var channel = self.findChannel(to);
 
       channel.addMessage('<span class="author">' + from + ': </span>' + message);

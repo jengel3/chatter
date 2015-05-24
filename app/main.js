@@ -138,6 +138,13 @@ requirejs(["app", "router", "modules/servers/serverlist", "modules/servers/serve
 			client.action(Chatter.Active.channel.get('name'), action);
 		});
 
+		Chatter.Commands.add("msg", function(client, data, args) {
+			if (args.length <= 1 || !Chatter.Active.channel) return;
+			var target = args[0];
+			var message = args.slice(1).join(' ');
+			client.say(target, message);
+		});
+
 		win.on('new-win-policy', function (frame, url, policy) {
 			policy.ignore();
 		});

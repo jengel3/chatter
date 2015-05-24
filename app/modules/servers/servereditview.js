@@ -42,7 +42,7 @@ define(["app", "backbone", "underscore", "modules/servers/server"], function(Cha
 				Chatter.servers.add(self.model);
 				self.model.save();
 			}
-			self.cleanup();
+			$('#server_popup').popup('hide');
 		},
 
 		parse: function(attr, value) {
@@ -58,12 +58,11 @@ define(["app", "backbone", "underscore", "modules/servers/server"], function(Cha
 			var self = this;
 			e.preventDefault();
 			e.stopPropagation();
-			self.cleanup();
+			$('#server_popup').popup('hide');
 		},
 
 		cleanup: function() {
 			var self = this;
-			$('#server_popup').popup('hide');
 			setTimeout(function() {
 				self.remove();
 			}, 1);

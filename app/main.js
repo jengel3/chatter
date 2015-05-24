@@ -25,10 +25,14 @@ requirejs(["app", "router", "modules/servers/serverlist", "modules/servers/serve
 					win.enterFullscreen();
 				}
 			}
-			if( event.keyCode == 121 ) { 
+			if( event.keyCode == 121 && !$('#server_popup').length) { 
 				var view = new ServerEditView({model: Chatter.Active.server});
 				var el = $('body').append(view.render().el);
-				$('#server_popup').popup();
+				$('#server_popup').popup({
+					onclose: function() {
+						view.cleanup();
+					}
+				});
 				$('#server_popup').popup('show');
 			}
 		});

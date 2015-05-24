@@ -29,6 +29,7 @@ requirejs(["app", "router", "modules/servers/serverlist", "modules/servers/serve
 				var view = new ServerEditView({model: Chatter.Active.server});
 				var el = $('body').append(view.render().el);
 				$('#server_popup').popup({
+					detach: false,
 					onclose: function() {
 						view.cleanup();
 					}

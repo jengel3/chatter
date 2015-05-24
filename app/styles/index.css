@@ -341,9 +341,9 @@ input {
 }
 
 .popup button.save {
-	background-color:cornflowerblue;
+	background-color:darkgreen;
 }
 
 #server_popup, #server_popup_wrapper, #server_popup_background {
-  transition: all 0.3s;
+	transition: all 0.3s;
 }

@@ -4,15 +4,15 @@ define(["app", "backbone", "localstorage", "underscore", "connection"], function
 		idAttribute: "id",
 		localStorage: new Backbone.LocalStorage("servers"),
 		defaults: {
-			host: "",
-			port: "",
-			title: "",
-			nick: "",
-			real_name: "",
+			host: "irc.esper.net",
+			port: 6667,
+			title: "Esper",
+			nick: "Chatter",
+			real_name: "Chatter Tester",
 			server_user: "",
 			server_pass: "",
 			shouldConnect: true,
-			channels: []
+			channels: ['#chatter']
 		},
 		connect: function() {
 			this.connection = new Connection(this);

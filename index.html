@@ -23,6 +23,34 @@
 		<div id="content"></div>
 	</div>
 
+	<script type="text/template" id='server-edit-template'>
+		<h1>Editing Server (Freenode)</h1>
+		<div class='inputs'>
+			<div class='sub-input'>
+				<input name="title" placeholder="Server Name" value="<%= title %>">
+			</div>
+			<div class='sub-input'>
+				<input name="host" placeholder="IP Address/Domain" value="<%= host %>">
+				<input name="port" placeholder="Server Port" value="<%= port %>">
+			</div>
+			<div class='sub-input'>
+				<input name="nick" placeholder="Nickname" value="<%= nick %>">
+				<input name="real_name" placeholder="Real Name" value="<%= real_name %>">
+			</div>
+			<div class='sub-input'>
+				<input name="server_user" placeholder="Username" value="<%= server_user %>">
+				<input name="server_pass" placeholder="Password" value="<%= server_pass %>">
+			</div>
+			<div class='sub-input'>
+				<input name="channels" placeholder="Channels (Comma separated list)" value="<%= channels %>">
+			</div>
+		</div>
+		<div class='buttons'>
+			<button class="server_save save">Save</button>
+			<button class="server_popup_close close">Close</button>
+		</div>
+	</script>
+
 	<script type='text/template' id='channel-template'>
 		<div class='top-wrap'>
 			<span class='channel-name'><%= name %>: </span>

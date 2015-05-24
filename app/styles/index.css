@@ -276,3 +276,70 @@ input.message-input {
 .separator {
 	color:darkmagenta;
 }
+
+.popup {
+	min-height: 20px;
+	padding: 19px;
+	margin-bottom: 20px;
+	background-color: #F5F5F5;
+	border: 1px solid #E3E3E3;
+	border-radius: 4px;
+	box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.05) inset;
+}
+
+.popup h1 {
+	margin: 0 0 10px 0;
+}
+
+input {
+	padding: 5px;
+	border-radius: 4px;
+	box-shadow: none;
+	border-style: groove;
+	height: 30px;
+	line-height: 30px;
+	font-size: 18px;
+}
+
+.inputs {
+	display:block;
+}
+
+.inputs .sub-input {
+	display:block;
+	margin: 30px;
+	height: 30px;
+
+}
+
+.inputs input:nth-child(2) {
+	float:right;
+	margin-left:5px;
+}
+
+.inputs input[name="title"], .inputs input[name="channels"] {
+	width:475px;
+}
+
+.buttons {
+	float:right;
+}
+
+.popup button {
+	box-shadow: none;
+	padding: 10px 15px 10px 15px;
+	cursor: pointer;
+	border: none;
+	border-radius: 5px;
+	color: white;
+	font-size: 16px;
+	font-weight: 700;
+}
+
+.popup button.close {
+	background-color:red;
+}
+
+.popup button.save {
+	background-color:cornflowerblue;
+}

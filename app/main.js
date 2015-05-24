@@ -1,8 +1,9 @@
 requirejs(["app", "router", "modules/servers/serverlist", "modules/servers/server", 
 	"modules/servers/serverlistview", "modules/channels/channelview", 
-	"modules/channels/channellist", "modules/channels/channel", "command"], 
+	"modules/channels/channellist", "modules/channels/channel", "command", "jquery", "jquery-popup-overlay",
+	"modules/servers/servereditview"], 
 	function(Chatter, Router, ServerList, Server, ServerListView, ChannelView, 
-		ChannelList, Channel, Command) {
+		ChannelList, Channel, Command, $, popup, ServerEditView) {
 		var gui = require('nw.gui');
 		Chatter.router = new Router();
 
@@ -23,6 +24,12 @@ requirejs(["app", "router", "modules/servers/serverlist", "modules/servers/serve
 					Chatter.display = "fullscreen";
 					win.enterFullscreen();
 				}
+			}
+			if( event.keyCode == 121 ) { 
+				var view = new ServerEditView({model: Chatter.Active.server});
+				var el = $('body').append(view.render().el);
+				$('#server_popup').popup();
+				$('#server_popup').popup('show');
 			}
 		});
 
@@ -131,22 +138,24 @@ requirejs(["app", "router", "modules/servers/serverlist", "modules/servers/serve
 		});
 
 		var servers = new ServerList();
-		servers.fetch();
+		Chatter.servers = servers;
+		Chatter.servers.fetch();
 		
-		if (servers.length === 0) {
-			var server = new Server({host: 'chat.freenode.net', port: 6667, title: "Freenode", nick: "JakeTestrator", real_name: "Jake", channels: ['#crafatar', '#unturned']})
+		if (Chatter.servers.length === 0) {
+			var server = new Server({host: 'chat.freenode.net', port: 6667, title: "Freenode", nick: "JakeTestrator", real_name: "Jake", channels: ['#programming', '#linux', '#chatter']})
 			server.save();
-			servers.add(server);
+			Chatter.servers.add(server);
 		}
 
 		var view = new ServerListView({collection: servers});
 		$('#channels ul').append(view.render().el);
 
-		servers.each(function(server) {
+		Chatter.servers.each(function(server) {
 			if (server.get('shouldConnect')) {
 				server.connect();
 			}
 		});
+
 
 		Chatter.disconnect = function(close, callback) {
 			var keys = Object.keys(Chatter.Clients);

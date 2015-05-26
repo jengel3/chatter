@@ -11,15 +11,16 @@ notifications:
 cache:
   directories:
     - node_modules
-before_deploy: git fetch --tags
+before_deploy: 
+  - ./scripts/zip-release.sh
+  - git fetch --tags
 deploy:
   provider: releases
   api_key:
     secure: AB6SPSgp/+opintYfgTkv0mzdMLElgFptYYR8bVosK5V7qyEts2l9NBeEuXDKKfT758QBkA151pD4nXegihfTp0whpyce4F099SxPlc0tzcfbfXVlWR/A5F3HAUjdFcNQCR6kWlcR1Opkmhp7Ep//F7sY4keJzD0rSLn8O4jKDE=
+  file_glob: true
   file: 
-    - build/Chatter/win64.zip
+    - build/Chatter/*.zip
   on:
     repo: Jake0oo0/chatter
     tags: true
-after_deploy:
-  - ./scripts/zip-release.sh

@@ -20,5 +20,6 @@ deploy:
     - build/Chatter/win64.zip
   on:
     repo: Jake0oo0/chatter
+    tags: true
 after_deploy:
   - ./scripts/zip-release.sh

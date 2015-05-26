@@ -24,7 +24,7 @@ gulp.task('build', function() {
     "!node_modules/read-all-stream/**", "!node_modules/nw/nwjs/chatter*",
     "!node_modules/unique-stream/**", "!node_modules/vinyl-fs/**", "!node_modules/rimraf/**", 
     "!node_modules/nw/**", "!node_modules/through2/**", "!node_modules/irc/node_modules/iconv/**"],
-    platforms: ['win64', 'linux64'],
+    platforms: ['win', 'osx', 'linux'],
     winIco: './dist/images/chatter.ico',
     version: '0.12.1'
   });

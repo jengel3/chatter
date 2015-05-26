@@ -13,7 +13,7 @@ var rm = require('gulp-rimraf');
 var NwBuilder = require('node-webkit-builder');
 
 // Build nwjs app
-gulp.task('build', ['compile', 'fonts', 'images'], function() {
+gulp.task('build', function() {
   var nw = new NwBuilder({
     appName: pkg.window.title,
     appVersion: pkg.version,
@@ -84,5 +84,6 @@ gulp.task('images', function () {
 });
 
 
+gulp.task('all', ['rjs', 'css', 'fonts', 'images']);
 gulp.task('compile', ['rjs', 'css', 'images']);
 gulp.task('default', ['compile', 'serve', 'watch']);

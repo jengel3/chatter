@@ -1,4 +1,5 @@
 define(["app", "backbone", "jquery", "moment"], function(Chatter, Backbone, $, moment) {
+	"use strict";
 	var uuid = require("node-uuid");
 	var Channel = Backbone.Model.extend({
 		idAttribute: "uuid",
@@ -13,7 +14,7 @@ define(["app", "backbone", "jquery", "moment"], function(Chatter, Backbone, $, m
 
 		initialize: function() {
 			if (!this.uuid) {
-				this.set("uuid", uuid.v4())
+				this.set("uuid", uuid.v4());
 			}
 		},
 
@@ -32,7 +33,7 @@ define(["app", "backbone", "jquery", "moment"], function(Chatter, Backbone, $, m
 			$("#content > div").hide();
 			var wrap = $("#content div.channel-wrap[data-channel=\"" + this.id + "\"]");
 			Chatter.Active.channel = this;
-			wrap.show()
+			wrap.show();
 			setTimeout(function() {
 				wrap.find(".message-input").focus();
 			}, 1);

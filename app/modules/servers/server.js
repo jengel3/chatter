@@ -1,5 +1,5 @@
 define(["app", "backbone", "localstorage", "underscore", "connection"], function(Chatter, Backbone, LocalStorage, _, Connection) {
-	var irc = require("irc");
+	"use strict";
 	var Server = Backbone.Model.extend({
 		idAttribute: "id",
 		localStorage: new Backbone.LocalStorage("servers"),
@@ -27,8 +27,8 @@ define(["app", "backbone", "localstorage", "underscore", "connection"], function
 			return null;
 		},
 		removeChannel: function(chan) {
-			var removed = _.without(self.channels, chan);
-			self.set("channels", removed)
+			var removed = _.without(this.channels, chan);
+			this.set("channels", removed);
 			return removed;
 		}
 	});	

@@ -1,4 +1,4 @@
-define(["app", "modules/channels/channellist", "modules/channels/channelview", "modules/channels/channel", "modules/servers/serverview"], function (Chatter, ChannelList, ChannelView, Channel, ServerView) {
+define(["app", "underscore", "jquery", "modules/channels/channellist", "modules/channels/channelview", "modules/channels/channel", "modules/servers/serverview"], function (Chatter, _, $, ChannelList, ChannelView, Channel, ServerView) {
   "use strict";
   var irc = require("irc");
   var Connection = function (server) {
@@ -151,7 +151,6 @@ define(["app", "modules/channels/channellist", "modules/channels/channelview", "
 
     self.client.addListener("join", function (chan, nick, message) {
       var channel = self.findChannel(chan);
-      console.debug("Channels", self.channels, self.server.get('title'))
       if (nick === self.nick) {
         if (!channel) {
           channel = new Channel({name: chan});

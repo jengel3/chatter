@@ -1,4 +1,5 @@
-define(["app", "backbone", "underscore"], function(Chatter, Backbone, _) {
+define(["app", "backbone", "underscore", "jquery"], function(Chatter, Backbone, _, $) {
+	"use strict";
 	var ChannelView = Backbone.View.extend({
 		template: _.template($("#channel-template").html()),
 		className: "channel-wrap",

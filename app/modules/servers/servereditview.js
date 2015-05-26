@@ -1,12 +1,13 @@
-define(["app", "backbone", "underscore", "modules/servers/server"], function(Chatter, Backbone, _, Server) {
+define(["app", "backbone", "underscore", "jquery", "modules/servers/server"], function(Chatter, Backbone, _, $, Server) {
+	"use strict";
 	var ServerEditView = Backbone.View.extend({
 		template: _.template($("#server-edit-template").html()),
-		className: 'popup',
-		id: 'server_popup',
+		className: "popup",
+		id: "server_popup",
 		events: {
-			'click .close': 'closed',
-			'click .save': 'saved',
-			'click .delete': 'destroy'
+			"click .close": "closed",
+			"click .save": 'saved',
+			"click .delete": "destroy"
 		},
 
 		initialize: function() {
@@ -28,13 +29,13 @@ define(["app", "backbone", "underscore", "modules/servers/server"], function(Cha
 			var self = this;
 			e.preventDefault();
 			e.stopPropagation();
-			var inputs = self.$el.find('input');
+			var inputs = self.$el.find("input");
 			for (var i = 0; i < inputs.length; i++) {
 				var input = $(inputs[i]);
-				var attr = input.attr('name');
+				var attr = input.attr("name");
 				var value = input.val();
 				self.model.set(attr, self.parse(attr, value));
-			};
+			}
 			if (self.editing) {
 				self.model.save();
 				Chatter.servers.fetch();
@@ -43,9 +44,9 @@ define(["app", "backbone", "underscore", "modules/servers/server"], function(Cha
 				Chatter.servers.add(self.model);
 				self.model.save();
 				var view = Chatter.Views.servers;
-				$('#channels > ul').html(view.render().el);
+				$("#channels > ul").html(view.render().el);
 				view.delegateEvents();
-				if (self.model.get('shouldConnect')) {
+				if (self.model.get("shouldConnect")) {
 					self.model.connect();
 				}
 			}
@@ -62,14 +63,14 @@ define(["app", "backbone", "underscore", "modules/servers/server"], function(Cha
 				for (var i = 0; i < connection.views.length; i++) {
 					var view = connection.views[i];
 					view.remove();
-				};
-				connection.client.disconnect('Disconnected from server', function() {
+				}
+				connection.client.disconnect("Disconnected from server", function() {
 					delete Chatter.Connections[self.model.id];
 					delete Chatter.Clients[self.model.id];
 					server.destroy();
 					Chatter.servers.fetch();
 					var view = Chatter.Views.servers;
-					$('#channels > ul').html(view.render().el);
+					$("#channels > ul").html(view.render().el);
 					view.delegateEvents();
 					if (Chatter.servers.length > 0) {
 						var focusable = Chatter.servers.first();
@@ -100,7 +101,6 @@ define(["app", "backbone", "underscore", "modules/servers/server"], function(Cha
 		},
 
 		closed: function(e) {
-			var self = this;
 			e.preventDefault();
 			e.stopPropagation();
 			$("#server_popup").popup("hide");

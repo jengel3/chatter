@@ -1,4 +1,5 @@
-define(["app", "backbone", "underscore"], function(Chatter, Backbone, _) {
+define(["app", "backbone", "underscore", "jquery"], function(Chatter, Backbone, _, $) {
+	"use strict";
 	var ServerView = Backbone.View.extend({
 		template: _.template($("#server-template").html()),
 		className: 'server-wrap',
@@ -12,7 +13,7 @@ define(["app", "backbone", "underscore"], function(Chatter, Backbone, _) {
 			this.$el.attr('data-server', this.model.get('id'));
 			return this;
 		},
-		entered: function(e) {
+		entered: function() {
 			// if (Chatter.Active.server && e.which === 13) {
 			// 	var server = Chatter.Active.server;
 			// 	var client = Chatter.Store[server.attributes.id];

@@ -14,7 +14,7 @@ define(["app", "backbone", "underscore", "jquery"], function(Chatter, Backbone, 
             this.$el.html("");
             this.collection.each(function(server){
                 self.$el.append(self.template(server.toJSON()));
-                var header = self.$el.find('li.server[data-id="' + server.id + '"]')
+                var header = self.$el.find('li.server[data-id="' + server.id + '"]');
                 var connection = Chatter.Connections[server.id];
                 if (connection) {
                     if (connection.channels.length > 0) {
@@ -45,7 +45,7 @@ define(["app", "backbone", "underscore", "jquery"], function(Chatter, Backbone, 
             e.stopPropagation();
             var id = $(e.currentTarget).data("id");
             var server = this.collection.get(id);
-            var active = Chatter.Active.server;
+            Chatter.Active.server = server;
             $("#content > div").hide();
             $("#content > div[data-server=\"" + id +"\"]").show();
             return false;

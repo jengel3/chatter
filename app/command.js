@@ -1,16 +1,14 @@
-define(["app", "underscore"], function (Chatter, _) {
+define(["app"], function (Chatter) {
+  "use strict";
   var Commands = {};
 
   Commands.list = [];
 
   Commands.add = function(matcher, handler) {
-    var self = this;
-
     Commands.list.push({
       matcher: matcher,
       handler: handler
     });
-
   };
 
   Commands.handle = function(client, data) {
@@ -25,7 +23,9 @@ define(["app", "underscore"], function (Chatter, _) {
         break;
       }
     }
-    if (!cmd) return false;
+    if (!cmd) {
+      return false;
+    }
     return cmd.handler(client, data, args.slice(1));
   };
 

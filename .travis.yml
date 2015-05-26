@@ -10,7 +10,7 @@ notifications:
     skip_join: true
 cache:
   directories:
-  - node_modules
+    - node_modules
 before_deploy: git fetch --tags
 deploy:
   provider: releases

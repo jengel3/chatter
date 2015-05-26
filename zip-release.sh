@@ -5,7 +5,7 @@
 cd build/Chatter;
 for i in */; do 
 	cd "$i"; 
-	zip -r "../${i%/}.zip" "."; 
+	zip -r "../chatter-${i%/}.zip" "."; 
 	echo "Zipped $i"; 
 	cd ../; 
 done

@@ -151,9 +151,9 @@ requirejs(["app", "router", "modules/servers/serverlist", "modules/servers/serve
 			Chatter.servers.fetch();
 		}
 
-		var view = new ServerListView({collection: Chatter.servers, elem: '#channels'});
+		var view = new ServerListView({collection: Chatter.servers});
 		Chatter.Views.servers = view;
-		Chatter.Views.servers.render();
+		$('#channels > ul').html(view.render().el);
 
 		Chatter.servers.each(function(server) {
 			if (server.get('shouldConnect')) {

@@ -3,17 +3,11 @@ define(["app", "backbone", "underscore", "jquery"], function(Chatter, Backbone, 
     var ServerListView = Backbone.View.extend({
         template: _.template("<li class=\"server\" data-id=<%= id %>><span class=\"server-title\"><span class=\"slider\">&times; </span><%= title %></span><ul></ul></li>"),
         id: 'ch-list',
-        tagName: 'ul',
         events: {
             "click .server": "server",
             "click .server ul li": "channel",
             "click .server .slider": "slide"
         },
-
-        initialize: function(opts) {
-            this.elem = opts.elem;
-        },
-
         render: function(){
             var self = this;
             this.$el.empty();
@@ -31,7 +25,6 @@ define(["app", "backbone", "underscore", "jquery"], function(Chatter, Backbone, 
                 }
 
             }, self);
-            $(this.elem).html(this.el);
             this.delegateEvents();
             return self;
         },
@@ -48,6 +41,7 @@ define(["app", "backbone", "underscore", "jquery"], function(Chatter, Backbone, 
         },
 
         server: function(e) {
+            console.log("server")
             e.preventDefault();
             e.stopPropagation();
             var id = $(e.currentTarget).data("id");
@@ -59,6 +53,7 @@ define(["app", "backbone", "underscore", "jquery"], function(Chatter, Backbone, 
         },
 
         channel: function(e) {
+            console.log("channel")
             e.preventDefault();
             e.stopPropagation();
             var id = $(e.currentTarget).data("channel-id");

@@ -42,7 +42,9 @@ define(["app", "backbone", "underscore", "modules/servers/server"], function(Cha
 				Chatter.servers.fetch();
 				Chatter.servers.add(self.model);
 				self.model.save();
-				Chatter.Views.servers.reset(Chatter.servers);
+				var view = Chatter.Views.servers;
+				$('#channels > ul').html(view.render().el);
+				view.delegateEvents();
 				if (self.model.get('shouldConnect')) {
 					self.model.connect();
 				}
@@ -66,8 +68,9 @@ define(["app", "backbone", "underscore", "modules/servers/server"], function(Cha
 					delete Chatter.Clients[self.model.id];
 					server.destroy();
 					Chatter.servers.fetch();
-					Chatter.Views.servers.reset(Chatter.servers);
-					$('#channels ul').html(Chatter.Views.servers.el);
+					var view = Chatter.Views.servers;
+					$('#channels > ul').html(view.render().el);
+					view.delegateEvents();
 					if (Chatter.servers.length > 0) {
 						var focusable = Chatter.servers.first();
 						Chatter.Active.server = focusable;

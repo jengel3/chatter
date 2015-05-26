@@ -151,13 +151,16 @@ define(["app", "modules/channels/channellist", "modules/channels/channelview", "
 
     self.client.addListener("join", function (chan, nick, message) {
       var channel = self.findChannel(chan);
+      console.debug("Channels", self.channels, self.server.get('title'))
       if (nick === self.nick) {
         if (!channel) {
           channel = new Channel({name: chan});
           self.channels.add(channel);
         }
         self.server.addChannel(chan);
-        Chatter.Views.servers.render();
+        var view = Chatter.Views.servers;
+        $('#channels > ul').html(view.render().el);
+        view.delegateEvents();
         var chView = new ChannelView({
           model: channel
         });
@@ -181,7 +184,9 @@ define(["app", "modules/channels/channellist", "modules/channels/channelview", "
       } else {
         var wrap = $("#content div.channel-wrap[data-channel=\"" + channel.id + "\"]");
         self.channels.remove(channel);
-        Chatter.Views.servers.render();
+        var view = Chatter.Views.servers;
+        $('#channels > ul').html(view.render().el);
+        view.delegateEvents();
         var first = self.channels.first();
         wrap.remove();
         first.focus();

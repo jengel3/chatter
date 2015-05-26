@@ -157,7 +157,7 @@ define(["app", "modules/channels/channellist", "modules/channels/channelview", "
           self.channels.add(channel);
         }
         self.server.addChannel(chan);
-        $("li.server[data-id=" + self.server.id + "]").find("ul").append("<li data-channel-id=\"" + channel.id + "\">" + chan + "</li>");
+        Chatter.Views.servers.render();
         var chView = new ChannelView({
           model: channel
         });
@@ -180,9 +180,8 @@ define(["app", "modules/channels/channellist", "modules/channels/channelview", "
         self.removeUser(nick, channel);
       } else {
         var wrap = $("#content div.channel-wrap[data-channel=\"" + channel.id + "\"]");
-        $("#channels li[data-channel-id=\"" + channel.id + "\"]").remove();
         self.channels.remove(channel);
-
+        Chatter.Views.servers.render();
         var first = self.channels.first();
         wrap.remove();
         first.focus();

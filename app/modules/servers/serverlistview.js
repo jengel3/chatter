@@ -1,43 +1,68 @@
-define(["app", "backbone", "underscore", "modules/channels/channellist", "modules/channels/channelview"], function(Chatter, Backbone, _, ChannelList, ChannelView) {
+define(["app", "backbone", "underscore", "jquery"], function(Chatter, Backbone, _, $) {
+    "use strict";
     var ServerListView = Backbone.View.extend({
-        template: _.template('<li class="server" data-id=<%= id %>><span class="server-title"><span class="slider">&times; </span><%= title %></span><ul></ul></li>'),
-
+        template: _.template("<li class=\"server\" data-id=<%= id %>><span class=\"server-title\"><span class=\"slider\">&times; </span><%= title %></span><ul></ul></li>"),
+        id: 'ch-list',
+        tagName: 'ul',
         events: {
             "click .server": "server",
-            "click .server ul li": "channel"
+            "click .server ul li": "channel",
+            "click .server .slider": "slide"
+        },
+
+        initialize: function(opts) {
+            this.elem = opts.elem;
         },
 
         render: function(){
+            var self = this;
+            this.$el.empty();
+            this.$el.html("");
             this.collection.each(function(server){
-                this.$el.append(this.template(server.toJSON()));
-            }, this);
-            return this;
+                self.$el.append(self.template(server.toJSON()));
+                var header = self.$el.find('li.server[data-id="' + server.id + '"]')
+                var connection = Chatter.Connections[server.id];
+                if (connection) {
+                    if (connection.channels.length > 0) {
+                        connection.channels.each(function(channel) {
+                            $(header).find("ul").append("<li data-channel-id=\"" + channel.id + "\">" + channel.get('name') + "</li>");
+                        }, self);
+                    }
+                }
+
+            }, self);
+            $(this.elem).html(this.el);
+            this.delegateEvents();
+            return self;
         },
 
-        reset: function(collection) {
-            this.collection = collection;
-            this.$el.html("");
-            this.$el.empty();
-            this.delegateEvents();
-            return this.render();
+        slide: function(e) {
+            e.stopPropagation();
+            e.preventDefault();
+            var list = $(e.currentTarget).parent().parent().find("ul");
+            if ($(list).is(":visible")) {
+                $(list).slideUp();
+            } else {
+                $(list).slideDown();
+            }
         },
 
         server: function(e) {
             e.preventDefault();
             e.stopPropagation();
-            var id = $(e.currentTarget).data('id');
+            var id = $(e.currentTarget).data("id");
             var server = this.collection.get(id);
             var active = Chatter.Active.server;
-            $('#content > div').hide();
-            $('#content > div[data-server="' + id +'"]').show();
+            $("#content > div").hide();
+            $("#content > div[data-server=\"" + id +"\"]").show();
             return false;
         },
 
         channel: function(e) {
             e.preventDefault();
             e.stopPropagation();
-            var id = $(e.currentTarget).data('channel-id');
-            var serverId = $(e.currentTarget).parents('li.server').data('id');
+            var id = $(e.currentTarget).data("channel-id");
+            var serverId = $(e.currentTarget).parents("li.server").data("id");
             var connection = Chatter.Connections[serverId];
             var channels = connection.channels;
             var channel = channels.get(id);

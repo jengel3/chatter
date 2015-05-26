@@ -117,10 +117,12 @@ ul {
 	line-height: 40px;
 	padding-left: 15px;
 	font-weight: 700;
+	cursor:pointer;
 }
 
 .server ul li {
 	padding: 5px 0px 5px 0px;
+	cursor:pointer;
 }
 
 #buttons {
@@ -142,6 +144,7 @@ ul {
 	margin-left:3px;
 	float:right;
 	-webkit-app-region: no-drag;
+	cursor:pointer;
 }
 
 #buttons .close {
@@ -351,4 +354,27 @@ input {
 
 #server_popup, #server_popup_wrapper, #server_popup_background {
 	transition: all 0.3s;
+}
+
+.manage {
+	bottom: 0;
+	position: absolute;
+	display: block;
+	height: 30px;
+	line-height: 30px;
+	font-size: 25px;
+	right: 0;
+	left: 0;
+	font-weight: 700;
+	background-color: #ccc;
+	padding-left: 5px;
+}
+
+.manage span {
+	-webkit-transition: all .2s ease-in-out;
+	cursor:pointer;
+}
+
+.manage span:hover {
+	-webkit-transform: scale(1.1);
 }

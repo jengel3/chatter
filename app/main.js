@@ -39,15 +39,6 @@ requirejs(["app", "router", "modules/servers/serverlist", "modules/servers/serve
 			}
 		});
 
-		$(".server").click(function(e) {
-			var list = $(e.target).parent().find("ul");
-			if ($(list).is(":visible")) {
-				$(list).slideUp();
-			} else {
-				$(list).slideDown();
-			}
-		});
-
 		Chatter.display = "normal";
 
 		var tray = new gui.Tray({ title: 'Chatter', icon: './dist/images/chatter.png' });
@@ -160,14 +151,26 @@ requirejs(["app", "router", "modules/servers/serverlist", "modules/servers/serve
 			Chatter.servers.fetch();
 		}
 
-		var view = new ServerListView({collection: Chatter.servers});
+		var view = new ServerListView({collection: Chatter.servers, elem: '#channels'});
 		Chatter.Views.servers = view;
-		$('#channels ul').append(view.render().el);
+		Chatter.Views.servers.render();
 
 		Chatter.servers.each(function(server) {
 			if (server.get('shouldConnect')) {
 				server.connect();
 			}
+		});
+
+		$('.add-server').click(function(e) {
+			var view = new ServerEditView({model: null});
+			var el = $("body").append(view.render().el);
+			$("#server_popup").popup({
+				detach: false,
+				onclose: function() {
+					view.cleanup();
+				}
+			});
+			$("#server_popup").popup("show");
 		});
 
 

@@ -68,7 +68,6 @@ define(["app", "backbone", "underscore", "modules/servers/server"], function(Cha
 					Chatter.servers.fetch();
 					Chatter.Views.servers.reset(Chatter.servers);
 					$('#channels ul').html(Chatter.Views.servers.el);
-					console.debug("Disconnected from a server.")
 					if (Chatter.servers.length > 0) {
 						var focusable = Chatter.servers.first();
 						Chatter.Active.server = focusable;

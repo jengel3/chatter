@@ -9,7 +9,6 @@ var uglify = require('gulp-uglify');
 var minifyCSS = require('gulp-minify-css');
 var rjs = require('gulp-requirejs');
 
-var glob = require('glob-array');
 var rm = require('gulp-rimraf');
 var NwBuilder = require('node-webkit-builder');
 
@@ -23,7 +22,9 @@ gulp.task('build', ['compile', 'fonts', 'images'], function() {
     "node_modules/**", "!node_modules/gulp*/**", "!node_modules/bower/**", 
     "!node_modules/duplexify/**", "!node_modules/node-webkit-builder/**", "!node_modules/*glob*/**", 
     "!node_modules/read-all-stream/**", "!node_modules/nw/nwjs/chatter*",
-    "!node_modules/unique-stream/**", "!node_modules/vinyl-fs/**", "!node_modules/rimraf/**", "!node_modules/nw/**"],
+    "!node_modules/unique-stream/**", "!node_modules/vinyl-fs/**", "!node_modules/rimraf/**", 
+    "!node_modules/nw/**", "!node_modules/through2/**", "!node_modules/irc/node_modules/iconv/**",
+    "!app/styles/**", "!app/images/*"],
     platforms: ['win64', 'linux64'],
     version: '0.12.1'
   });

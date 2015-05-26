@@ -36,16 +36,10 @@
   "author": "Jake",
   "dependencies": {
     "bower": "^1.4.1",
-    "duplexify": "^3.4.0",
     "gulp": "^3.8.11",
     "irc": "Jake0oo0/node-irc",
     "node-uuid": "^1.4.3",
-    "node-webkit-builder": "^1.0.11",
     "nw": "^0.12.1",
-    "read-all-stream": "^2.1.2",
-    "requirejs": "^2.1.17",
-    "slate-irc": "^0.8.1",
-    "unique-stream": "^2.0.2",
     "vinyl-fs": "^1.0.0"
   },
   "devDependencies": {
@@ -64,6 +58,10 @@
     "gulp-util": "~3.0.4",
     "node-webkit-builder": "^1.0.11",
     "rimraf": "^2.3.3",
-    "through2": "^0.6.5"
+    "through2": "^0.6.5",
+    "node-webkit-builder": "^1.0.11",
+    "unique-stream": "^2.0.2",
+    "duplexify": "^3.4.0",
+    "read-all-stream": "^2.1.2"
   }
 }

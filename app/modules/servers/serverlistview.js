@@ -41,7 +41,6 @@ define(["app", "backbone", "underscore", "jquery"], function(Chatter, Backbone, 
         },
 
         server: function(e) {
-            console.log("server")
             e.preventDefault();
             e.stopPropagation();
             var id = $(e.currentTarget).data("id");
@@ -53,7 +52,6 @@ define(["app", "backbone", "underscore", "jquery"], function(Chatter, Backbone, 
         },
 
         channel: function(e) {
-            console.log("channel")
             e.preventDefault();
             e.stopPropagation();
             var id = $(e.currentTarget).data("channel-id");

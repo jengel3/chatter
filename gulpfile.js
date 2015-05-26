@@ -18,7 +18,7 @@ gulp.task('build', ['compile', 'fonts', 'images'], function() {
     appName: pkg.window.title,
     appVersion: pkg.version,
     buildDir: 'build',
-    files: ['package.json', 'app/**', 'dist/**', 'vendor/components/**/*', 'index.html', 
+    files: ['package.json', 'app/**', 'dist/**/*', 'vendor/components/**/*', 'index.html', 
     "node_modules/**", "!node_modules/gulp*/**", "!node_modules/bower/**", 
     "!node_modules/duplexify/**", "!node_modules/node-webkit-builder/**", "!node_modules/*glob*/**", 
     "!node_modules/read-all-stream/**", "!node_modules/nw/nwjs/chatter*",

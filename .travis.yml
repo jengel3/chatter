@@ -19,8 +19,10 @@ deploy:
   api_key:
     secure: AB6SPSgp/+opintYfgTkv0mzdMLElgFptYYR8bVosK5V7qyEts2l9NBeEuXDKKfT758QBkA151pD4nXegihfTp0whpyce4F099SxPlc0tzcfbfXVlWR/A5F3HAUjdFcNQCR6kWlcR1Opkmhp7Ep//F7sY4keJzD0rSLn8O4jKDE=
   file_glob: true
+  skip_cleanup: true
   file: 
     - build/Chatter/*.zip
   on:
     repo: Jake0oo0/chatter
     tags: true
+    all_branches: true

@@ -36,7 +36,6 @@
   "author": "Jake",
   "dependencies": {
     "bower": "^1.4.1",
-    "gulp": "^3.8.11",
     "irc": "Jake0oo0/node-irc",
     "node-uuid": "^1.4.3",
     "nw": "^0.12.1",

@@ -26,6 +26,7 @@ gulp.task('build', ['compile', 'fonts', 'images'], function() {
     "!node_modules/nw/**", "!node_modules/through2/**", "!node_modules/irc/node_modules/iconv/**",
     "!app/styles/**", "!app/images/*"],
     platforms: ['win64', 'linux64'],
+    winIco: './dist/images/chatter.ico',
     version: '0.12.1'
   });
 

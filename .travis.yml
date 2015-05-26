@@ -2,12 +2,20 @@ language: node_js
 node_js:
 - '0.10'
 script:
-  - gulp build
+- gulp build
 notifications:
   irc:
     channels:
-      - irc.esper.net#chatter
+    - irc.esper.net#chatter
     skip_join: true
 cache:
   directories:
-    - node_modules
+  - node_modules
+deploy:
+  provider: releases
+  api_key:
+    secure: AB6SPSgp/+opintYfgTkv0mzdMLElgFptYYR8bVosK5V7qyEts2l9NBeEuXDKKfT758QBkA151pD4nXegihfTp0whpyce4F099SxPlc0tzcfbfXVlWR/A5F3HAUjdFcNQCR6kWlcR1Opkmhp7Ep//F7sY4keJzD0rSLn8O4jKDE=
+  file: 
+  	- build/Chatter/win64.zip
+  on:
+    repo: Jake0oo0/chatter

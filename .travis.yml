@@ -6,7 +6,7 @@ script:
 notifications:
   irc:
     channels:
-    - irc.esper.net#chatter
+      - irc.esper.net#chatter
     skip_join: true
 cache:
   directories:

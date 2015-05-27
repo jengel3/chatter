@@ -1,9 +1,9 @@
 requirejs(["app", "router", "modules/servers/serverlist", "modules/servers/server", 
 	"modules/servers/serverlistview", "modules/channels/channelview", 
-	"modules/channels/channellist", "modules/channels/channel", "command", "jquery", "jquery-popup-overlay",
+	"modules/channels/channellist", "modules/channels/channel", "commands", "jquery", "jquery-popup-overlay",
 	"modules/servers/servereditview"],
 	function(Chatter, Router, ServerList, Server, ServerListView, ChannelView, 
-		ChannelList, Channel, Command, $, popup, ServerEditView) {
+		ChannelList, Channel, Commands, $, popup, ServerEditView) {
 		"use strict"; 
 		var gui = require("nw.gui");
 		Chatter.router = new Router();
@@ -89,14 +89,14 @@ requirejs(["app", "router", "modules/servers/serverlist", "modules/servers/serve
 			win.menu = mb;
 		}
 
-		Chatter.Commands = Command;
-		Chatter.Commands.add = Command.add;
+		Chatter.Commands = Commands;
+		Chatter.Commands.register = Commands.register;
 
-		Chatter.Commands.add("join", function(client, data, args) {
+		Chatter.Commands.register("join", function (client, data, args) {
 			client.join(args.join(' ') + ' ');
 		});
 
-		Chatter.Commands.add("part", function(client, data, args) {
+		Chatter.Commands.register("part", function (client, data, args) {
 			var channel = null;
 			var message = null;
 			if (args.length === 1) {
@@ -110,22 +110,22 @@ requirejs(["app", "router", "modules/servers/serverlist", "modules/servers/serve
 			client.part(channel, message);
 		});
 
-		Chatter.Commands.add("nick", function(client, data, args) {
+		Chatter.Commands.register("nick", function (client, data, args) {
 			if (args.length === 1) {
 				var nick = args[0];
 				client.send('nick', nick);
 			}
 		});
 
-		Chatter.Commands.add("reload", function(client, data, args) {
+		Chatter.Commands.register("reload", function (client, data, args) {
 			Chatter.reload();
 		});
 
-		Chatter.Commands.add("dev", function(client, data, args) {
+		Chatter.Commands.register("dev", function (client, data, args) {
 			win.showDevTools();
 		});
 
-		Chatter.Commands.add("topic", function(client, data, args) {
+		Chatter.Commands.register("topic", function (client, data, args) {
 			if (args.length === 0 || !Chatter.Active.channel) {
 				return;
 			}
@@ -133,7 +133,7 @@ requirejs(["app", "router", "modules/servers/serverlist", "modules/servers/serve
 			client.send('topic', Chatter.Active.channel.get('name'), topic);
 		});
 
-		Chatter.Commands.add("me", function(client, data, args) {
+		Chatter.Commands.register("me", function (client, data, args) {
 			if (args.length === 0 || !Chatter.Active.channel) {
 				return;
 			}
@@ -141,7 +141,7 @@ requirejs(["app", "router", "modules/servers/serverlist", "modules/servers/serve
 			client.action(Chatter.Active.channel.get('name'), action);
 		});
 
-		Chatter.Commands.add("msg", function(client, data, args) {
+		Chatter.Commands.register("msg", function (client, data, args) {
 			if (args.length <= 1 || !Chatter.Active.channel) {
 				return;
 			}

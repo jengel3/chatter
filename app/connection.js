@@ -238,7 +238,9 @@ define(["app", "underscore", "jquery", "modules/channels/channellist", "modules/
             message: message,
             nick: self.nick
           };
-          Chatter.Commands.handle(self.client, data);
+          Chatter.Commands.handle(self.client, data, function(client, data, args) {
+            client.send(data.command, args.join(" "));
+          });
         } else {
           if (receiver.modelName === "Channel") {
             self.client.say(receiver.get("name"), message);

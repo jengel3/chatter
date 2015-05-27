@@ -95,7 +95,7 @@ define(["app", "underscore", "jquery", "modules/channels/channellist", "modules/
       if (Chatter.Active.channel) {
         Chatter.Active.channel.addMessage("<div class=\"message\"><span class=\"err-msg\">Chatter Error: </span>" + message.command + "</div>");
       }
-       Chatter.vent.trigger('client:error', message);
+      Chatter.vent.trigger('client:error', message);
     });
 
     self.client.addListener("registered", function (message) {
@@ -125,6 +125,10 @@ define(["app", "underscore", "jquery", "modules/channels/channellist", "modules/
 
       channel.addMessage("<span class=\"author\">" + from + ": </span>" + message);
       Chatter.vent.trigger('message', channel, message);
+    });
+
+    self.client.addListener("pm", function (nick, text, message) {
+      Chatter.vent.trigger('privateMessage:' + self.server.id, nick, text, false, false);
     });
 
     self.client.addListener("action", function (from, to, text, message) {
@@ -221,26 +225,54 @@ define(["app", "underscore", "jquery", "modules/channels/channellist", "modules/
       }
     });
 
+    Chatter.vent.on('privateMessage:' + self.server.id, function(nick, message, focus, sent) {
+      var channel = self.findChannel(nick);
+      if (!channel) {
+        channel = new Channel({name: nick});
+        self.channels.add(channel);
+
+        var view = Chatter.Views.servers;
+        $('#channels > ul').html(view.render().el);
+        view.delegateEvents();
+
+        var chView = new ChannelView({
+          model: channel
+        });
+        self.views.push(chView);
+
+        $("#content").append(chView.render().el);
+      }
+
+      if (focus) {
+        channel.focus();
+      } else if (Chatter.Active.channel.get('name') !== nick) {
+        channel.hide();
+      }
+
+      if (sent) {
+        self.client.say(nick, message);
+      } else {
+        channel.addMessage("<span class=\"author\">" + nick + ": </span>" + message);
+      }
+    });
+
     Chatter.vent.on('sendingMessage:' + self.server.id, function(receiver, message) {
       if (message.trim() !== "") {
-          if (message.slice()[0] === '/') {
-            var data = {
-              receiver: receiver, 
-              message: message,
-              nick: self.nick
-            };
-            Chatter.Commands.handle(self.client, data);
-          } else {
-            if (typeof receiver === "string") {
-              receiver = self.findChannel(receiver);
-            }
-            if (receiver.modelName === "Channel") {
-              self.client.say(receiver.get("name"), message);
-            } else if (receiver.modelName === "Server") {
-              self.client.send(message);
-            }
+        if (message.slice()[0] === '/') {
+          var data = {
+            receiver: receiver, 
+            message: message,
+            nick: self.nick
+          };
+          Chatter.Commands.handle(self.client, data);
+        } else {
+          if (receiver.modelName === "Channel") {
+            self.client.say(receiver.get("name"), message);
+          } else if (receiver.modelName === "Server") {
+            self.client.send(message);
           }
         }
+      }
     });
   };
   function toPriority(sym) {

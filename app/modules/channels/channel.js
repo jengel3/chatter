@@ -17,6 +17,12 @@ define(["app", "backbone", "jquery", "moment"], function(Chatter, Backbone, $, m
 			if (!this.uuid) {
 				this.set("uuid", uuid.v4());
 			}
+			if (this.get('name').startsWith('#')) {
+				this.pm = false;
+			} else {
+				this.pm = true;
+				this.topic = this.get('name') + ' (Private Message)'
+			}
 		},
 
 		getMessages: function() {
@@ -39,6 +45,11 @@ define(["app", "backbone", "jquery", "moment"], function(Chatter, Backbone, $, m
 				wrap.find(".message-input").focus();
 			}, 1);
 			Chatter.vent.trigger('focus:channel', this);
+		},
+		
+		hide: function() {
+			var wrap = $("#content div.channel-wrap[data-channel=\"" + this.id + "\"]");
+			wrap.hide();
 		}
 	});	
 	return Channel;

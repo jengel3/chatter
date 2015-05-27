@@ -68,6 +68,10 @@ requirejs(["app", "router", "modules/servers/serverlist", "modules/servers/serve
 			}
 		});
 
+		win.on('close', function() {
+			Chatter.disconnect(true);
+		});
+
 		tray.on('click', function() {
 			if (Chatter.display === "minimized") {
 				Chatter.vent.trigger('window:tray:normalized');
@@ -147,7 +151,7 @@ requirejs(["app", "router", "modules/servers/serverlist", "modules/servers/serve
 			}
 			var target = args[0];
 			var message = args.slice(1).join(' ');
-			Chatter.vent.trigger('sendingMessage:' + client.server.id, target, message);
+			Chatter.vent.trigger('privateMessage:' + Chatter.Active.server.id, target, message, false, true);
 		});
 
 		win.on('new-win-policy', function (frame, url, policy) {
@@ -220,9 +224,4 @@ requirejs(["app", "router", "modules/servers/serverlist", "modules/servers/serve
 				location.reload();
 			});
 		};
-
-		win.on('close', function() {
-			Chatter.disconnect(true);
-		});
-
 	});

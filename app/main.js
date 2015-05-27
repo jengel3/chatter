@@ -101,8 +101,11 @@ requirejs(["app", "router", "modules/servers/serverlist", "modules/servers/serve
 		});
 
 		Chatter.Commands.register("part", function (client, data, args) {
-			var channel = null;
-			var message = null;
+			if (!Chatter.Active.server) {
+				return;
+			}
+			var channel;
+			var message;
 			if (args.length === 1) {
 				channel = args[0];
 			} else {
@@ -111,7 +114,7 @@ requirejs(["app", "router", "modules/servers/serverlist", "modules/servers/serve
 			if (args.length > 1) {
 				message = args.slice(1).join(' ');
 			}
-			client.part(channel, message);
+			Chatter.vent.trigger('part:' + Chatter.Active.server.id, channel, message);
 		});
 
 		Chatter.Commands.register("nick", function (client, data, args) {
@@ -151,7 +154,7 @@ requirejs(["app", "router", "modules/servers/serverlist", "modules/servers/serve
 			}
 			var target = args[0];
 			var message = args.slice(1).join(' ');
-			Chatter.vent.trigger('privateMessage:' + Chatter.Active.server.id, target, message, false, true);
+			Chatter.vent.trigger('privateMessage:' + Chatter.Active.server.id, target, message);
 		});
 
 		win.on('new-win-policy', function (frame, url, policy) {

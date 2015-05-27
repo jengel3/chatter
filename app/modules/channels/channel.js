@@ -6,9 +6,8 @@ define(["app", "backbone", "jquery", "moment"], function(Chatter, Backbone, $, m
 		modelName: "Channel",
 		defaults: {
 			name: "",
+			lower: "",
 			topic: "",
-			current: false,
-			server: 0,
 			names: {},
 			channels: []
 		},
@@ -17,12 +16,12 @@ define(["app", "backbone", "jquery", "moment"], function(Chatter, Backbone, $, m
 			if (!this.uuid) {
 				this.set("uuid", uuid.v4());
 			}
-			if (this.get('name').startsWith('#')) {
-				this.pm = false;
-			} else {
-				this.pm = true;
-				this.topic = this.get('name') + ' (Private Message)'
+			this.on("change:topic", this.setTopic, this)
+			if (!this.get('name').startsWith('#')) {
+				this.set('pm', true);
+				this.set('topic', "(Private Message)")
 			}
+			this.set('lower', this.get('name').toLowerCase());
 		},
 
 		getMessages: function() {
@@ -50,6 +49,13 @@ define(["app", "backbone", "jquery", "moment"], function(Chatter, Backbone, $, m
 		hide: function() {
 			var wrap = $("#content div.channel-wrap[data-channel=\"" + this.id + "\"]");
 			wrap.hide();
+		},
+
+		setTopic: function() {
+			var topic = this.get('topic');
+			var wrapper = $("#content div.channel-wrap[data-channel=\"" + this.id + "\"]");
+			$(wrapper).find(".topic").text(topic);
+			$(wrapper).find(".topic").attr("title", topic);
 		}
 	});	
 	return Channel;

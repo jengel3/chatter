@@ -25,7 +25,7 @@ define(["app", "underscore", "jquery", "modules/channels/channellist", "modules/
 
   Connection.prototype.findChannel = function (ch) {
     var self = this;
-    var channel = self.channels.findWhere({name: ch});
+    var channel = self.channels.findWhere({lower: ch.toLowerCase()});
     return channel;
   };
 
@@ -120,15 +120,16 @@ define(["app", "underscore", "jquery", "modules/channels/channellist", "modules/
       }
     });
 
-    self.client.addListener("message#", function (from, to, message) {
-      var channel = self.findChannel(to);
+    self.client.addListener("message", function (from, to, message) {
+      var channel;
+      if (self.isChannel(to)) {
+        channel = self.findChannel(to);
+      } else {
+        channel = self.createPM(from);
+      }
 
       channel.addMessage("<span class=\"author\">" + from + ": </span>" + message);
       Chatter.vent.trigger('message', channel, message);
-    });
-
-    self.client.addListener("pm", function (nick, text, message) {
-      Chatter.vent.trigger('privateMessage:' + self.server.id, nick, text, false, false);
     });
 
     self.client.addListener("action", function (from, to, text, message) {
@@ -146,11 +147,8 @@ define(["app", "underscore", "jquery", "modules/channels/channellist", "modules/
 
     self.client.addListener("topic", function (chan, topic, nick, message) {
       var channel = self.findChannel(chan);
-      channel.set("topic", topic);
-
-      var wrapper = $("#content div.channel-wrap[data-channel=\"" + channel.id + "\"]");
-      $(wrapper).find(".topic").text(topic);
-      $(wrapper).find(".topic").attr("title", topic);
+      
+      channel.set('topic', topic);
 
       channel.addMessage("*" + nick + " set the topic to: " + topic);
 
@@ -193,14 +191,7 @@ define(["app", "underscore", "jquery", "modules/channels/channellist", "modules/
         self.removeUser(nick, channel);
         Chatter.vent.trigger('part', channel);
       } else {
-        var wrap = $("#content div.channel-wrap[data-channel=\"" + channel.id + "\"]");
-        self.channels.remove(channel);
-        var view = Chatter.Views.servers;
-        $('#channels > ul').html(view.render().el);
-        view.delegateEvents();
-        var first = self.channels.first();
-        wrap.remove();
-        first.focus();
+        self.removeChannel(chan);
         Chatter.vent.trigger('self:part', channel);
       }
     });
@@ -225,35 +216,18 @@ define(["app", "underscore", "jquery", "modules/channels/channellist", "modules/
       }
     });
 
-    Chatter.vent.on('privateMessage:' + self.server.id, function(nick, message, focus, sent) {
-      var channel = self.findChannel(nick);
-      if (!channel) {
-        channel = new Channel({name: nick});
-        self.channels.add(channel);
-
-        var view = Chatter.Views.servers;
-        $('#channels > ul').html(view.render().el);
-        view.delegateEvents();
-
-        var chView = new ChannelView({
-          model: channel
-        });
-        self.views.push(chView);
-
-        $("#content").append(chView.render().el);
-      }
-
-      if (focus) {
-        channel.focus();
-      } else if (Chatter.Active.channel.get('name') !== nick) {
-        channel.hide();
-      }
-
-      if (sent) {
-        self.client.say(nick, message);
+    Chatter.vent.on('part:' + self.server.id, function(chan, message) {
+      var channel = self.findChannel(chan);
+      if (channel.get('pm')) {
+        self.removeChannel(chan);
       } else {
-        channel.addMessage("<span class=\"author\">" + nick + ": </span>" + message);
+        self.client.part(chan, message);
       }
+    });
+
+    Chatter.vent.on('privateMessage:' + self.server.id, function(nick, message) {
+      var channel = self.createPM(nick);
+      self.client.say(nick, message);
     });
 
     Chatter.vent.on('sendingMessage:' + self.server.id, function(receiver, message) {
@@ -275,6 +249,47 @@ define(["app", "underscore", "jquery", "modules/channels/channellist", "modules/
       }
     });
   };
+
+  Connection.prototype.removeChannel = function(channel) {
+    var wrap = $("#content div.channel-wrap[data-channel=\"" + channel.id + "\"]");
+    self.channels.remove(channel);
+    var view = Chatter.Views.servers;
+    $('#channels > ul').html(view.render().el);
+    view.delegateEvents();
+    var first = self.channels.first();
+    wrap.remove();
+    first.focus();
+  };
+
+  Connection.prototype.isChannel = function(chan) {
+    return chan.startsWith('#');
+  };
+
+  Connection.prototype.createPM = function(nickname) {
+    var self = this;
+    var channel = self.findChannel(nickname);
+    if (!channel) {
+      channel = new Channel({name: nickname});
+      self.channels.add(channel);
+
+      var view = Chatter.Views.servers;
+      $('#channels > ul').html(view.render().el);
+      view.delegateEvents();
+
+      var chView = new ChannelView({
+        model: channel
+      });
+      self.views.push(chView);
+
+      $("#content").append(chView.render().el);
+      channel.hide();
+    }
+    if (channel.get('name') !== nickname) {
+      channel.set('name', nickname)
+    }
+    return channel;
+  };
+
   function toPriority(sym) {
     if (sym === "@") {
       return 0;

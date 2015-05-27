@@ -22,7 +22,7 @@ define(["app", "backbone", "underscore", "jquery"], function(Chatter, Backbone, 
 				Chatter.vent.trigger('sendingMessage:' + server.id, channel, msg);
 				message.val("");
 			}
-		}
+		}	
 	});
-return ChannelView;
+	return ChannelView;
 });

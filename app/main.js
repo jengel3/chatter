@@ -45,20 +45,24 @@ requirejs(["app", "router", "modules/servers/serverlist", "modules/servers/serve
 
 		var tray = new gui.Tray({ icon: './dist/images/chatter.png' });
 		$('.close').click(function() {
+			Chatter.vent.trigger('window:closed');
 			Chatter.display = "closed";
 			win.close();
 		});
 
 		$('.minimize').click(function() {
+			Chatter.vent.trigger('window:minimized');
 			Chatter.display = "minimized";
 			win.hide();
 		});
 
 		$('.maximize').click(function() {
 			if (Chatter.display === "maximized") {
+				Chatter.vent.trigger('window:normalized');
 				Chatter.display = "normal";
 				win.unmaximize();
 			} else {
+				Chatter.vent.trigger('window:maximized');
 				Chatter.display = "maximized";
 				win.maximize();
 			}
@@ -66,9 +70,11 @@ requirejs(["app", "router", "modules/servers/serverlist", "modules/servers/serve
 
 		tray.on('click', function() {
 			if (Chatter.display === "minimized") {
+				Chatter.vent.trigger('window:tray:normalized');
 				Chatter.display = "normal";
 				win.show();
 			} else {
+				Chatter.vent.trigger('window:tray:minimized');
 				Chatter.display = "minimized";
 				win.hide();
 			}
@@ -141,7 +147,7 @@ requirejs(["app", "router", "modules/servers/serverlist", "modules/servers/serve
 			}
 			var target = args[0];
 			var message = args.slice(1).join(' ');
-			client.say(target, message);
+			Chatter.vent.trigger('sendingMessage:' + client.server.id, target, message);
 		});
 
 		win.on('new-win-policy', function (frame, url, policy) {

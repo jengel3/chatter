@@ -2,6 +2,7 @@ define(["app", "backbone", "localstorage", "underscore", "connection"], function
 	"use strict";
 	var Server = Backbone.Model.extend({
 		idAttribute: "id",
+		modelName: "Server",
 		localStorage: new Backbone.LocalStorage("servers"),
 		defaults: {
 			host: "irc.esper.net",

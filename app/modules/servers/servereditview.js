@@ -59,6 +59,7 @@ define(["app", "backbone", "underscore", "jquery", "modules/servers/server"], fu
 			e.stopPropagation();
 			var connection = Chatter.Connections[this.model.id];
 			var server = self.model;
+			Chatter.vent.trigger('client:disconnect', connection);
 			if (connection.connected) {
 				for (var i = 0; i < connection.views.length; i++) {
 					var view = connection.views[i];

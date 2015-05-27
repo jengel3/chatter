@@ -40,6 +40,7 @@ define(["app", "underscore", "jquery", "modules/channels/channellist", "modules/
   Connection.prototype.connect = function (callback) {
     var self = this;
     self.client.connect(function () {
+      Chatter.vent.trigger('client:connect', self);
       callback();
     });
   };
@@ -94,6 +95,7 @@ define(["app", "underscore", "jquery", "modules/channels/channellist", "modules/
       if (Chatter.Active.channel) {
         Chatter.Active.channel.addMessage("<div class=\"message\"><span class=\"err-msg\">Chatter Error: </span>" + message.command + "</div>");
       }
+       Chatter.vent.trigger('client:error', message);
     });
 
     self.client.addListener("registered", function (message) {
@@ -122,6 +124,7 @@ define(["app", "underscore", "jquery", "modules/channels/channellist", "modules/
       var channel = self.findChannel(to);
 
       channel.addMessage("<span class=\"author\">" + from + ": </span>" + message);
+      Chatter.vent.trigger('message', channel, message);
     });
 
     self.client.addListener("action", function (from, to, text, message) {
@@ -134,6 +137,7 @@ define(["app", "underscore", "jquery", "modules/channels/channellist", "modules/
       var channel = self.findChannel(to);
 
       channel.addMessage("<span class=\"author\">" + self.nick + ": </span>" + message);
+      Chatter.vent.trigger('sentMessage', to, message);
     });
 
     self.client.addListener("topic", function (chan, topic, nick, message) {
@@ -144,8 +148,9 @@ define(["app", "underscore", "jquery", "modules/channels/channellist", "modules/
       $(wrapper).find(".topic").text(topic);
       $(wrapper).find(".topic").attr("title", topic);
 
-
       channel.addMessage("*" + nick + " set the topic to: " + topic);
+
+      Chatter.vent.trigger('topic', channel, topic, nick);
     });
 
 
@@ -166,11 +171,13 @@ define(["app", "underscore", "jquery", "modules/channels/channellist", "modules/
         self.views.push(chView);
         $("#content").append(chView.render().el);
         channel.focus();
+        Chatter.vent.trigger('self:join', channel);
       } else {
         var newnames = channel.get("names");
         newnames[nick] = "";
         self.renderNames(chan, newnames);
         channel.addMessage("*" + nick + " has joined " + chan);
+        Chatter.vent.trigger('join', channel);
       }
     });
 
@@ -180,6 +187,7 @@ define(["app", "underscore", "jquery", "modules/channels/channellist", "modules/
       if (nick !== self.nick) {
         channel.addMessage("*" + nick + " has left " + chan);
         self.removeUser(nick, channel);
+        Chatter.vent.trigger('part', channel);
       } else {
         var wrap = $("#content div.channel-wrap[data-channel=\"" + channel.id + "\"]");
         self.channels.remove(channel);
@@ -189,6 +197,7 @@ define(["app", "underscore", "jquery", "modules/channels/channellist", "modules/
         var first = self.channels.first();
         wrap.remove();
         first.focus();
+        Chatter.vent.trigger('self:part', channel);
       }
     });
 
@@ -203,11 +212,35 @@ define(["app", "underscore", "jquery", "modules/channels/channellist", "modules/
           var channel = self.channels.findWhere({name: ch});
           if (channel.get("names")[nick]) {
             channel.addMessage("*" + nick + " has quit " + ch + ": " + reason);
+            Chatter.vent.trigger('quit', channel);
           }
         }
       } else {
         self.connected = false;
+        Chatter.vent.trigger('self:quit', channel);
       }
+    });
+
+    Chatter.vent.on('sendingMessage:' + self.server.id, function(receiver, message) {
+      if (message.trim() !== "") {
+          if (message.slice()[0] === '/') {
+            var data = {
+              receiver: receiver, 
+              message: message,
+              nick: self.nick
+            };
+            Chatter.Commands.handle(self.client, data);
+          } else {
+            if (typeof receiver === "string") {
+              receiver = self.findChannel(receiver);
+            }
+            if (receiver.modelName === "Channel") {
+              self.client.say(receiver.get("name"), message);
+            } else if (receiver.modelName === "Server") {
+              self.client.send(message);
+            }
+          }
+        }
     });
   };
   function toPriority(sym) {

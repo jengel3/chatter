@@ -17,22 +17,10 @@ define(["app", "backbone", "underscore", "jquery"], function(Chatter, Backbone, 
 			if (Chatter.Active.channel && Chatter.Active.server && e.which === 13) {
 				var server = Chatter.Active.server;
 				var channel = Chatter.Active.channel;
-				var client = Chatter.Clients[server.id];
-				var msg = $("#content .channel-wrap[data-channel=\"" + channel.id + "\"] .message-input");
-				var message = $(msg).val();
-				if (message.trim() !== "") {
-					if (message.slice()[0] === '/') {
-						var data = {
-							receiver: channel, 
-							message: message,
-							nick: client.nick
-						};
-						Chatter.Commands.handle(client, data);
-					} else {
-						client.say(channel.get("name"), message);
-					}
-					$(msg).val("");
-				}
+				var message = $("#content .channel-wrap[data-channel=\"" + channel.id + "\"] .message-input");
+				var msg = message.val();
+				Chatter.vent.trigger('sendingMessage:' + server.id, channel, msg);
+				message.val("");
 			}
 		}
 	});

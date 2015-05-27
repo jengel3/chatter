@@ -6,6 +6,7 @@ define(["app", "backbone", "underscore", "jquery"], function(Chatter, Backbone, 
 		events: {
 			'keypress .message-input': 'entered'
 		},
+
 		render: function(){
 			var dict = this.model.toJSON();
 			var html = this.template(dict);
@@ -13,16 +14,15 @@ define(["app", "backbone", "underscore", "jquery"], function(Chatter, Backbone, 
 			this.$el.attr('data-server', this.model.get('id'));
 			return this;
 		},
-		entered: function() {
-			// if (Chatter.Active.server && e.which === 13) {
-			// 	var server = Chatter.Active.server;
-			// 	var client = Chatter.Store[server.attributes.id];
-			// 	var msg = $('#content .channel-wrap[data-server="' + channel.attributes.id + '"] .message-input');
-			// 	var message = $(msg).val();
-			// 	if (message.trim() !== "") {
-			// 		client.say(channel.get('name'), message);
-			// 	}
-			// }
+
+		entered: function(e) {
+			if (Chatter.Active.server && e.which === 13) {
+				var server = Chatter.Active.server;
+				var message = $("#content .server-wrap[data-server=\"" + server.id + "\"] .message-input");
+				var msg = message.val();
+				Chatter.vent.trigger('sendingMessage:' + server.id, server, msg);
+				message.val("");
+			}
 		}
 	});
 return ServerView;

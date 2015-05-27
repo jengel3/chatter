@@ -3,6 +3,7 @@ define(["app", "backbone", "jquery", "moment"], function(Chatter, Backbone, $, m
 	var uuid = require("node-uuid");
 	var Channel = Backbone.Model.extend({
 		idAttribute: "uuid",
+		modelName: "Channel",
 		defaults: {
 			name: "",
 			topic: "",
@@ -37,6 +38,7 @@ define(["app", "backbone", "jquery", "moment"], function(Chatter, Backbone, $, m
 			setTimeout(function() {
 				wrap.find(".message-input").focus();
 			}, 1);
+			Chatter.vent.trigger('focus:channel', this);
 		}
 	});	
 	return Channel;

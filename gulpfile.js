@@ -55,6 +55,7 @@ gulp.task('rjs', function() {
  .pipe(gulp.dest('./dist/js/'))
  .pipe(rename('source.min.js'))
  .pipe(uglify())
+ .on('error', console.warn)
  .pipe(gulp.dest('./dist/js/'));
 });
 
@@ -62,6 +63,7 @@ gulp.task('uglify', ['rjs'], function() {
  gulp.src('dist/js/*.js')
  .pipe(rename('source.min.js'))
  .pipe(uglify())
+ .on('error', console.warn)
  .pipe(gulp.dest('dist/js/'));
 });
 
@@ -69,17 +71,20 @@ gulp.task('css', function () {
  gulp.src(['./app/styles/*.css'])
  .pipe(rename('app.css'))
  .pipe(minifyCSS())
+ .on('error', console.warn)
  .pipe(gulp.dest('./dist/css/'));
 });
 
 
 gulp.task('fonts', function () {
  gulp.src(['./app/styles/fonts/**'], { "base" : "./app/styles/fonts/" })
+ .on('error', console.warn)
  .pipe(gulp.dest('./dist/css/fonts/'));
 });
 
 gulp.task('images', function () {
  gulp.src(['./app/images/*'])
+ .on('error', console.warn)
  .pipe(gulp.dest('./dist/images/'));
 });
 

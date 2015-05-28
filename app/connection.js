@@ -256,7 +256,7 @@ define(["app", "underscore", "jquery", "modules/channels/channellist", "modules/
     Chatter.vent.on('part:' + self.server.id, function(chan, message) {
       var channel = self.findChannel(chan);
       if (channel.get('pm')) {
-        self.removeChannel(chan);
+        self.removeChannel(channel);
       } else {
         self.client.part(chan, message);
       }

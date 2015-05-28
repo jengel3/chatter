@@ -11,6 +11,9 @@ define(["app", "backbone", "underscore", "jquery"], function(Chatter, Backbone, 
 			var html = this.template(dict);
 			this.$el.html(html);
 			this.$el.attr("data-channel", this.model.id);
+			if (this.model.get('pm')) {
+				this.$el.addClass('pm');
+			}
 			return this;
 		},
 		entered: function(e) {

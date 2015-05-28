@@ -63,7 +63,9 @@
 		<div class='input-wrap'>
 			<input class='message-input'></input>
 		</div>
+		<% if (!pm) { %>
 		<div class='users scroll'><ul></ul></div>
+		<% } %>
 	</script>
 
 	<script type='text/template' id='server-template'>

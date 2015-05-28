@@ -41,7 +41,8 @@ define(["app", "underscore"], function (Chatter, _) {
         }
       }
     }
-    if (!cmd) {
+    // we didn't find a command, run the default output
+    if (_.isString(cmd)) {
       return def(client, data, args.slice(1));
     }
     return cmd.handler(client, data, args.slice(1));

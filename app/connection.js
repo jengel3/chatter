@@ -88,15 +88,7 @@ define(["app", "underscore", "jquery", "modules/channels/channellist", "modules/
     self.client = new irc.Client(self.attrs.host, self.attrs.nick, options);
     Chatter.Clients[self.server.attributes.id] = self.client;
 
-    self.client.addListener("error", function (message) {
-      var messages = $("#content div.server-wrap[data-server=\"" + self.server.id + "\"] .messages");
-      $(messages).append("<div class=\"message\"><span class=\"err-msg\">Chatter Error: </span>" + message.command + "</div>");
-      $(messages).scrollTop(($(messages).height() * 2));
-      if (Chatter.Active.channel) {
-        Chatter.Active.channel.addMessage("<div class=\"message\"><span class=\"err-msg\">Chatter Error: </span>" + message.command + "</div>");
-      }
-      Chatter.vent.trigger('client:error', message);
-    });
+    self.client.addListener("error", function (message) {});
 
     self.client.addListener("registered", function (message) {
       var view = new ServerView({
@@ -110,15 +102,6 @@ define(["app", "underscore", "jquery", "modules/channels/channellist", "modules/
       self.renderNames(ch, names);
     });
 
-    self.client.addListener("motd", function (motd) {
-      var messages = $("#content div.server-wrap[data-server=\"" + self.server.id + "\"] .messages");
-      var lines = motd.split(/\n/);
-      for (var x = 0; x < lines.length; x++) {
-        var line = lines[x];
-        $(messages).append("<div class=\"message\">" + line + "</div>");
-        $(messages).scrollTop(($(messages).height() * 2));
-      }
-    });
 
     self.client.addListener("message", function (from, to, message) {
       var channel;
@@ -136,6 +119,60 @@ define(["app", "underscore", "jquery", "modules/channels/channellist", "modules/
       var channel = self.findChannel(to);
 
       channel.addMessage("* " + from + " " + text);
+    });
+
+    self.client.addListener("notice", function (nick, to, text, message) {
+      // console.log("received notice", message, nick)
+    });
+
+    self.client.addListener("raw", function (message) {
+      // https://www.alien.net.au/irc/irc2numerics.html
+      // we need to specify which codes are important
+      // and which ones can be passed to the server
+
+      var pass = [
+      "001", "002", "003", "004", "005", "006", "007",
+      "372", "375", "376", "377", "378"
+      ]
+
+      // any 'message' with these codes will be passed to
+      // the current channel, or server if necessary
+      var important = [
+      "705", "404", "411", "412", "421", "433",
+      "464"
+      ]
+
+      var args = message.args;
+      if (message.args[0] === self.nick) {
+        args = args.slice(1);
+      }
+      var raw = args.join(" ");
+
+      if (_.contains(pass, message.rawCommand)) {
+        self.serverMessage(raw);
+      } else if (message.rawCommand === "401" || message.rawCommand === "403") {
+        // we need to clean up a channel if it was created before getting this response
+        var chan = args[0];
+        var channel = self.findChannel(chan);
+        if (channel) {
+          self.removeChannel(channel);
+          if (!channel.get('pm')) {
+            self.client.part(chan);
+          }
+        }
+        if (Chatter.Active.channel) {
+          var channel = Chatter.Active.channel;
+          channel.addMessage(raw);
+        } else {
+          self.serverMessage(raw);
+        }
+      } else if (_.contains(important, message.rawCommand) || message.commandType === "error") {
+        if (Chatter.Active.channel) {
+          var channel = Chatter.Active.channel;
+          channel.addMessage(raw);
+        }
+        self.serverMessage(raw);
+      }
     });
 
     self.client.addListener("selfMessage", function (to, message) {
@@ -252,7 +289,15 @@ define(["app", "underscore", "jquery", "modules/channels/channellist", "modules/
     });
   };
 
+  Connection.prototype.serverMessage = function(message) {
+    var self = this;
+    var messages = $("#content div.server-wrap[data-server=\"" + self.server.id + "\"] .messages");
+    $(messages).append("<div class=\"message\">" + message + "</div>");
+    $(messages).scrollTop(($(messages).height() * 2));
+  };
+
   Connection.prototype.removeChannel = function(channel) {
+    var self = this;
     var wrap = $("#content div.channel-wrap[data-channel=\"" + channel.id + "\"]");
     self.channels.remove(channel);
     var view = Chatter.Views.servers;
@@ -304,3 +349,9 @@ define(["app", "underscore", "jquery", "modules/channels/channellist", "modules/
   
   return Connection;
 });
+
+/*
+todo
+ - catch gulp errors
+ - fix /msg #chan creating PM 
+*/

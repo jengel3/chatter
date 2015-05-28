@@ -170,15 +170,17 @@ ul {
 	border-bottom:1px solid #ccc;
 }
 
-.server-wrap .input-wrap {
+
+/* Styling to manage server and PM views */
+.server-wrap .input-wrap, .pm.channel-wrap .input-wrap {
 	right: 0;
 }
 
-.server-wrap .top-wrap {
+.server-wrap .top-wrap, .pm.channel-wrap .top-wrap {
 	right:0;
 }
 
-.server-wrap .messages {
+.server-wrap .messages, .pm.channel-wrap .messages {
 	right:0;
 }
 

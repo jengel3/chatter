@@ -9,7 +9,8 @@ define(["app", "backbone", "jquery", "moment"], function(Chatter, Backbone, $, m
 			lower: "",
 			topic: "",
 			names: {},
-			channels: []
+			channels: [],
+			pm: false
 		},
 
 		initialize: function() {

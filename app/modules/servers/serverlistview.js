@@ -46,6 +46,7 @@ define(["app", "backbone", "underscore", "jquery"], function(Chatter, Backbone, 
             var id = $(e.currentTarget).data("id");
             var server = this.collection.get(id);
             Chatter.Active.server = server;
+            Chatter.Active.channel = null;
             $("#content > div").hide();
             $("#content > div[data-server=\"" + id +"\"]").show();
             return false;

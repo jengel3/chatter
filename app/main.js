@@ -1,9 +1,9 @@
 requirejs(["app", "router", "modules/servers/serverlist", "modules/servers/server", 
 	"modules/servers/serverlistview", "modules/channels/channelview", 
 	"modules/channels/channellist", "modules/channels/channel", "commands", "jquery", "jquery-popup-overlay",
-	"modules/servers/servereditview"],
+	"modules/servers/servereditview", "modules/settings", "modules/settingseditview"],
 	function(Chatter, Router, ServerList, Server, ServerListView, ChannelView, 
-		ChannelList, Channel, Commands, $, popup, ServerEditView) {
+		ChannelList, Channel, Commands, $, popup, ServerEditView, Settings, SettingsEditView) {
 		"use strict"; 
 		var gui = require("nw.gui");
 		Chatter.router = new Router();
@@ -14,6 +14,10 @@ requirejs(["app", "router", "modules/servers/serverlist", "modules/servers/serve
 		Chatter.Connections = {};
 		Chatter.Views = {};
 		Chatter.Active = {server: null, channel: null};
+
+		var settings = new Settings({id: 1});
+		settings.fetch();
+		Chatter.Settings = settings;
 
 		document.addEventListener("keydown", function(event){
 			var key = event.keyCode;
@@ -38,6 +42,17 @@ requirejs(["app", "router", "modules/servers/serverlist", "modules/servers/serve
 					}
 				});
 				$("#server_popup").popup("show");
+			}
+			if (key === 115 && !$("#settings_popup").length) { 
+				var view = new SettingsEditView();
+				$("body").append(view.render().el);
+				$("#settings_popup").popup({
+					detach: false,
+					onclose: function() {
+						view.cleanup();
+					}
+				});
+				$("#settings_popup").popup("show");
 			}
 		});
 

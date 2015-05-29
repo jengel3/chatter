@@ -54,6 +54,37 @@
 		</div>
 	</script>
 
+	<script type="text/template" id='settings-template'>
+		<h1>Chatter Settings</h1>
+		<div class='inputs'>
+			<div class="tabs">
+				<div class="tab active">Notifications</div>
+				<div class="tab">Channels</div>
+				<div class="tab">Client</div>
+			</div>
+			<div class='sub-input active' id="settings-notifications">
+				<input name="notificationsMessage" type="checkbox" <% if (notificationsMessage) { %> checked <% } %>><label>Notification on Message</label>
+				<br>
+				<input name="notificationsPM" type="checkbox" <% if (notificationsPM) { %> checked <% } %>><label>Notification on PM</label>
+				<br>
+				<input name="notificationSound" type="checkbox" <% if (notificationSound) { %> checked <% } %>><label>Notification on PM</label>
+				<br>
+			</div>
+			<div class='sub-input' id="settings-channels">
+				<input name="hideJoinPart" type="checkbox" <% if (hideJoinPart) { %> checked <% } %>><label>Hide Join and Part Messages</label>
+				<br>
+			</div>
+			<div class='sub-input' id="settings-client">
+				<input name="minimizeTray" type="checkbox" <% if (minimizeTray) { %> checked <% } %>><label>Minimize to Tray</label>
+				<br>
+			</div>
+		</div>
+		<div class='buttons'>
+			<button class="server_save save">Save</button>
+			<button class="server_popup_close close">Close</button>
+		</div>
+	</script>
+
 	<script type='text/template' id='channel-template'>
 		<div class='top-wrap'>
 			<span class='channel-name'><%= name %>: </span>
@@ -64,23 +95,23 @@
 			<input class='message-input'></input>
 		</div>
 		<% if (!pm) { %>
-		<div class='users scroll'><ul></ul></div>
-		<% } %>
-	</script>
+			<div class='users scroll'><ul></ul></div>
+			<% } %>
+		</script>
 
-	<script type='text/template' id='server-template'>
-		<div class='top-wrap'>
-			<span class='channel-name'><%= title %></span>
-			<span class='topic'>(<%= host %>:<%= port %>)</span>
-		</div>
-		<div class='messages scroll'></div>
-		<div class='input-wrap'>
-			<input class='message-input'></input>
-		</div>
-	</script>
-	<link href='dist/css/app.css' rel='stylesheet' />
-	<!-- build:[src] /source.min.js -->
-	<script src="vendor/components/requirejs/require.js" data-main="app/config"></script>
-	<!-- /build -->
-</body>
-</html>
+		<script type='text/template' id='server-template'>
+			<div class='top-wrap'>
+				<span class='channel-name'><%= title %></span>
+				<span class='topic'>(<%= host %>:<%= port %>)</span>
+			</div>
+			<div class='messages scroll'></div>
+			<div class='input-wrap'>
+				<input class='message-input'></input>
+			</div>
+		</script>
+		<link href='dist/css/app.css' rel='stylesheet' />
+		<!-- build:[src] /source.min.js -->
+		<script src="vendor/components/requirejs/require.js" data-main="app/config"></script>
+		<!-- /build -->
+	</body>
+	</html>

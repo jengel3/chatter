@@ -284,7 +284,8 @@ input.message-input {
 }
 
 .popup {
-	min-height: 20px;
+	min-width: 30em;
+	min-height: 10em;
 	padding: 19px;
 	margin-bottom: 20px;
 	background-color: #F5F5F5;
@@ -307,6 +308,14 @@ input {
 	font-size: 18px;
 }
 
+input[type="checkbox"] {
+	vertical-align: middle;
+}
+
+label {
+	vertical-align: middle;
+}
+
 .inputs {
 	display:block;
 }
@@ -314,8 +323,7 @@ input {
 .inputs .sub-input {
 	display:block;
 	margin: 30px;
-	height: 30px;
-
+	margin: 15px 30px 15px 30px;
 }
 
 .inputs input:nth-child(2) {
@@ -355,7 +363,7 @@ input {
 }
 
 
-#server_popup, #server_popup_wrapper, #server_popup_background {
+.popup, .popup_wrapper, .popup_background {
 	transition: all 0.3s;
 }
 
@@ -380,4 +388,35 @@ input {
 
 .manage span:hover {
 	-webkit-transform: scale(1.1);
+}
+
+.tabs {
+	display: flex;
+	flex-flow: row wrap;
+	justify-content: space-around;
+}
+
+.tabs .tab {
+	background-color: #ccc;
+	padding: 5px;
+	height: 30px;
+	line-height: 30px;
+	color: white;
+	font-weight: bold;
+	font-size: 20px;
+	text-align: center;
+	width: 120px;
+	cursor: pointer;
+}
+
+.tab.active {
+	color: red;
+}
+
+#settings_popup .sub-input {
+	display:none;	
+}
+
+#settings_popup .sub-input.active {
+	display:block;
 }

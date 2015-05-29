@@ -352,6 +352,5 @@ define(["app", "underscore", "jquery", "modules/channels/channellist", "modules/
 
 /*
 todo
- - catch gulp errors
  - fix /msg #chan creating PM 
 */

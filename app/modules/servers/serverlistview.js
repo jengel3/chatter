@@ -35,8 +35,10 @@ define(["app", "backbone", "underscore", "jquery"], function(Chatter, Backbone, 
             var list = $(e.currentTarget).parent().parent().find("ul");
             if ($(list).is(":visible")) {
                 $(list).slideUp();
+                $(e.currentTarget).html('+ ');
             } else {
                 $(list).slideDown();
+                $(e.currentTarget).html('&times; ');
             }
         },
 

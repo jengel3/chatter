@@ -8,7 +8,9 @@ requirejs.config({
 		"marionette": "../vendor/components/backbone.marionette/lib/backbone.marionette",
     "jquery-popup-overlay": "../vendor/components/jquery-popup-overlay/jquery.popupoverlay",
     "localstorage": "../vendor/components/backbone.localStorage/backbone.localStorage",
-    "moment": "../vendor/components/moment/moment"
+    "moment": "../vendor/components/moment/moment",
+    "triejs": "../node_modules/triejs/src/trie",
+    "tab-complete": "../vendor/components/tab-complete/dist/jquery.tab-complete.min"
   },
   deps: ["main"],
   shim: {
@@ -22,8 +24,12 @@ requirejs.config({
       exports: "Backbone"
     },
     marionette: {
-     exports: "Marionette"
+      exports: "Marionette"
     },
-    "jquery-popup-overlay": ["jquery"]
+    triejs: {
+      exports: "Triejs"
+    },
+    "jquery-popup-overlay": ["jquery"],
+    "tab-complete": ["jquery", "triejs"]
  }
 });

@@ -32,7 +32,7 @@ Chatter provides a short list of events based on Backbone's [event protocol](htt
 
 Example:
 
-```
+```js
 Chatter.vent.on('self:join', function(channel) {
   console.log("Joined", channel.get('name'));
 });

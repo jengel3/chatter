@@ -8,7 +8,7 @@ define(["app", "backbone", "underscore", "jquery"], function(Chatter, Backbone, 
 		},
 		initialize: function() {
 			this.model.on('change:names', this.setupTabComplete, this);
-			this.setup = false;
+			this.initialized = false;
 		},
 
 		render: function(){
@@ -35,7 +35,7 @@ define(["app", "backbone", "underscore", "jquery"], function(Chatter, Backbone, 
 
 		setupTabComplete: function() {
 			var names = Object.keys(this.model.get('names'));
-			if (this.setup) {
+			if (this.initialized) {
 				this.$el.find('input').tabComplete('reset', this.model.get('names'));
 			} else {
 				this.$el.find('input').tabComplete({
@@ -51,7 +51,7 @@ define(["app", "backbone", "underscore", "jquery"], function(Chatter, Backbone, 
 					},
 					preventTabbing: true
 				});
-				this.setup = true;
+				this.initialized = true;
 			}
 		}
 	});

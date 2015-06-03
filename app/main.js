@@ -45,12 +45,12 @@ requirejs(["app", "router", "modules/servers/serverlist", "modules/servers/serve
 				$("#server_popup").popup("show");
 			}
 			if (key === 115 && !$("#settings_popup").length) { 
-				var view = new SettingsEditView();
-				$("body").append(view.render().el);
+				var settingsView = new SettingsEditView();
+				$("body").append(settingsView.render().el);
 				$("#settings_popup").popup({
 					detach: false,
 					onclose: function() {
-						view.cleanup();
+						settingsView.cleanup();
 					}
 				});
 				$("#settings_popup").popup("show");
@@ -167,7 +167,7 @@ requirejs(["app", "router", "modules/servers/serverlist", "modules/servers/serve
 		Chatter.servers.fetch();
 		
 		if (Chatter.servers.length === 0) {
-			var server = new Server({host: 'chat.freenode.net', port: 6667, title: "Freenode", nick: "Chatter", real_name: "Chatter", channels: ['#chatter', '#programming']});
+			var server = new Server();
 			server.save();
 			Chatter.servers.add(server);
 			Chatter.servers.fetch();

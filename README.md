@@ -24,7 +24,7 @@ Chatter provides a short list of events based on Backbone's [event protocol](htt
 * ```part [channel]``` - Triggered when a user leaves a channel.
 * ```self:part [channel]``` - Triggered when the client leaves a channel.
 * ```part [channel]``` - Triggered when a user quits a channel.
-* ```self:quit [channel]``` - Triggered when the client quits a channel.
+* ```self:quit [server]``` - Triggered when the client quits a server.
 * ```client:error [message]``` - Triggered when the client throws an error.
 * ```client:connect [connection]``` - Triggered when a client connects to a server successfully.
 * ```client:disconnect [connection]``` - Triggered when a client disconnects from a server.

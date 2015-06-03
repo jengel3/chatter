@@ -87,7 +87,6 @@ requirejs(["app", "router", "modules/servers/serverlist", "modules/servers/serve
         win.requestAttention(true);
         Chatter.BadgeCount += 1;
         win.setBadgeLabel(Chatter.BadgeCount);
-        console.log("Sending notification yo");
 
         nwNotify.notify({
           title: "PM from " + channel.get('name'),

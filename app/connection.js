@@ -258,7 +258,7 @@ define(["app", "underscore", "jquery", "modules/channels/channellist", "modules/
         }
       } else {
         self.connected = false;
-        Chatter.vent.trigger('self:quit', channel);
+        Chatter.vent.trigger('self:quit', self.server);
       }
     });
 
@@ -343,7 +343,7 @@ define(["app", "underscore", "jquery", "modules/channels/channellist", "modules/
       channel.hide();
     }
     if (channel.get('name') !== nickname) {
-      channel.set('name', nickname)
+      channel.set('name', nickname);
     }
     return channel;
   };

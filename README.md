@@ -14,6 +14,8 @@ Chatter is an IRC client built on [node.js](https://nodejs.org/), [nw.js](https:
 
 ## Event API
 
+Chatter provides a short list of events based on Backbone's [event protocol](http://backbonejs.org/#Events). These events can be accessed through the window Chatter object.
+
 * ```message [channel, message]``` - Triggered when a message is received.
 * ```sentMessage [receiver, message]``` - Triggered when a message is sent.
 * ```topic [channel, topic, nick]``` - Triggered when the topic is changed.
@@ -27,3 +29,11 @@ Chatter is an IRC client built on [node.js](https://nodejs.org/), [nw.js](https:
 * ```client:connect [connection]``` - Triggered when a client connects to a server successfully.
 * ```client:disconnect [connection]``` - Triggered when a client disconnects from a server.
 * ```focus:channel [channel]``` - Triggered when a channel is focused by being clicked on or joined.
+
+Example:
+
+```
+Chatter.vent.on('self:join', function(channel) {
+  console.log("Joined", channel.get('name'));
+});
+```

@@ -105,14 +105,17 @@ define(["app", "underscore", "jquery", "modules/channels/channellist", "modules/
 
     self.client.addListener("message", function (from, to, message) {
       var channel;
+      var isPM = false;
       if (self.isChannel(to)) {
         channel = self.findChannel(to);
       } else {
         channel = self.createPM(from);
+        isPM = true;
       }
 
       channel.addMessage("<span class=\"author\">" + from + ": </span>" + message);
-      Chatter.vent.trigger('message', channel, message);
+      Chatter.vent.trigger('message', channel, message, isPM);
+
     });
 
     self.client.addListener("action", function (from, to, text, message) {
@@ -133,14 +136,14 @@ define(["app", "underscore", "jquery", "modules/channels/channellist", "modules/
       var pass = [
       "001", "002", "003", "004", "005", "006", "007",
       "372", "375", "376", "377", "378"
-      ]
+      ];
 
       // any 'message' with these codes will be passed to
       // the current channel, or server if necessary
       var important = [
       "705", "404", "411", "412", "421", "433",
       "464"
-      ]
+      ];
 
       var args = message.args;
       if (message.args[0] === self.nick) {
@@ -175,179 +178,179 @@ define(["app", "underscore", "jquery", "modules/channels/channellist", "modules/
       }
     });
 
-    self.client.addListener("selfMessage", function (to, message) {
-      var channel = self.findChannel(to);
+self.client.addListener("selfMessage", function (to, message) {
+  var channel = self.findChannel(to);
 
-      channel.addMessage("<span class=\"author\">" + self.nick + ": </span>" + message);
-      Chatter.vent.trigger('sentMessage', to, message);
-    });
+  channel.addMessage("<span class=\"author\">" + self.nick + ": </span>" + message);
+  Chatter.vent.trigger('sentMessage', to, message);
+});
 
-    self.client.addListener("topic", function (chan, topic, nick, message) {
-      var channel = self.findChannel(chan);
-      
-      channel.set('topic', topic);
+self.client.addListener("topic", function (chan, topic, nick, message) {
+  var channel = self.findChannel(chan);
 
-      channel.addMessage("*" + nick + " set the topic to: " + topic);
+  channel.set('topic', topic);
 
-      Chatter.vent.trigger('topic', channel, topic, nick);
-    });
+  channel.addMessage("*" + nick + " set the topic to: " + topic);
+
+  Chatter.vent.trigger('topic', channel, topic, nick);
+});
 
 
-    self.client.addListener("join", function (chan, nick, message) {
-      var channel = self.findChannel(chan);
-      if (nick === self.nick) {
-        if (!channel) {
-          channel = new Channel({name: chan});
-          self.channels.add(channel);
-        }
-        self.server.addChannel(chan);
-        var view = Chatter.Views.servers;
-        $('#channels > ul').html(view.render().el);
-        view.delegateEvents();
-        var chView = new ChannelView({
-          model: channel
-        });
-        self.views.push(chView);
-        $("#content").append(chView.render().el);
-        channel.focus();
-        Chatter.vent.trigger('self:join', channel);
-      } else {
-        var newnames = channel.get("names");
-        newnames[nick] = "";
-        self.renderNames(chan, newnames);
-        channel.addMessage("*" + nick + " has joined " + chan);
-        Chatter.vent.trigger('join', channel);
-      }
-    });
-
-    self.client.addListener("part", function (chan, nick, reason, message) {
-      var channel = self.findChannel(chan);
-
-      if (nick !== self.nick) {
-        channel.addMessage("*" + nick + " has left " + chan);
-        self.removeUser(nick, channel);
-        Chatter.vent.trigger('part', channel);
-      } else {
-        self.removeChannel(chan);
-        Chatter.vent.trigger('self:part', channel);
-      }
-    });
-
-    self.client.addListener("setNick", function (newNick) {
-      self.nick = newNick;
-    });
-
-    self.client.addListener("quit", function (nick, reason, chans, message) {
-      if (nick !== self.nick) {
-        for (var x = 0; x < chans.length; x++) {
-          var ch = chans[x];
-          var channel = self.channels.findWhere({name: ch});
-          if (channel.get("names")[nick]) {
-            channel.addMessage("*" + nick + " has quit " + ch + ": " + reason);
-            Chatter.vent.trigger('quit', channel);
-          }
-        }
-      } else {
-        self.connected = false;
-        Chatter.vent.trigger('self:quit', channel);
-      }
-    });
-
-    Chatter.vent.on('part:' + self.server.id, function(chan, message) {
-      var channel = self.findChannel(chan);
-      if (channel.get('pm')) {
-        self.removeChannel(channel);
-      } else {
-        self.client.part(chan, message);
-      }
-    });
-
-    Chatter.vent.on('privateMessage:' + self.server.id, function(nick, message) {
-      var channel = self.createPM(nick);
-      self.client.say(nick, message);
-    });
-
-    Chatter.vent.on('sendingMessage:' + self.server.id, function(receiver, message) {
-      if (message.trim() !== "") {
-        if (message.slice()[0] === '/') {
-          var data = {
-            receiver: receiver, 
-            message: message,
-            nick: self.nick
-          };
-          Chatter.Commands.handle(self.client, data, function(client, data, args) {
-            client.send(data.command, args.join(" "));
-          });
-        } else {
-          if (receiver.modelName === "Channel") {
-            self.client.say(receiver.get("name"), message);
-          } else if (receiver.modelName === "Server") {
-            self.client.send(message);
-          }
-        }
-      }
-    });
-  };
-
-  Connection.prototype.serverMessage = function(message) {
-    var self = this;
-    var messages = $("#content div.server-wrap[data-server=\"" + self.server.id + "\"] .messages");
-    $(messages).append("<div class=\"message\">" + message + "</div>");
-    $(messages).scrollTop(($(messages).height() * 2));
-  };
-
-  Connection.prototype.removeChannel = function(channel) {
-    var self = this;
-    var wrap = $("#content div.channel-wrap[data-channel=\"" + channel.id + "\"]");
-    self.channels.remove(channel);
+self.client.addListener("join", function (chan, nick, message) {
+  var channel = self.findChannel(chan);
+  if (nick === self.nick) {
+    if (!channel) {
+      channel = new Channel({name: chan});
+      self.channels.add(channel);
+    }
+    self.server.addChannel(chan);
     var view = Chatter.Views.servers;
     $('#channels > ul').html(view.render().el);
     view.delegateEvents();
-    var first = self.channels.first();
-    wrap.remove();
-    first.focus();
-  };
+    var chView = new ChannelView({
+      model: channel
+    });
+    self.views.push(chView);
+    $("#content").append(chView.render().el);
+    channel.focus();
+    Chatter.vent.trigger('self:join', channel);
+  } else {
+    var newnames = channel.get("names");
+    newnames[nick] = "";
+    self.renderNames(chan, newnames);
+    channel.addMessage("*" + nick + " has joined " + chan);
+    Chatter.vent.trigger('join', channel);
+  }
+});
 
-  Connection.prototype.isChannel = function(chan) {
-    return chan.startsWith('#');
-  };
+self.client.addListener("part", function (chan, nick, reason, message) {
+  var channel = self.findChannel(chan);
 
-  Connection.prototype.createPM = function(nickname) {
-    var self = this;
-    var channel = self.findChannel(nickname);
-    if (!channel) {
-      channel = new Channel({name: nickname});
-      self.channels.add(channel);
+  if (nick !== self.nick) {
+    channel.addMessage("*" + nick + " has left " + chan);
+    self.removeUser(nick, channel);
+    Chatter.vent.trigger('part', channel);
+  } else {
+    self.removeChannel(chan);
+    Chatter.vent.trigger('self:part', channel);
+  }
+});
 
-      var view = Chatter.Views.servers;
-      $('#channels > ul').html(view.render().el);
-      view.delegateEvents();
+self.client.addListener("setNick", function (newNick) {
+  self.nick = newNick;
+});
 
-      var chView = new ChannelView({
-        model: channel
+self.client.addListener("quit", function (nick, reason, chans, message) {
+  if (nick !== self.nick) {
+    for (var x = 0; x < chans.length; x++) {
+      var ch = chans[x];
+      var channel = self.channels.findWhere({name: ch});
+      if (channel.get("names")[nick]) {
+        channel.addMessage("*" + nick + " has quit " + ch + ": " + reason);
+        Chatter.vent.trigger('quit', channel);
+      }
+    }
+  } else {
+    self.connected = false;
+    Chatter.vent.trigger('self:quit', channel);
+  }
+});
+
+Chatter.vent.on('part:' + self.server.id, function(chan, message) {
+  var channel = self.findChannel(chan);
+  if (channel.get('pm')) {
+    self.removeChannel(channel);
+  } else {
+    self.client.part(chan, message);
+  }
+});
+
+Chatter.vent.on('privateMessage:' + self.server.id, function(nick, message) {
+  var channel = self.createPM(nick);
+  self.client.say(nick, message);
+});
+
+Chatter.vent.on('sendingMessage:' + self.server.id, function(receiver, message) {
+  if (message.trim() !== "") {
+    if (message.slice()[0] === '/') {
+      var data = {
+        receiver: receiver, 
+        message: message,
+        nick: self.nick
+      };
+      Chatter.Commands.handle(self.client, data, function(client, data, args) {
+        client.send(data.command, args.join(" "));
       });
-      self.views.push(chView);
-
-      $("#content").append(chView.render().el);
-      channel.hide();
-    }
-    if (channel.get('name') !== nickname) {
-      channel.set('name', nickname)
-    }
-    return channel;
-  };
-
-  function toPriority(sym) {
-    if (sym === "@") {
-      return 0;
-    } else if (sym === "+") {
-      return 1;
     } else {
-      return 2;
+      if (receiver.modelName === "Channel") {
+        self.client.say(receiver.get("name"), message);
+      } else if (receiver.modelName === "Server") {
+        self.client.send(message);
+      }
     }
   }
-  
-  return Connection;
+});
+};
+
+Connection.prototype.serverMessage = function(message) {
+  var self = this;
+  var messages = $("#content div.server-wrap[data-server=\"" + self.server.id + "\"] .messages");
+  $(messages).append("<div class=\"message\">" + message + "</div>");
+  $(messages).scrollTop(($(messages).height() * 2));
+};
+
+Connection.prototype.removeChannel = function(channel) {
+  var self = this;
+  var wrap = $("#content div.channel-wrap[data-channel=\"" + channel.id + "\"]");
+  self.channels.remove(channel);
+  var view = Chatter.Views.servers;
+  $('#channels > ul').html(view.render().el);
+  view.delegateEvents();
+  var first = self.channels.first();
+  wrap.remove();
+  first.focus();
+};
+
+Connection.prototype.isChannel = function(chan) {
+  return chan.startsWith('#');
+};
+
+Connection.prototype.createPM = function(nickname) {
+  var self = this;
+  var channel = self.findChannel(nickname);
+  if (!channel) {
+    channel = new Channel({name: nickname});
+    self.channels.add(channel);
+
+    var view = Chatter.Views.servers;
+    $('#channels > ul').html(view.render().el);
+    view.delegateEvents();
+
+    var chView = new ChannelView({
+      model: channel
+    });
+    self.views.push(chView);
+
+    $("#content").append(chView.render().el);
+    channel.hide();
+  }
+  if (channel.get('name') !== nickname) {
+    channel.set('name', nickname)
+  }
+  return channel;
+};
+
+function toPriority(sym) {
+  if (sym === "@") {
+    return 0;
+  } else if (sym === "+") {
+    return 1;
+  } else {
+    return 2;
+  }
+}
+
+return Connection;
 });
 
 /*

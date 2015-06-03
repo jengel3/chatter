@@ -57,50 +57,50 @@ requirejs(["app", "router", "modules/servers/serverlist", "modules/servers/serve
 			}
 		});
 
+Chatter.display = "normal";
+
+var tray = new gui.Tray({ icon: './dist/images/chatter.png' });
+$('.close').click(function() {
+	Chatter.vent.trigger('window:closed');
+	Chatter.display = "closed";
+	win.close();
+});
+
+$('.minimize').click(function() {
+	Chatter.vent.trigger('window:minimized');
+	Chatter.display = "minimized";
+	win.hide();
+});
+
+$('.maximize').click(function() {
+	if (Chatter.display === "maximized") {
+		Chatter.vent.trigger('window:normalized');
 		Chatter.display = "normal";
+		win.unmaximize();
+	} else {
+		Chatter.vent.trigger('window:maximized');
+		Chatter.display = "maximized";
+		win.maximize();
+	}
+});
 
-		var tray = new gui.Tray({ icon: './dist/images/chatter.png' });
-		$('.close').click(function() {
-			Chatter.vent.trigger('window:closed');
-			Chatter.display = "closed";
-			win.close();
-		});
+win.on('close', function() {
+	Chatter.disconnect(true);
+});
 
-		$('.minimize').click(function() {
-			Chatter.vent.trigger('window:minimized');
-			Chatter.display = "minimized";
-			win.hide();
-		});
+tray.on('click', function() {
+	if (Chatter.display === "minimized") {
+		Chatter.vent.trigger('window:tray:normalized');
+		Chatter.display = "normal";
+		win.show();
+	} else {
+		Chatter.vent.trigger('window:tray:minimized');
+		Chatter.display = "minimized";
+		win.hide();
+	}
+});
 
-		$('.maximize').click(function() {
-			if (Chatter.display === "maximized") {
-				Chatter.vent.trigger('window:normalized');
-				Chatter.display = "normal";
-				win.unmaximize();
-			} else {
-				Chatter.vent.trigger('window:maximized');
-				Chatter.display = "maximized";
-				win.maximize();
-			}
-		});
-
-		win.on('close', function() {
-			Chatter.disconnect(true);
-		});
-
-		tray.on('click', function() {
-			if (Chatter.display === "minimized") {
-				Chatter.vent.trigger('window:tray:normalized');
-				Chatter.display = "normal";
-				win.show();
-			} else {
-				Chatter.vent.trigger('window:tray:minimized');
-				Chatter.display = "minimized";
-				win.hide();
-			}
-		});
-
-		tray.tooltip = "Chatter";
+tray.tooltip = "Chatter";
 
 		//https://github.com/nwjs/nw.js/issues/1955
 		if (process.platform === "darwin") {
@@ -170,7 +170,6 @@ requirejs(["app", "router", "modules/servers/serverlist", "modules/servers/serve
 			var server = new Server();
 			server.save();
 			Chatter.servers.add(server);
-			Chatter.servers.fetch();
 		}
 
 		var view = new ServerListView({collection: Chatter.servers});
@@ -193,6 +192,11 @@ requirejs(["app", "router", "modules/servers/serverlist", "modules/servers/serve
 				}
 			});
 			$("#server_popup").popup("show");
+		});
+
+		$(document).bind("drop dragenter dragover dragleave", function(e) {
+			e.preventDefault();
+			return false;
 		});
 
 

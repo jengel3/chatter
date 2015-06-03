@@ -130,8 +130,11 @@ requirejs(["app", "router", "modules/servers/serverlist", "modules/servers/serve
     });
 
     win.on('close', function() {
+      win.hide();
       Chatter.disconnect(true);
       Chatter.focused = false;
+      win.close(true);
+      nwNotify.closeAll();
     });
 
     win.on('blur', function() {

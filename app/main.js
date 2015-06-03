@@ -7,6 +7,8 @@ requirejs(["app", "router", "modules/servers/serverlist", "modules/servers/serve
     ChannelList, Channel, Commands, $, popup, ServerEditView, Settings, SettingsEditView, TabComplete) {
     "use strict";
     var gui = require("nw.gui");
+    var nwNotify = require('nw-notify');
+    var path = require('path');
     Chatter.router = new Router();
     window.Triejs = require("Triejs");
 
@@ -71,32 +73,28 @@ requirejs(["app", "router", "modules/servers/serverlist", "modules/servers/serve
       }
     });
 
+function focusNotification(e) {
+  win.focus();
+  e.closeNotification();
+}
+
+nwNotify.setConfig({
+    appIcon: path.join(nwNotify.getAppPath(), 'dist/images/chatter.png'),
+    displayTime: 4000
+});
+
     Chatter.vent.on('message', function(channel, message, isPM) {
       if (!Chatter.focused && isPM && Chatter.Settings.get('notificationsPM')) {
         win.requestAttention(true);
         Chatter.BadgeCount += 1;
         win.setBadgeLabel(Chatter.BadgeCount);
+        console.log("Sending notification yo");
 
-
-        console.log("Sending notification yo")
-        var options = {
-          body: message
-        };
-
-        var notification = new window.Notification("Private Message", options);
-
-        notification.onclick = function() {
-          document.getElementById("output").innerHTML += "Notification clicked";
-        }
-
-        notification.onshow = function() {
-          myAud = document.getElementById("audio1");
-          myAud.play();
-
-          setTimeout(function() {
-            notification.close();
-          }, 1000);
-        }
+        nwNotify.notify({
+          title: "PM from " + channel.get('name'), 
+          text: message,
+          onClickFunc: focusNotification
+        });
       }
     });
 

@@ -39,6 +39,7 @@
     "irc": "Jake0oo0/node-irc",
     "node-uuid": "^1.4.3",
     "nw": "^0.12.1",
+    "nw-notify": "^0.2.0",
     "triejs": "^0.1.5",
     "vinyl-fs": "^1.0.0"
   },

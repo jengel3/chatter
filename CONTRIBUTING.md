@@ -1,5 +1,3 @@
-# Contributions
-
 ## Developing
 
 0. Indent using **2 spaces**

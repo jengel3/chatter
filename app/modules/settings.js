@@ -10,6 +10,6 @@ define(["app", "backbone", "localstorage"], function(Chatter, Backbone, LocalSto
 			minimizeTray: true,
 			hideJoinPart: false
 		}
-	});	
+	});
 	return Settings;
 });

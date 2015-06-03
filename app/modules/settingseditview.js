@@ -15,7 +15,7 @@ define(["app", "backbone", "underscore", "jquery", "modules/settings"], function
 			this.model = Chatter.Settings;
 		},
 
-		render: function(){
+		render: function() {
 			var dict = this.model.toJSON();
 			var html = this.template(dict);
 			this.$el.html(html);
@@ -70,5 +70,5 @@ define(["app", "backbone", "underscore", "jquery", "modules/settings"], function
 			}, 1);
 		}
 	});
-return SettingsEditview;
+	return SettingsEditview;
 });

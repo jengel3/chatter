@@ -7,7 +7,7 @@ define(["app", "backbone", "underscore", "jquery"], function(Chatter, Backbone, 
 			'keypress .message-input': 'entered'
 		},
 
-		render: function(){
+		render: function() {
 			var dict = this.model.toJSON();
 			var html = this.template(dict);
 			this.$el.html(html);
@@ -25,5 +25,5 @@ define(["app", "backbone", "underscore", "jquery"], function(Chatter, Backbone, 
 			}
 		}
 	});
-return ServerView;
+	return ServerView;
 });

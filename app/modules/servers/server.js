@@ -17,7 +17,7 @@ define(["app", "backbone", "localstorage", "underscore", "connection"], function
 		},
 		connect: function() {
 			this.connection = new Connection(this);
-		}, 
+		},
 		addChannel: function(chan) {
 			var chans = this.get("channels");
 			if (chans.indexOf(chan) === -1) {
@@ -32,6 +32,6 @@ define(["app", "backbone", "localstorage", "underscore", "connection"], function
 			this.set("channels", removed);
 			return removed;
 		}
-	});	
+	});
 	return Server;
 });

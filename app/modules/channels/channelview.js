@@ -11,7 +11,7 @@ define(["app", "backbone", "underscore", "jquery"], function(Chatter, Backbone, 
 			this.initialized = false;
 		},
 
-		render: function(){
+		render: function() {
 			var dict = this.model.toJSON();
 			var html = this.template(dict);
 			this.$el.html(html);
@@ -55,5 +55,5 @@ define(["app", "backbone", "underscore", "jquery"], function(Chatter, Backbone, 
 			}
 		}
 	});
-return ChannelView;
+	return ChannelView;
 });

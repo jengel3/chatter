@@ -1,4 +1,4 @@
-define(["app", "underscore"], function (Chatter, _) {
+define(["app", "underscore"], function(Chatter, _) {
   "use strict";
   var Commands = {};
 
@@ -12,7 +12,7 @@ define(["app", "underscore"], function (Chatter, _) {
     if (_.isFunction(handler)) {
       // new command
       context.type = 1;
-    } else if(_.isString(handler)) {
+    } else if (_.isString(handler)) {
       // alias
       context.type = 2;
     }

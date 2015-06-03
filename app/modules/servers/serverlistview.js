@@ -8,11 +8,11 @@ define(["app", "backbone", "underscore", "jquery"], function(Chatter, Backbone, 
             "click .server ul li": "channel",
             "click .server .slider": "slide"
         },
-        render: function(){
+        render: function() {
             var self = this;
             this.$el.empty();
             this.$el.html("");
-            this.collection.each(function(server){
+            this.collection.each(function(server) {
                 self.$el.append(self.template(server.toJSON()));
                 var header = self.$el.find('li.server[data-id="' + server.id + '"]');
                 var connection = Chatter.Connections[server.id];
@@ -50,7 +50,7 @@ define(["app", "backbone", "underscore", "jquery"], function(Chatter, Backbone, 
             Chatter.Active.server = server;
             Chatter.Active.channel = null;
             $("#content > div").hide();
-            $("#content > div[data-server=\"" + id +"\"]").show();
+            $("#content > div[data-server=\"" + id + "\"]").show();
             return false;
         },
 
@@ -67,5 +67,5 @@ define(["app", "backbone", "underscore", "jquery"], function(Chatter, Backbone, 
             return false;
         }
     });
-return ServerListView;
+    return ServerListView;
 });

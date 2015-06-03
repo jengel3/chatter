@@ -3,7 +3,7 @@ define(function(require, exports, module) {
   var Backbone = require("backbone");
 
   if (window.Chatter) {
-  	return window.Chatter;
+    return window.Chatter;
   }
 
   window.Chatter = new Marionette.Application();

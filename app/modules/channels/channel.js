@@ -35,7 +35,7 @@ define(["app", "backbone", "jquery", "moment"], function(Chatter, Backbone, $, m
 			$(msgs).append("<div class=\"message\"><span class=\"timestamp\">" + date + '</span> <span class="separator">=></span> <span class="text">' + message + '</span></div>');
 			$(msgs).scrollTop(($(msgs).height() * 2));
 		},
-		
+
 		focus: function() {
 			$("#content > div").hide();
 			var wrap = $("#content div.channel-wrap[data-channel=\"" + this.id + "\"]");
@@ -46,7 +46,7 @@ define(["app", "backbone", "jquery", "moment"], function(Chatter, Backbone, $, m
 			}, 1);
 			Chatter.vent.trigger('focus:channel', this);
 		},
-		
+
 		hide: function() {
 			var wrap = $("#content div.channel-wrap[data-channel=\"" + this.id + "\"]");
 			wrap.hide();
@@ -58,6 +58,6 @@ define(["app", "backbone", "jquery", "moment"], function(Chatter, Backbone, $, m
 			$(wrapper).find(".topic").text(topic);
 			$(wrapper).find(".topic").attr("title", topic);
 		}
-	});	
+	});
 	return Channel;
 });

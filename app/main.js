@@ -3,8 +3,7 @@ requirejs(["app", "router", "modules/servers/serverlist", "modules/servers/serve
     "modules/channels/channellist", "modules/channels/channel", "commands", "jquery", "jquery-popup-overlay",
     "modules/servers/servereditview", "modules/settings", "modules/settingseditview", "tab-complete"
   ],
-  function(Chatter, Router, ServerList, Server, ServerListView, ChannelView,
-    ChannelList, Channel, Commands, $, popup, ServerEditView, Settings, SettingsEditView, TabComplete) {
+  function(Chatter, Router, ServerList, Server, ServerListView, ChannelView, ChannelList, Channel, Commands, $, popup, ServerEditView, Settings, SettingsEditView, TabComplete) {
     "use strict";
     var gui = require("nw.gui");
     var nwNotify = require('nw-notify');
@@ -73,15 +72,15 @@ requirejs(["app", "router", "modules/servers/serverlist", "modules/servers/serve
       }
     });
 
-function focusNotification(e) {
-  win.focus();
-  e.closeNotification();
-}
+    function focusNotification(e) {
+      win.focus();
+      e.closeNotification();
+    }
 
-nwNotify.setConfig({
-    appIcon: path.join(nwNotify.getAppPath(), 'dist/images/chatter.png'),
-    displayTime: 4000
-});
+    nwNotify.setConfig({
+      appIcon: path.join(nwNotify.getAppPath(), 'dist/images/chatter.png'),
+      displayTime: 4000
+    });
 
     Chatter.vent.on('message', function(channel, message, isPM) {
       if (!Chatter.focused && isPM && Chatter.Settings.get('notificationsPM')) {
@@ -91,7 +90,7 @@ nwNotify.setConfig({
         console.log("Sending notification yo");
 
         nwNotify.notify({
-          title: "PM from " + channel.get('name'), 
+          title: "PM from " + channel.get('name'),
           text: message,
           onClickFunc: focusNotification
         });

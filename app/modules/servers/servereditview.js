@@ -18,7 +18,7 @@ define(["app", "backbone", "underscore", "jquery", "modules/servers/server"], fu
 			}
 		},
 
-		render: function(){
+		render: function() {
 			var dict = this.model.toJSON();
 			var html = this.template(dict);
 			this.$el.html(html);
@@ -53,7 +53,7 @@ define(["app", "backbone", "underscore", "jquery", "modules/servers/server"], fu
 			$("#server_popup").popup("hide");
 		},
 
-		destroy: function (e) {
+		destroy: function(e) {
 			var self = this;
 			e.preventDefault();
 			e.stopPropagation();
@@ -114,5 +114,5 @@ define(["app", "backbone", "underscore", "jquery", "modules/servers/server"], fu
 			}, 1);
 		}
 	});
-return ServerEditView;
+	return ServerEditView;
 });

@@ -8,21 +8,23 @@
 	<meta name="viewport" content="width=device-width,initial-scale=1">
 </head>
 <body>
-	<div id="header" style="-webkit-app-region: drag">
-		<div id='buttons'>
-			<div title='Close' class='close'></div>
-			<div title='Maximize' class='maximize'></div>
-			<div title='Minimize' class='minimize'></div>
-		</div>
-	</div>
-	<div id="wrap">
-		<div id="channels">
-			<ul></ul>
-			<div class='manage'>
-				<span class='add-server'>+</span>
+	<div class="main">
+		<div id="header" style="-webkit-app-region: drag">
+			<div id='buttons'>
+				<div title='Close' class='close'></div>
+				<div title='Maximize' class='maximize'></div>
+				<div title='Minimize' class='minimize'></div>
 			</div>
 		</div>
-		<div id="content"></div>
+		<div id="wrap">
+			<div id="channels">
+				<ul></ul>
+				<div class='manage'>
+					<span class='add-server'>+</span>
+				</div>
+			</div>
+			<div id="content"></div>
+		</div>
 	</div>
 
 	<script type="text/template" id='server-edit-template'>
@@ -86,6 +88,7 @@
 	</script>
 
 	<script type='text/template' id='channel-template'>
+		<div class='left-content'>
 		<div class='top-wrap'>
 			<span class='channel-name'><%= name %>: </span>
 			<span class='topic' title='<%= topic %>'><%= topic %></span>
@@ -94,9 +97,12 @@
 		<div class='input-wrap'>
 			<input class='message-input'></input>
 		</div>
+		</div>
+		<div class='right-content'>
 		<% if (!pm) { %>
 			<div class='users scroll'><ul></ul></div>
 			<% } %>
+			</div>
 		</script>
 
 		<script type='text/template' id='server-template'>

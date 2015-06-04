@@ -222,8 +222,10 @@ define(["app", "underscore", "jquery", "modules/channels/channellist", "modules/
         var newnames = channel.get("names");
         newnames[nick] = "";
         self.renderNames(chan, newnames);
-        channel.addMessage("*" + nick + " has joined " + chan);
-        Chatter.vent.trigger('join', channel);
+        if (!Chatter.Settings.get("hideJoinPart")) {
+          channel.addMessage("*" + nick + " has joined " + chan);
+        }
+        Chatter.vent.trigger("join", channel);
       }
     });
 
@@ -231,7 +233,9 @@ define(["app", "underscore", "jquery", "modules/channels/channellist", "modules/
       var channel = self.findChannel(chan);
 
       if (nick !== self.nick) {
-        channel.addMessage("*" + nick + " has left " + chan);
+        if (!Chatter.Settings.get("hideJoinPart")) {
+          channel.addMessage("*" + nick + " has left " + chan);
+        }
         self.removeUser(nick, channel);
         Chatter.vent.trigger('part', channel);
       } else {
@@ -252,33 +256,35 @@ define(["app", "underscore", "jquery", "modules/channels/channellist", "modules/
             name: ch
           });
           if (channel.get("names")[nick]) {
-            channel.addMessage("*" + nick + " has quit " + ch + ": " + reason);
-            Chatter.vent.trigger('quit', channel);
+            if (!Chatter.Settings.get("hideJoinPart")) {
+              channel.addMessage("*" + nick + " has quit " + ch + ": " + reason);
+            }
+            Chatter.vent.trigger("quit", channel);
           }
         }
       } else {
         self.connected = false;
-        Chatter.vent.trigger('self:quit', self.server);
+        Chatter.vent.trigger("self:quit", self.server);
       }
     });
 
-    Chatter.vent.on('part:' + self.server.id, function(chan, message) {
+    Chatter.vent.on("part:" + self.server.id, function(chan, message) {
       var channel = self.findChannel(chan);
-      if (channel.get('pm')) {
+      if (channel.get("pm")) {
         self.removeChannel(channel);
       } else {
         self.client.part(chan, message);
       }
     });
 
-    Chatter.vent.on('privateMessage:' + self.server.id, function(nick, message) {
+    Chatter.vent.on("privateMessage:" + self.server.id, function(nick, message) {
       var channel = self.createPM(nick);
       self.client.say(nick, message);
     });
 
-    Chatter.vent.on('sendingMessage:' + self.server.id, function(receiver, message) {
+    Chatter.vent.on("sendingMessage:" + self.server.id, function(receiver, message) {
       if (message.trim() !== "") {
-        if (message.slice()[0] === '/') {
+        if (message.slice()[0] === "/") {
           var data = {
             receiver: receiver,
             message: message,
@@ -302,7 +308,7 @@ define(["app", "underscore", "jquery", "modules/channels/channellist", "modules/
     var self = this;
     var messages = $("#content div.server-wrap[data-server=\"" + self.server.id + "\"] .messages");
     $(messages).append("<div class=\"message\">" + message + "</div>");
-    $(messages).scrollTop(($(messages).height() * 2));
+    sel.scrollTop(messages.prop("scrollHeight"));
   };
 
   Connection.prototype.removeChannel = function(channel) {

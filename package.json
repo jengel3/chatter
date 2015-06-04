@@ -1,6 +1,6 @@
 {
   "name": "Chatter",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "IRC client written in nw.js and Backbone",
   "main": "index.html",
   "private": false,

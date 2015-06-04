@@ -72,6 +72,11 @@ requirejs(["app", "router", "modules/servers/serverlist", "modules/servers/serve
       }
     });
 
+    $(document).on("click", ".browser-link", function(e) {
+      var link = $(e.target).attr('href');
+      gui.Shell.openExternal(link);
+    });
+
     function focusNotification(e) {
       win.focus();
       e.closeNotification();

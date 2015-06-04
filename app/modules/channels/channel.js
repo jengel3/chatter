@@ -1,6 +1,11 @@
 define(["app", "backbone", "jquery", "moment"], function(Chatter, Backbone, $, moment) {
 	"use strict";
 	var uuid = require("node-uuid");
+	var Autolinker = require("autolinker");
+	var autolinker = new Autolinker({
+		stripPrefix: false,
+		className: 'browser-link'
+	});
 	var Channel = Backbone.Model.extend({
 		idAttribute: "uuid",
 		modelName: "Channel",
@@ -32,12 +37,15 @@ define(["app", "backbone", "jquery", "moment"], function(Chatter, Backbone, $, m
 		addMessage: function(message) {
 			var msgs = $(this.getMessages());
 			var date = moment().format("MM/DD/YYYY hh:mm");
-			$(msgs).append("<div class=\"message\"><span class=\"timestamp\">" + date + '</span> <span class="separator">=></span> <span class="text">' + message + '</span></div>');
+			$(msgs).append("<div class=\"message\"><span class=\"timestamp\">" + date + '</span> <span class="separator">=></span> <span class="text">' + autolinker.link(message) + '</span></div>');
 			this.scrollMessages(msgs);
 		},
 
 		scrollMessages: function(sel) {
-			sel.scrollTop(sel.prop("scrollHeight"));
+			if (!sel) {
+				sel = $(this.getMessages());
+			}
+			sel.scrollTop($(sel).prop("scrollHeight"));
 		},
 
 		focus: function() {

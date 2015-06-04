@@ -35,6 +35,7 @@
   ],
   "author": "Jake",
   "dependencies": {
+    "autolinker": "^0.17.1",
     "bower": "^1.4.1",
     "irc": "Jake0oo0/node-irc",
     "node-uuid": "^1.4.3",

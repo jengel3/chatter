@@ -148,6 +148,12 @@ requirejs(["app", "router", "modules/servers/serverlist", "modules/servers/serve
       win.setBadgeLabel("");
     });
 
+    win.on('resize', function(width, height) {
+      if (Chatter.Active.channel) {
+        Chatter.Active.channel.scrollMessages();
+      }
+    });
+
     tray.on('click', function() {
       if (Chatter.display === "minimized") {
         Chatter.vent.trigger('window:tray:normalized');

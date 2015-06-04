@@ -33,7 +33,11 @@ define(["app", "backbone", "jquery", "moment"], function(Chatter, Backbone, $, m
 			var msgs = $(this.getMessages());
 			var date = moment().format("MM/DD/YYYY hh:mm");
 			$(msgs).append("<div class=\"message\"><span class=\"timestamp\">" + date + '</span> <span class="separator">=></span> <span class="text">' + message + '</span></div>');
-			$(msgs).scrollTop(($(msgs).height() * 2));
+			this.scrollMessages(msgs);
+		},
+
+		scrollMessages: function(sel) {
+			sel.scrollTop(sel.prop("scrollHeight"));
 		},
 
 		focus: function() {

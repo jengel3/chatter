@@ -55,7 +55,7 @@ gulp.task('rjs', function() {
  .pipe(gulp.dest('./dist/js/'))
  .pipe(rename('source.min.js'))
  .pipe(uglify())
- .on('error', console.warn)
+ .on('error', gutil.log)
  .pipe(gulp.dest('./dist/js/'));
 });
 

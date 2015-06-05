@@ -116,7 +116,7 @@ define(["app", "underscore", "jquery", "modules/channels/channellist", "modules/
         isPM = true;
       }
 
-      channel.addMessage("<span class=\"author\">" + from + ": </span>" + message);
+      channel.addMessage("<span class='author'>" + from + ": </span>" + message);
       Chatter.vent.trigger('message', channel, message, isPM);
 
     });

@@ -247,7 +247,7 @@ requirejs(["app", "router", "modules/servers/serverlist", "modules/servers/serve
       var target = args[0]
       var message = args.slice(1).join(" ");
       client.notice(target, message);
-      Chatter.vent.trigger("notice:" + Chatter.Active.server.id, null, target, message)
+      Chatter.vent.trigger("notice:" + Chatter.Active.server.id, null, target, message);
     });
 
     Chatter.Commands.register("j", "join");

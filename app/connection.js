@@ -87,6 +87,7 @@ define(["app", "underscore", "jquery", "modules/channels/channellist", "modules/
       port: self.attrs.port,
       realName: self.attrs.real_name
     };
+    
     self.client = new irc.Client(self.attrs.host, self.attrs.nick, options);
     Chatter.Clients[self.server.attributes.id] = self.client;
 

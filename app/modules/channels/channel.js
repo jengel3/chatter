@@ -4,7 +4,14 @@ define(["app", "backbone", "jquery", "moment"], function(Chatter, Backbone, $, m
 	var Autolinker = require("autolinker");
 	var autolinker = new Autolinker({
 		stripPrefix: false,
-		className: 'browser-link'
+		className: "browser-link",
+		hashtag: "twitter",
+		replaceFn: function(autolinker, match) {
+			if (match.getType() === "hashtag") {
+				var channel = match.getAnchorText();
+				return '<a href="' + channel + '" class="channel-link">' + channel + '</a>';
+			}
+		}
 	});
 	var Channel = Backbone.Model.extend({
 		idAttribute: "uuid",

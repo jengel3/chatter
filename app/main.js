@@ -74,8 +74,18 @@ requirejs(["app", "router", "modules/servers/serverlist", "modules/servers/serve
 
 
     $(document).on("click", ".browser-link", function(e) {
+      e.preventDefault();
       var link = $(e.target).attr('href');
       gui.Shell.openExternal(link);
+    });
+
+    $(document).on("click", ".channel-link", function(e) {
+      e.preventDefault();
+      var channel = $(e.target).attr('href');
+      if (Chatter.Active.server) {
+        var connection = Chatter.Connections[Chatter.Active.server.id];
+        connection.client.join(channel.trim() + " ");
+      }
     });
 
     function focusNotification(e) {

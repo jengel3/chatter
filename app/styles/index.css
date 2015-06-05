@@ -50,8 +50,9 @@ html, body, .main {
 }
 
 #wrap > #channels {
-  width: 25%;
+  width: 200px;
   height: 100%;
+  position: relative;
 }
 
 #wrap #content {
@@ -67,8 +68,13 @@ html, body, .main {
 	height: 100%;
 }
 
-.users {
-	height: 100%;
+.right-content {
+	width: 200px;
+}
+
+.left-content {
+	width:100%;
+	position:relative;
 }
 
 
@@ -96,8 +102,11 @@ html, body, .main {
 
 .users {
 	display: block;
-	overflow-y:scroll;
+	overflow-y:auto;
 	overflow-x:hidden;
+	height: 100%;
+	width: 100%;
+	background: #f0efef;
 }
 
 #channels {
@@ -105,21 +114,9 @@ html, body, .main {
 	-webkit-user-select:none;
 }
 
-.users {
-	background: #f0efef;
-}
-
 .users, #channels {
 	border-right: solid 1px #ccc;
 	border-left: solid 1px #ccc;
-}
-
-.left-content {
-	width: 75%;
-}
-
-.right-content {
-	width: 25%;
 }
 
 .server-wrap, .channel-wrap {
@@ -195,6 +192,9 @@ ul {
 	display: -webkit-flex;
 	border-top:1px solid #ccc;
 	border-bottom:1px solid #ccc;
+	  position: absolute;
+  bottom: 0;
+  width: 100%;
 }
 
 
@@ -229,6 +229,8 @@ input.message-input {
 .messages {
 	display: block;
 	overflow-x:hidden;
+	overflow-y: auto;
+  height: calc(100% - 83px);
 }
 
 .message {
@@ -378,12 +380,15 @@ label {
 	font-size: 25px;
 	font-weight: 700;
 	background-color: #ccc;
-	padding-left: 5px;
+	position:absolute;
+	bottom:0;
+	width:100%;
 }
 
 .manage span {
 	-webkit-transition: all .2s ease-in-out;
 	cursor:pointer;
+	padding-left:5px;
 }
 
 .manage span:hover {

@@ -308,7 +308,7 @@ define(["app", "underscore", "jquery", "modules/channels/channellist", "modules/
     var self = this;
     var messages = $("#content div.server-wrap[data-server=\"" + self.server.id + "\"] .messages");
     $(messages).append("<div class=\"message\">" + message + "</div>");
-    sel.scrollTop(messages.prop("scrollHeight"));
+    messages.scrollTop(messages.prop("scrollHeight"));
   };
 
   Connection.prototype.removeChannel = function(channel) {

@@ -1,9 +1,9 @@
 requirejs(["app", "router", "modules/servers/serverlist", "modules/servers/server",
     "modules/servers/serverlistview", "modules/channels/channelview",
     "modules/channels/channellist", "modules/channels/channel", "commands", "jquery", "jquery-popup-overlay",
-    "modules/servers/servereditview", "modules/settings", "modules/settingseditview", "tab-complete"
+    "modules/servers/servereditview", "modules/settings", "modules/settingseditview", "tab-complete", "jquery-ui"
   ],
-  function(Chatter, Router, ServerList, Server, ServerListView, ChannelView, ChannelList, Channel, Commands, $, popup, ServerEditView, Settings, SettingsEditView, TabComplete) {
+  function(Chatter, Router, ServerList, Server, ServerListView, ChannelView, ChannelList, Channel, Commands, $, popup, ServerEditView, Settings, SettingsEditView, TabComplete, ui) {
     "use strict";
     var gui = require("nw.gui");
     var nwNotify = require('nw-notify');
@@ -71,6 +71,7 @@ requirejs(["app", "router", "modules/servers/serverlist", "modules/servers/serve
         $("#settings_popup").popup("show");
       }
     });
+
 
     $(document).on("click", ".browser-link", function(e) {
       var link = $(e.target).attr('href');

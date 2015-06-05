@@ -128,7 +128,24 @@ define(["app", "underscore", "jquery", "modules/channels/channellist", "modules/
     });
 
     self.client.addListener("notice", function(nick, to, text, message) {
-      // console.log("received notice", message, nick)
+      Chatter.vent.trigger("notice:" + self.server.id, nick, to, text)
+    });
+
+    Chatter.vent.on("notice:" + self.server.id, function(from, to, message) {
+      if (!from) {
+        from = self.nick;
+      }
+      var channel = Chatter.Active.channel;
+      if (self.isChannel(to)) {
+        channel = self.findChannel(to);
+        channel.addMessage("<span class='author notice'>-" + from + "/" + to + "-: </span>" + message);
+      } else {
+        if (channel && self.channels.contains(channel)) {
+          channel.addMessage("<span class='author notice'>-" + from + "-: </span>" + message);
+        } else {
+          self.serverMessage("<span class='author notice'>-" + from + "-: </span>" + message);
+        }
+      }
     });
 
     self.client.addListener("raw", function(message) {
@@ -367,8 +384,3 @@ define(["app", "underscore", "jquery", "modules/channels/channellist", "modules/
 
   return Connection;
 });
-
-/*
-todo
- - fix /msg #chan creating PM 
-*/

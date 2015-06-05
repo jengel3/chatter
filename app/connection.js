@@ -165,7 +165,7 @@ define(["app", "underscore", "jquery", "modules/channels/channellist", "modules/
             self.client.part(chan);
           }
         }
-        if (Chatter.Active.channel) {
+        if (Chatter.Active.channel && Chatter.Active.channel.server === self.server.id) {
           var channel = Chatter.Active.channel;
           channel.addMessage(raw);
         } else {

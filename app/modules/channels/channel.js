@@ -1,7 +1,6 @@
-define(["app", "backbone", "jquery", "moment"], function(Chatter, Backbone, $, moment) {
+define(["app", "backbone", "jquery", "moment", "autolinker"], function(Chatter, Backbone, $, moment, Autolinker) {
 	"use strict";
 	var uuid = require("node-uuid");
-	var Autolinker = require("autolinker");
 	var autolinker = new Autolinker({
 		stripPrefix: false,
 		className: "browser-link",

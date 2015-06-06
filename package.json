@@ -35,14 +35,12 @@
   ],
   "author": "Jake",
   "dependencies": {
-    "autolinker": "^0.17.1",
     "bower": "^1.4.1",
     "irc": "Jake0oo0/node-irc",
     "node-uuid": "^1.4.3",
     "nw": "^0.12.1",
     "nw-notify": "^0.2.0",
-    "triejs": "^0.1.5",
-    "vinyl-fs": "^1.0.0"
+    "triejs": "^0.1.5"
   },
   "devDependencies": {
     "glob": "^5.0.5",
@@ -63,6 +61,7 @@
     "through2": "^0.6.5",
     "unique-stream": "^2.0.2",
     "duplexify": "^3.4.0",
-    "read-all-stream": "^2.1.2"
+    "read-all-stream": "^2.1.2",
+    "vinyl-fs": "^1.0.0"
   }
 }

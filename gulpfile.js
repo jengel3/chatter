@@ -12,19 +12,22 @@ var rjs = require('gulp-requirejs');
 var rm = require('gulp-rimraf');
 var NwBuilder = require('node-webkit-builder');
 
-// Build nwjs app
+var files = ['package.json', 'app/**', 'dist/**/*', 'index.html', 
+'vendor/components/backbone/backbone-min.js', 'vendor/components/jquery/dist/jquery.min.js',
+'vendor/components/underscore/underscore-min.js', 'vendor/components/backbone.marionette/lib/backbone.marionette.min.js',
+'vendor/components/jquery-popup-overlay/jquery.popupoverlay.js', 
+'vendor/components/backbone.localStorage/backbone.localStorage-min.js',
+'vendor/components/moment/min/moment.min.js', 'node_modules/triejs/src/trie.min.js', 
+'vendor/components/tab-complete/dist/jquery.tab-complete.min.js', 'vendor/components/Autolinker.js/dist/Autolinker.min.js', 
+'node_modules/irc/**/*', 'node_modules/node-uuid/**/*', 'node_modules/nw-notify/**/*', 'vendor/components/requirejs/require.js'];
+
 gulp.task('build', function() {
   var nw = new NwBuilder({
     appName: pkg.window.title,
     appVersion: pkg.version,
     buildDir: 'build',
-    files: ['package.json', 'app/**', 'dist/**/*', 'vendor/components/**/*', 'index.html', 
-    "node_modules/**", "!node_modules/gulp*/**", "!node_modules/bower/**", 
-    "!node_modules/duplexify/**", "!node_modules/node-webkit-builder/**", "!node_modules/*glob*/**", 
-    "!node_modules/read-all-stream/**", "!node_modules/nw/nwjs/chatter*",
-    "!node_modules/unique-stream/**", "!node_modules/vinyl-fs/**", "!node_modules/rimraf/**", 
-    "!node_modules/nw/**", "!node_modules/through2/**", "!node_modules/irc/node_modules/iconv/**"],
-    platforms: ['win', 'osx', 'linux'],
+    files: files,
+    platforms: ['win'],
     winIco: './dist/images/chatter.ico',
     version: '0.12.1'
   });
@@ -34,9 +37,7 @@ gulp.task('build', function() {
   return nw.build().catch(console.log);
 });
 
-gulp.task('serve', ['compile'], shell.task([
-  'node node_modules/nw/bin/nw . --debug'
-  ]));
+gulp.task('serve', ['compile'], shell.task(['node node_modules/nw/bin/nw . --debug']));
 
 
 gulp.task('watch', function () {
@@ -45,13 +46,13 @@ gulp.task('watch', function () {
 
 
 gulp.task('rjs', function() {
- rjs({
-  mainConfigFile: "app/config.js",
-  include: ["main"],
-  out: "source.js",
-  baseUrl: "app",
-  wrap: true,
-})
+  rjs({
+    mainConfigFile: "app/config.js",
+    include: ["main"],
+    out: "source.js",
+    baseUrl: "app",
+    wrap: true
+  })
  .pipe(gulp.dest('./dist/js/'))
  .pipe(rename('source.min.js'))
  .pipe(uglify())

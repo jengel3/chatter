@@ -1,15 +1,15 @@
 requirejs(["app", "router", "modules/servers/serverlist", "modules/servers/server",
     "modules/servers/serverlistview", "modules/channels/channelview",
     "modules/channels/channellist", "modules/channels/channel", "commands", "jquery", "jquery-popup-overlay",
-    "modules/servers/servereditview", "modules/settings", "modules/settingseditview", "tab-complete"
+    "modules/servers/servereditview", "modules/settings", "modules/settingseditview", "tab-complete", "triejs"
   ],
-  function(Chatter, Router, ServerList, Server, ServerListView, ChannelView, ChannelList, Channel, Commands, $, popup, ServerEditView, Settings, SettingsEditView, TabComplete) {
+  function(Chatter, Router, ServerList, Server, ServerListView, ChannelView, ChannelList, Channel, Commands, $, popup, ServerEditView, Settings, SettingsEditView, TabComplete, Triejs) {
     "use strict";
     var gui = require("nw.gui");
     var nwNotify = require('nw-notify');
     var path = require('path');
     Chatter.router = new Router();
-    window.Triejs = require("Triejs");
+    window.Triejs = Triejs;
 
     Chatter.start();
     var win = gui.Window.get();

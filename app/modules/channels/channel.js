@@ -21,7 +21,8 @@ define(["app", "backbone", "jquery", "moment", "autolinker"], function(Chatter, 
 			topic: "",
 			names: {},
 			channels: [],
-			pm: false
+			pm: false,
+			messages: []
 		},
 
 		initialize: function() {

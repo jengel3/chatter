@@ -12,7 +12,7 @@ var rjs = require('gulp-requirejs');
 var rm = require('gulp-rimraf');
 var NwBuilder = require('node-webkit-builder');
 
-var files = ['package.json', 'app/**', 'dist/**/*', 'index.html', 
+var files = ['package.json', 'app/**', 'dist/**/*', 'index.html', '.desktop', 
 'vendor/components/backbone/backbone-min.js', 'vendor/components/jquery/dist/jquery.min.js',
 'vendor/components/underscore/underscore-min.js', 'vendor/components/backbone.marionette/lib/backbone.marionette.min.js',
 'vendor/components/jquery-popup-overlay/jquery.popupoverlay.js', 
@@ -27,7 +27,7 @@ gulp.task('build', function() {
     appVersion: pkg.version,
     buildDir: 'build',
     files: files,
-    platforms: ['win', 'osx', 'linux'],
+    platforms: ['osx', 'linux'],
     winIco: './dist/images/chatter.ico',
     version: '0.12.1'
   });

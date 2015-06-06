@@ -4,11 +4,12 @@ define(["app", "backbone", "underscore", "jquery"], function(Chatter, Backbone, 
 		template: _.template($("#channel-template").html()),
 		className: "channel-wrap",
 		events: {
-			"keypress .message-input": "entered"
+			"keydown .message-input": "entered"
 		},
 		initialize: function() {
 			this.model.on('change:names', this.setupTabComplete, this);
 			this.initialized = false;
+			this.index = 0;
 		},
 
 		render: function() {
@@ -23,13 +24,35 @@ define(["app", "backbone", "underscore", "jquery"], function(Chatter, Backbone, 
 		},
 
 		entered: function(e) {
-			if (Chatter.Active.channel && Chatter.Active.server && e.which === 13) {
+			if (Chatter.Active.channel && Chatter.Active.server) {
 				var server = Chatter.Active.server;
 				var channel = Chatter.Active.channel;
-				var message = $("#content .channel-wrap[data-channel=\"" + channel.id + "\"] .message-input");
-				var msg = message.val();
-				Chatter.vent.trigger('sendingMessage:' + server.id, channel, msg);
-				message.val("");
+				var $msg = $("#content .channel-wrap[data-channel=\"" + channel.id + "\"] .message-input");
+				if (e.which === 13) {
+					console.log("SENDING")
+					var message = $msg.val();
+					Chatter.vent.trigger('sendingMessage:' + server.id, channel, message);
+					$msg.val("");
+					channel.get('messages').push(message);
+					this.index = 0;
+				} else if (e.which === 38) {
+					console.log('up')
+					//up
+					if (this.index < channel.get('messages').length) {
+						this.index += 1;
+					}
+					console.log(this.index, channel.get('messages').length);
+					$msg.val(channel.get('messages')[channel.get('messages').length - this.index]);
+				} else if (e.which === 40) {
+					console.log('down')
+					if (this.index > 0) {
+						this.index -= 1;
+					}
+					console.log(this.index, channel.get('messages').length);
+					$msg.val(channel.get('messages')[channel.get('messages').length - this.index]);
+				} else {
+					this.index = 0;
+				}
 			}
 		},
 

@@ -151,6 +151,8 @@ requirejs(["app", "router", "modules/servers/serverlist", "modules/servers/serve
       Chatter.focused = false;
       win.close(true);
       nwNotify.closeAll();
+      tray.remove();
+      tray = null;
     });
 
     win.on('blur', function() {
@@ -328,6 +330,8 @@ requirejs(["app", "router", "modules/servers/serverlist", "modules/servers/serve
     };
 
     Chatter.reload = function() {
+      tray.remove();
+      tray = null;
       Chatter.disconnect(false, function() {
         location.reload();
       });

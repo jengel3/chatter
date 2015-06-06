@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Encoding=UTF-8
+Name=Chatter
+Comment=Chatter IRC Client
+Exec=chatter
+Icon=./dist/images/chatter.png
+Terminal=false
+Categories=Chat;IRC;NodeJS;Webkit
+Name[en_AU]=nw

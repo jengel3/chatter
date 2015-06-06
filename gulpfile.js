@@ -27,7 +27,7 @@ gulp.task('build', function() {
     appVersion: pkg.version,
     buildDir: 'build',
     files: files,
-    platforms: ['win'],
+    platforms: ['win', 'mac', 'linux'],
     winIco: './dist/images/chatter.ico',
     version: '0.12.1'
   });

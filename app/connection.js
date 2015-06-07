@@ -33,7 +33,7 @@ define(["app", "underscore", "jquery", "modules/channels/channellist", "modules/
 
   Connection.prototype.join = function() {
     var self = this;
-    _.each(self.server.get("channels"), function(channel, index, list) {
+    _.each(self.server.get("channels"), function(channel) {
       self.client.join(channel.trim() + " ", function() {});
     });
     Chatter.Active.server = self.server;
@@ -128,7 +128,7 @@ define(["app", "underscore", "jquery", "modules/channels/channellist", "modules/
     });
 
     self.client.addListener("notice", function(nick, to, text, message) {
-      Chatter.vent.trigger("notice:" + self.server.id, nick, to, text)
+      Chatter.vent.trigger("notice:" + self.server.id, nick, to, text);
     });
 
     Chatter.vent.on("notice:" + self.server.id, function(from, to, message) {
@@ -345,9 +345,9 @@ define(["app", "underscore", "jquery", "modules/channels/channellist", "modules/
 
     var output = by + " ";
     if (adding) {
-      output += "sets"
+      output += "sets";
     } else {
-      output += "removes"
+      output += "removes";
     }
 
     if (isChannel) {

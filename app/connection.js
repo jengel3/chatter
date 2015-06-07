@@ -162,7 +162,7 @@ define(["app", "underscore", "jquery", "modules/channels/channellist", "modules/
       // the current channel, or server if necessary
       var important = [
         "705", "404", "411", "412", "421", "433",
-        "464", "472", "477", "524"
+        "464", "472", "477", "524", "479"
       ];
 
       var args = message.args;

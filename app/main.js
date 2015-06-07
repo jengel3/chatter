@@ -379,9 +379,9 @@ requirejs(["app", "router", "modules/servers/serverlist", "modules/servers/serve
     function updateCheck() {
       var pkg = gui.App.manifest;
       $.getJSON("https://api.github.com/repos/Jake0oo0/chatter/releases/latest", function(data) {
-        var version = data.tag_name;
+        var version = data.tag_name.replace('v', '');
         console.log("Latest version: " + version, "Current version: " + pkg.version);
-        var newVersion = gtVer(version.replace('v', ''), pkg.version);
+        var newVersion = gtVer(version, pkg.version);
 
         if (newVersion) {
           console.log("New version found!");
@@ -389,6 +389,7 @@ requirejs(["app", "router", "modules/servers/serverlist", "modules/servers/serve
           dynManifest.name = pkg.name;
           dynManifest.version = pkg.version;
           dynManifest.author = pkg.author;
+          dynManifest.packages = {mac: {}, win: {}, linux32: {}, linux64: {}};
           dynManifest.manifestUrl = "https://github.com/Jake0oo0/chatter/releases/download/v" + version + "/package.json";
           dynManifest.packages.mac.url = "https://github.com/Jake0oo0/chatter/releases/download/v" + version + "/chatter-osx64.zip";
           dynManifest.packages.win.url = "https://github.com/Jake0oo0/chatter/releases/download/v" + version + "/chatter-win64.zip";

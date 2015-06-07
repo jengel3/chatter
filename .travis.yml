@@ -26,6 +26,7 @@ deploy:
   skip_cleanup: true
   file: 
     - build/Chatter/*.zip
+    - package.json
   on:
     repo: Jake0oo0/chatter
     tags: true

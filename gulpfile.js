@@ -41,8 +41,10 @@ var files = ['package.json', 'app/**', 'dist/**/*', 'index.html', '.desktop',
 'vendor/components/jquery-popup-overlay/jquery.popupoverlay.js', 
 'vendor/components/backbone.localStorage/backbone.localStorage-min.js',
 'vendor/components/moment/min/moment.min.js', 'node_modules/triejs/src/trie.min.js', 
-'vendor/components/tab-complete/dist/jquery.tab-complete.min.js', 'vendor/components/Autolinker.js/dist/Autolinker.min.js', 
-'node_modules/irc/**/*', 'node_modules/node-uuid/**/*', 'node_modules/nw-notify/**/*', 'vendor/components/requirejs/require.js'];
+'vendor/components/tab-complete/dist/jquery.tab-complete.min.js', 
+'vendor/components/Autolinker.js/dist/Autolinker.min.js', 
+'node_modules/irc/**/*', 'node_modules/node-uuid/**/*', 'node_modules/nw-notify/**/*', 
+'vendor/components/requirejs/require.js', 'node_modules/node-webkit-updater/**/*'];
 
 gulp.task('build', function() {
   var nw = new NwBuilder({

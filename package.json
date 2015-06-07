@@ -43,6 +43,7 @@
     "triejs": "^0.1.5"
   },
   "devDependencies": {
+    "duplexify": "^3.4.0",
     "glob": "^5.0.5",
     "glob-array": "^0.1.2",
     "gulp": "^3.8.7",
@@ -56,12 +57,12 @@
     "gulp-sourcemaps": "^1.5.2",
     "gulp-uglify": "^1.2.0",
     "gulp-util": "~3.0.4",
+    "minimist": "^1.1.1",
     "node-webkit-builder": "^1.0.11",
+    "read-all-stream": "^2.1.2",
     "rimraf": "^2.3.3",
     "through2": "^0.6.5",
     "unique-stream": "^2.0.2",
-    "duplexify": "^3.4.0",
-    "read-all-stream": "^2.1.2",
     "vinyl-fs": "^1.0.0"
   }
 }

@@ -10,7 +10,7 @@ before_install:
   - sh -e /etc/init.d/xvfb start
 script:
   - gulp all
-  - gulp build
+  - gulp build --build all
 cache:
   directories:
     - node_modules

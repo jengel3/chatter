@@ -12,6 +12,28 @@ var rjs = require('gulp-requirejs');
 var rm = require('gulp-rimraf');
 var NwBuilder = require('node-webkit-builder');
 
+var minimist = require('minimist');
+
+var platform = process.platform;
+platform = /^win/.test(platform) ? 'win' : /^darwin/.test(platform) ? 'mac' : 'linux';
+
+var arch = process.arch;
+arch = /^32/.test(arch) ? '32' : '64';
+
+var flags = {
+  string: 'build',
+  default: { build: platform + arch }
+};
+
+var options = minimist(process.argv.slice(2), flags);
+
+var platforms;
+if (options.build === "all") {
+  platforms = ["osx", "linux", "win"];
+} else {
+  platforms = options.build.split(',');
+}
+
 var files = ['package.json', 'app/**', 'dist/**/*', 'index.html', '.desktop', 
 'vendor/components/backbone/backbone-min.js', 'vendor/components/jquery/dist/jquery.min.js',
 'vendor/components/underscore/underscore-min.js', 'vendor/components/backbone.marionette/lib/backbone.marionette.min.js',
@@ -27,9 +49,10 @@ gulp.task('build', function() {
     appVersion: pkg.version,
     buildDir: 'build',
     files: files,
-    platforms: ['win', 'osx', 'linux'],
+    platforms: platforms,
     winIco: './dist/images/chatter.ico',
-    version: '0.12.1'
+    version: '0.12.1',
+    macCredits: 'credits.html'
   });
 
   nw.on('log', console.log);

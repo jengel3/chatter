@@ -10,6 +10,10 @@ Chatter is an IRC client built on [node.js](https://nodejs.org/), [nw.js](https:
 0. Run ```npm install```
 0. Run ```bower install```
 0. Run ```gulp build```
+  * This will create a build for your current platform only
+  * Specify specific platforms in a comma separated list with --build. 
+    * Ex. gulp build --build linux64,osx32
+  * Build all platforms with --build all
 0. Access compiled files in ```./build/Chatter/os/```
 
 ## Event API

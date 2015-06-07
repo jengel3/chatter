@@ -9,7 +9,6 @@ var uglify = require('gulp-uglify');
 var minifyCSS = require('gulp-minify-css');
 var rjs = require('gulp-requirejs');
 
-var rm = require('gulp-rimraf');
 var NwBuilder = require('node-webkit-builder');
 
 var minimist = require('minimist');
@@ -44,7 +43,7 @@ var files = ['package.json', 'app/**', 'dist/**/*', 'index.html', '.desktop',
 'vendor/components/tab-complete/dist/jquery.tab-complete.min.js', 
 'vendor/components/Autolinker.js/dist/Autolinker.min.js', 
 'node_modules/irc/**/*', 'node_modules/node-uuid/**/*', 'node_modules/nw-notify/**/*', 
-'vendor/components/requirejs/require.js', 'node_modules/node-webkit-updater/**/*'];
+'vendor/components/requirejs/require.js'];
 
 gulp.task('build', function() {
   var nw = new NwBuilder({
@@ -53,7 +52,7 @@ gulp.task('build', function() {
     buildDir: 'build',
     files: files,
     platforms: platforms,
-    winIco: (options.icon ? './dist/images/chatter.ico' : null),
+    winIco: (options.icon || platform === 'win' ? './dist/images/chatter.ico' : null),
     version: '0.12.1',
     macCredits: 'credits.html'
   });

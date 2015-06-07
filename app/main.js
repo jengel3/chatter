@@ -234,7 +234,7 @@ requirejs(["app", "router", "modules/servers/serverlist", "modules/servers/serve
 
     Chatter.Commands.register("update", function(client, data, args) {
       if (Chatter.Active.channel) {
-        Chatter.Active.channel.addMessage("Running update check. If an update is found, Chatter will be restarted when it is installed. (This will change soon)");
+        Chatter.Active.channel.addMessage("Running update check...");
       }
       updateCheck();
     });
@@ -385,18 +385,9 @@ requirejs(["app", "router", "modules/servers/serverlist", "modules/servers/serve
 
         if (newVersion) {
           console.log("New version found!");
-          var dynManifest = {};
-          dynManifest.name = pkg.name;
-          dynManifest.version = pkg.version;
-          dynManifest.author = pkg.author;
-          dynManifest.packages = {mac: {}, win: {}, linux32: {}, linux64: {}};
-          dynManifest.manifestUrl = "https://github.com/Jake0oo0/chatter/releases/download/v" + version + "/package.json";
-          dynManifest.packages.mac.url = "https://github.com/Jake0oo0/chatter/releases/download/v" + version + "/chatter-osx64.zip";
-          dynManifest.packages.win.url = "https://github.com/Jake0oo0/chatter/releases/download/v" + version + "/chatter-win64.zip";
-          dynManifest.packages.linux32.url = "https://github.com/Jake0oo0/chatter/releases/download/v" + version + "/chatter-linux32.zip";
-          dynManifest.packages.linux64.url = "https://github.com/Jake0oo0/chatter/releases/download/v" + version + "/chatter-linux64.zip";
-          update(dynManifest);
-          console.log(dynManifest);
+          if (Chatter.Active.channel) {
+            Chatter.Active.channel.addMessage("New version available! Download it now: https://github.com/Jake0oo0/chatter/releases/latest")
+          } 
         } else {
           console.log("No new version found!")
         }
@@ -444,44 +435,6 @@ requirejs(["app", "router", "modules/servers/serverlist", "modules/servers/serve
         }
 
         return false;
-      }
-
-
-      function update(pkg) {
-        var updater = require('node-webkit-updater');
-        var upd = new updater(pkg);
-        var copyPath, execPath;
-
-        if (gui.App.argv.length) {
-          copyPath = gui.App.argv[0];
-          execPath = gui.App.argv[1];
-
-          upd.install(copyPath, function(err) {
-            if (!err) {
-
-              upd.run(execPath, null);
-              gui.App.quit();
-            }
-          });
-        } else {
-          upd.checkNewVersion(function(error, newVersionExists, manifest) {
-            if (!error && newVersionExists) {
-
-              upd.download(function(error, filename) {
-                if (!error) {
-
-                  upd.unpack(filename, function(error, newAppPath) {
-                    if (!error) {
-
-                      upd.runInstaller(newAppPath, [upd.getAppPath(), upd.getAppExec()], {});
-                      gui.App.quit();
-                    }
-                  }, manifest);
-                }
-              }, manifest);
-            }
-          });
-        }
       }
     }
 

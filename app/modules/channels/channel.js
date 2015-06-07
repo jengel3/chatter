@@ -22,14 +22,16 @@ define(["app", "backbone", "jquery", "moment", "autolinker"], function(Chatter, 
 			names: {},
 			channels: [],
 			pm: false,
-			messages: []
+			messages: [],
+			modes: ""
 		},
 
 		initialize: function() {
 			if (!this.uuid) {
 				this.set("uuid", uuid.v4());
 			}
-			this.on("change:topic", this.setTopic, this)
+			this.on("change:topic", this.setTopic, this);
+			this.on("change:modes", this.setModes, this);
 			if (!this.get('name').startsWith('#')) {
 				this.set('pm', true);
 				this.set('topic', "(Private Message)")
@@ -76,6 +78,11 @@ define(["app", "backbone", "jquery", "moment", "autolinker"], function(Chatter, 
 			var wrapper = $("#content div.channel-wrap[data-channel=\"" + this.id + "\"]");
 			$(wrapper).find(".topic").text(topic);
 			$(wrapper).find(".topic").attr("title", topic);
+		},
+
+		setModes: function() {
+			var modeBar = $("#content div.channel-wrap[data-channel=\"" + this.id + "\"] .channel-name");
+			$(modeBar).text(this.get('name') + " (" + this.get("modes") + "):");
 		}
 	});
 	return Channel;

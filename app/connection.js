@@ -162,7 +162,7 @@ define(["app", "underscore", "jquery", "modules/channels/channellist", "modules/
       // the current channel, or server if necessary
       var important = [
         "705", "404", "411", "412", "421", "433",
-        "464"
+        "464", "472", "477", "524"
       ];
 
       var args = message.args;
@@ -195,7 +195,20 @@ define(["app", "underscore", "jquery", "modules/channels/channellist", "modules/
           channel.addMessage(raw);
         }
         self.serverMessage(raw);
+      } else if (message.rawCommand === "324") {
+        var channel = self.findChannel(message.args[1]);
+        var modes = message.args.slice(2);
+        var mstring = modes.join(" ").trim();
+        channel.set("modes", mstring);
       }
+    });
+
+    self.client.addListener("+mode", function (channel, by, mode, argument, message, isChannel) { 
+      self.updateModes(channel, by, mode, argument, message, isChannel, true);
+    });
+
+    self.client.addListener("-mode", function (channel, by, mode, argument, message, isChannel) { 
+      self.updateModes(channel, by, mode, argument, message, isChannel, false);
     });
 
     self.client.addListener("selfMessage", function(to, message) {
@@ -320,6 +333,31 @@ define(["app", "underscore", "jquery", "modules/channels/channellist", "modules/
         }
       }
     });
+  };
+
+  Connection.prototype.updateModes = function(channel, by, mode, argument, message, isChannel, adding) {
+    var self = this;
+    if (isChannel) {
+      self.client.send("MODE", channel);
+    } else {
+      self.client.send("NAMES", channel);
+    }
+
+    var output = by + " ";
+    if (adding) {
+      output += "sets"
+    } else {
+      output += "removes"
+    }
+
+    if (isChannel) {
+      output += " channel mode(s) " + mode + " " + (argument ? argument : "") + " on " + channel;
+    } else {
+      output += " user mode(s) " + mode + " on " + argument;
+    }
+
+    var chan = self.findChannel(channel);
+    chan.addMessage(output);
   };
 
   Connection.prototype.serverMessage = function(message) {

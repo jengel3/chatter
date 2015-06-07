@@ -268,9 +268,9 @@ requirejs(["app", "router", "modules/servers/serverlist", "modules/servers/serve
 
     Chatter.Commands.register("notice", function(client, data, args) {
       if (args.length <= 1) {
-        return
+        return;
       }
-      var target = args[0]
+      var target = args[0];
       var message = args.slice(1).join(" ");
       client.notice(target, message);
       Chatter.vent.trigger("notice:" + Chatter.Active.server.id, null, target, message);

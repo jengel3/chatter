@@ -28,31 +28,33 @@ define(["app", "backbone", "underscore", "jquery"], function(Chatter, Backbone, 
 				var server = Chatter.Active.server;
 				var channel = Chatter.Active.channel;
 				var $msg = $("#content .channel-wrap[data-channel=\"" + channel.id + "\"] .message-input");
+				var messageList = channel.get('messages');
 				if (e.which === 13) {
-					console.log("SENDING")
 					var message = $msg.val();
 					Chatter.vent.trigger('sendingMessage:' + server.id, channel, message);
 					$msg.val("");
-					channel.get('messages').push(message);
+					messageList.push(message);
 					this.index = 0;
 				} else if (e.which === 38) {
-					console.log('up')
-					//up
-					if (this.index < channel.get('messages').length) {
+					if (this.index > messageList.length) {
+						this.index = 0;
+					}
+					if (this.index < messageList.length) {
 						this.index += 1;
 					}
-					console.log(this.index, channel.get('messages').length);
-					$msg.val(channel.get('messages')[channel.get('messages').length - this.index]);
+					$msg.val(messageList[messageList.length - this.index]);
 				} else if (e.which === 40) {
-					console.log('down')
+					if (this.index > messageList.length) {
+						this.index = 0;
+					}
 					if (this.index > 0) {
 						this.index -= 1;
 					}
-					console.log(this.index, channel.get('messages').length);
-					$msg.val(channel.get('messages')[channel.get('messages').length - this.index]);
+					$msg.val(messageList[messageList.length - this.index]);
 				} else {
 					this.index = 0;
 				}
+				channel.set('messages', messageList);
 			}
 		},
 

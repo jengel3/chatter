@@ -242,6 +242,30 @@ requirejs(["app", "router", "modules/servers/serverlist", "modules/servers/serve
       Chatter.vent.trigger('privateMessage:' + Chatter.Active.server.id, target, message);
     });
 
+    Array.prototype.empty = function() {
+      this.length = 0;
+    };
+
+    Chatter.Commands.register("clear", function(client, data, args) {
+      var channel = Chatter.Active.channel;
+      if (!channel) {
+        return;
+      }
+      channel.get('messages').empty();
+      channel.getMessages().empty();
+    });
+
+    Chatter.Commands.register("clearall", function(client, data, args) {
+      var connections = Chatter.Connections;
+      _.each(connections, function(con, k) {
+        var channels = con.channels;
+        channels.each(function(channel) {
+          channel.get('messages').empty();
+          channel.getMessages().empty();
+        });
+      });
+    });
+
     Chatter.Commands.register("notice", function(client, data, args) {
       if (args.length <= 1) {
         return

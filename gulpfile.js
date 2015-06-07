@@ -22,7 +22,8 @@ arch = /^32/.test(arch) ? '32' : '64';
 
 var flags = {
   string: 'build',
-  default: { build: platform + arch }
+  boolean: 'icon',
+  default: { build: platform + arch, icon: false }
 };
 
 var options = minimist(process.argv.slice(2), flags);
@@ -50,7 +51,7 @@ gulp.task('build', function() {
     buildDir: 'build',
     files: files,
     platforms: platforms,
-    winIco: './dist/images/chatter.ico',
+    winIco: (options.icon ? './dist/images/chatter.ico' : null),
     version: '0.12.1',
     macCredits: 'credits.html'
   });

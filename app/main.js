@@ -93,6 +93,18 @@ requirejs(["app", "router", "modules/servers/serverlist", "modules/servers/serve
       e.closeNotification();
     }
 
+    function playNotificationSound(e) {
+      function playSound() {
+        var audio = new Audio();
+        audio.src = './dist/sounds/notification.ogg';
+        audio.play();
+      }
+
+      if (Chatter.Settings.get('notifications.sound')) {
+        playSound();
+      }
+    }
+
     nwNotify.setConfig({
       appIcon: path.join(nwNotify.getAppPath(), 'dist/images/chatter.png'),
       displayTime: 4000
@@ -107,7 +119,8 @@ requirejs(["app", "router", "modules/servers/serverlist", "modules/servers/serve
         nwNotify.notify({
           title: "PM from " + channel.get('name'),
           text: message,
-          onClickFunc: focusNotification
+          onClickFunc: focusNotification,
+          onShowFunc: playNotificationSound
         });
       }
     });
@@ -386,7 +399,7 @@ requirejs(["app", "router", "modules/servers/serverlist", "modules/servers/serve
           console.log("New version found!");
           if (Chatter.Active.channel) {
             Chatter.Active.channel.addMessage("New version available! Download it now: https://github.com/Jake0oo0/chatter/releases/latest")
-          } 
+          }
         } else {
           console.log("No new version found!")
         }

@@ -6,6 +6,8 @@
 
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<meta name="viewport" content="width=device-width,initial-scale=1">
+
+	<link href='dist/css/app.css' rel='stylesheet' id='#theme' />
 </head>
 <body>
 	<div class="main">
@@ -69,7 +71,7 @@
 				<br>
 				<input name="notifications.onPM" type="checkbox" <% if (notifications.onPM) { %> checked <% } %>><label>Notification on PM</label>
 				<br>
-				<input name="notifications.onNotice" type="checkbox" <% if (notifications.onNotice) { %> checked <% } %>><label>Notification on PM</label>
+				<input name="notifications.onNotice" type="checkbox" <% if (notifications.onNotice) { %> checked <% } %>><label>Notification on Notice</label>
 				<br>
 				<input name="notifications.sound" type="checkbox" <% if (notifications.sound) { %> checked <% } %>><label>Sound on Notification</label>
 				<br>
@@ -125,7 +127,6 @@
 			</div>
 			</div>
 		</script>
-		<link href='dist/css/app.css' rel='stylesheet' />
 		<!-- build:[src] /source.min.js -->
 		<script src="vendor/components/requirejs/require.js" data-main="app/config"></script>
 		<!-- /build -->

@@ -114,7 +114,14 @@ gulp.task('images', function () {
  .pipe(gulp.dest('./dist/images/'));
 });
 
+gulp.task('sounds', function () {
+ gulp.src(['./app/sounds/*'])
+ .on('error', console.warn)
+ .pipe(gulp.dest('./dist/sounds/'));
+});
 
-gulp.task('all', ['rjs', 'css', 'fonts', 'images']);
-gulp.task('compile', ['rjs', 'css', 'images']);
+
+
+gulp.task('all', ['rjs', 'css', 'fonts', 'images', 'sounds']);
+gulp.task('compile', ['rjs', 'css', 'images', 'sounds']);
 gulp.task('default', ['compile', 'serve', 'watch']);

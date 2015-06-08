@@ -36,7 +36,19 @@ define(["app", "backbone", "underscore", "jquery", "modules/settings"], function
 					value = input.val();
 				}
 				var attr = input.attr("name");
-				self.model.set(attr, self.parse(attr, value));
+				console.log(attr, value);
+				// hacky method around Backbone not
+				// supporting nested attributes
+				if (attr.split('.').length) {
+					var split = attr.split('.');
+					var sub = split[0];
+					var setting = split[1];
+					var subAttr = self.model.get(sub);
+					subAttr[setting] = value;
+					self.model.set(sub, subAttr);
+				} else {
+					self.model.set(attr, self.parse(attr, value));
+				}
 			}
 			self.model.save();
 			Chatter.Settings.fetch();

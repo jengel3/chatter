@@ -65,19 +65,27 @@
 				<div class="tab">Client</div>
 			</div>
 			<div class='sub-input active' id="settings-notifications">
-				<input name="notificationsMessage" type="checkbox" <% if (notificationsMessage) { %> checked <% } %>><label>Notification on Message</label>
+				<input name="notifications.onMessage" type="checkbox" <% if (notifications.onMessage) { %> checked <% } %>><label>Notification on Message</label>
 				<br>
-				<input name="notificationsPM" type="checkbox" <% if (notificationsPM) { %> checked <% } %>><label>Notification on PM</label>
+				<input name="notifications.onPM" type="checkbox" <% if (notifications.onPM) { %> checked <% } %>><label>Notification on PM</label>
 				<br>
-				<input name="notificationSound" type="checkbox" <% if (notificationSound) { %> checked <% } %>><label>Sound on Notification</label>
+				<input name="notifications.onNotice" type="checkbox" <% if (notifications.onNotice) { %> checked <% } %>><label>Notification on PM</label>
+				<br>
+				<input name="notifications.sound" type="checkbox" <% if (notifications.sound) { %> checked <% } %>><label>Sound on Notification</label>
 				<br>
 			</div>
 			<div class='sub-input' id="settings-channels">
-				<input name="hideJoinPart" type="checkbox" <% if (hideJoinPart) { %> checked <% } %>><label>Hide Join and Part Messages</label>
+				<input name="channels.hideJoinPart" type="checkbox" <% if (channels.hideJoinPart) { %> checked <% } %>><label>Hide Join and Part Messages</label>
+				<br>
+				<label>Quit Message</label><br>
+				<input class="full-input" name="channels.quitMessage" placeholder="Quit Message" value="<%= channels.quitMessage %>">
+				<br>
+				<label>Part Message</label><br>
+				<input class='full-input' name="channels.partMessage" placeholder="Part Message" value="<%= channels.partMessage %>">
 				<br>
 			</div>
 			<div class='sub-input' id="settings-client">
-				<input name="minimizeTray" type="checkbox" <% if (minimizeTray) { %> checked <% } %>><label>Minimize to Tray</label>
+				<input name="window.minimizeToTray" type="checkbox" <% if (window.minimizeToTray) { %> checked <% } %>><label>Minimize to Tray</label>
 				<br>
 			</div>
 		</div>

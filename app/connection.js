@@ -23,14 +23,6 @@ define(["app", "underscore", "jquery", "modules/channels/channellist", "modules/
     });
   };
 
-  Connection.prototype.findChannel = function(ch) {
-    var self = this;
-    var channel = self.channels.findWhere({
-      lower: ch.toLowerCase()
-    });
-    return channel;
-  };
-
   Connection.prototype.join = function() {
     var self = this;
     _.each(self.server.get("channels"), function(channel) {
@@ -45,37 +37,6 @@ define(["app", "underscore", "jquery", "modules/channels/channellist", "modules/
       Chatter.vent.trigger('client:connect', self);
       callback();
     });
-  };
-
-  Connection.prototype.renderNames = function(chan, names) {
-    var self = this;
-    var channel = self.findChannel(chan);
-    var sorted = Object.keys(names).sort(function(a, b) {
-      return toPriority(names[a]) - toPriority(names[b]);
-    });
-    channel.set("names", names);
-    var users = $("#content div.channel-wrap[data-channel='" + channel.id + "'] .users ul");
-    var users_new = "";
-    for (var x = 0; x < sorted.length; x++) {
-      var username = sorted[x];
-      var rank = names[username];
-      var added = "<li class='user'>";
-      if (rank === "@") {
-        added += "<span class='rank operator'>@</span>";
-      } else if (rank === "+") {
-        added += "<span class='rank voiced'>+</span>";
-      }
-      added += username + "</li>";
-      users_new += added;
-    }
-    $(users).html(users_new);
-  };
-
-  Connection.prototype.removeUser = function(user, channel) {
-    var self = this;
-    var names = channel.get("names");
-    delete names[user];
-    self.renderNames(channel.get("name"), names);
   };
 
   Connection.prototype.setup = function() {
@@ -253,7 +214,7 @@ define(["app", "underscore", "jquery", "modules/channels/channellist", "modules/
         var newnames = channel.get("names");
         newnames[nick] = "";
         self.renderNames(chan, newnames);
-        if (!Chatter.Settings.get("hideJoinPart")) {
+        if (!Chatter.Settings.get("channels.hideJoinPart")) {
           channel.addMessage("*" + nick + " has joined " + chan);
         }
         Chatter.vent.trigger("join", channel);
@@ -264,7 +225,7 @@ define(["app", "underscore", "jquery", "modules/channels/channellist", "modules/
       var channel = self.findChannel(chan);
 
       if (nick !== self.nick) {
-        if (!Chatter.Settings.get("hideJoinPart")) {
+        if (!Chatter.Settings.get("channels.hideJoinPart")) {
           channel.addMessage("*" + nick + " has left " + chan);
         }
         self.removeUser(nick, channel);
@@ -287,7 +248,7 @@ define(["app", "underscore", "jquery", "modules/channels/channellist", "modules/
             name: ch
           });
           if (channel.get("names")[nick]) {
-            if (!Chatter.Settings.get("hideJoinPart")) {
+            if (!Chatter.Settings.get("channels.hideJoinPart")) {
               channel.addMessage("*" + nick + " has quit " + ch + ": " + reason);
             }
             Chatter.vent.trigger("quit", channel);
@@ -304,7 +265,7 @@ define(["app", "underscore", "jquery", "modules/channels/channellist", "modules/
       if (channel.get("pm")) {
         self.removeChannel(channel);
       } else {
-        self.client.part(chan, message);
+        self.client.part(chan, message || Chatter.Settings.get("channels.partMessage"));
       }
     });
 
@@ -407,6 +368,45 @@ define(["app", "underscore", "jquery", "modules/channels/channellist", "modules/
     if (channel.get('name') !== nickname) {
       channel.set('name', nickname);
     }
+    return channel;
+  };
+
+  Connection.prototype.renderNames = function(chan, names) {
+    var self = this;
+    var channel = self.findChannel(chan);
+    var sorted = Object.keys(names).sort(function(a, b) {
+      return toPriority(names[a]) - toPriority(names[b]);
+    });
+    channel.set("names", names);
+    var users = $("#content div.channel-wrap[data-channel='" + channel.id + "'] .users ul");
+    var users_new = "";
+    for (var x = 0; x < sorted.length; x++) {
+      var username = sorted[x];
+      var rank = names[username];
+      var added = "<li class='user'>";
+      if (rank === "@") {
+        added += "<span class='rank operator'>@</span>";
+      } else if (rank === "+") {
+        added += "<span class='rank voiced'>+</span>";
+      }
+      added += username + "</li>";
+      users_new += added;
+    }
+    $(users).html(users_new);
+  };
+
+  Connection.prototype.removeUser = function(user, channel) {
+    var self = this;
+    var names = channel.get("names");
+    delete names[user];
+    self.renderNames(channel.get("name"), names);
+  };
+
+  Connection.prototype.findChannel = function(ch) {
+    var self = this;
+    var channel = self.channels.findWhere({
+      lower: ch.toLowerCase()
+    });
     return channel;
   };
 

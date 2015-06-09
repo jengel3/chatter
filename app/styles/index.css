@@ -336,7 +336,7 @@ label {
 	margin-left:5px;
 }
 
-.inputs input[name="title"], .inputs input[name="channels"] {
+.inputs input[name="title"], .inputs input[name="channels"], .inputs input[name="onConnect"] {
 	width:475px;
 }
 

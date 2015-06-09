@@ -36,7 +36,6 @@ define(["app", "backbone", "underscore", "jquery", "modules/settings"], function
 					value = input.val();
 				}
 				var attr = input.attr("name");
-				console.log(attr, value);
 				// hacky method around Backbone not
 				// supporting nested attributes
 				if (attr.split('.').length) {

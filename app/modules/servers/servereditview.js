@@ -97,6 +97,10 @@ define(["app", "backbone", "underscore", "jquery", "modules/servers/server"], fu
 				if (typeof value === "string") {
 					return value.split(',');
 				}
+			} else if (attr === "onConnect") {
+				if (typeof value === "string") {
+					return value.split(',');
+				}
 			}
 			return value;
 		},

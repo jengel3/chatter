@@ -9,11 +9,12 @@ define(["app", "backbone", "localstorage", "underscore", "connection"], function
 			port: 6667,
 			title: "Esper",
 			nick: "Chatter",
-			real_name: "Chatter Tester",
-			server_user: "",
-			server_pass: "",
+			realName: "Chatter Tester",
+			serverUser: "",
+			serverPass: "",
 			shouldConnect: true,
-			channels: ["#chatter"]
+			channels: ["#chatter"],
+			onConnect: []
 		},
 		connect: function() {
 			this.connection = new Connection(this);

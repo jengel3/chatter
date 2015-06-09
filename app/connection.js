@@ -19,6 +19,14 @@ define(["app", "underscore", "jquery", "modules/channels/channellist", "modules/
     self.connect(function() {
       console.debug("Successfully connected to " + self.server.attributes.title);
       self.connected = true;
+
+      var commands = self.server.get("onConnect");
+      for (var i = 0; i < commands.length; i++) {
+        var command = commands[i].trim();
+        var args = command.split(" ");
+        self.client.send.apply(this, args)
+      }
+      
       self.join();
     });
   };
@@ -46,7 +54,7 @@ define(["app", "underscore", "jquery", "modules/channels/channellist", "modules/
       autoConnect: false,
       userName: self.attrs.nick,
       port: self.attrs.port,
-      realName: self.attrs.real_name
+      realName: self.attrs.realName
     };
 
     self.client = new irc.Client(self.attrs.host, self.attrs.nick, options);
@@ -164,11 +172,11 @@ define(["app", "underscore", "jquery", "modules/channels/channellist", "modules/
       }
     });
 
-    self.client.addListener("+mode", function (channel, by, mode, argument, message, isChannel) { 
+    self.client.addListener("+mode", function(channel, by, mode, argument, message, isChannel) {
       self.updateModes(channel, by, mode, argument, message, isChannel, true);
     });
 
-    self.client.addListener("-mode", function (channel, by, mode, argument, message, isChannel) { 
+    self.client.addListener("-mode", function(channel, by, mode, argument, message, isChannel) {
       self.updateModes(channel, by, mode, argument, message, isChannel, false);
     });
 

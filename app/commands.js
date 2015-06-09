@@ -15,6 +15,9 @@ define(["app", "underscore"], function(Chatter, _) {
     } else if (_.isString(handler)) {
       // alias
       context.type = 2;
+    } else if (_.isRegex(handler)) {
+      // regex
+      context.type = 3;
     }
     Commands.list.push(context);
   };

@@ -7,6 +7,7 @@ define(["app", "underscore", "jquery", "modules/channels/channellist", "modules/
     self.server = server;
     self.nick = server.attributes.nick;
     self.connected = false;
+    self.firstConnect = true;
 
     self.channels = new ChannelList();
 
@@ -26,7 +27,7 @@ define(["app", "underscore", "jquery", "modules/channels/channellist", "modules/
         var args = command.split(" ");
         self.client.send.apply(self.client, args)
       }
-      
+
       self.join();
     });
   };
@@ -63,15 +64,22 @@ define(["app", "underscore", "jquery", "modules/channels/channellist", "modules/
     self.client.addListener("error", function(message) {});
 
     self.client.addListener("registered", function(message) {
-      var view = new ServerView({
-        model: self.server
-      });
-      self.views.push(view);
-      $("#content").append(view.render().el);
+      if (self.firstConnect) {
+        var view = new ServerView({
+          model: self.server
+        });
+        self.views.push(view);
+        $("#content").append(view.render().el);
+        self.firstConnect = false;
+      }
     });
 
     self.client.addListener("names", function(ch, names) {
       self.renderNames(ch, names);
+    });
+
+    self.client.addListener("abort", function(ret) {
+      console.warn("ABORTING SNED HELP!!!")
     });
 
 
@@ -131,7 +139,8 @@ define(["app", "underscore", "jquery", "modules/channels/channellist", "modules/
       // the current channel, or server if necessary
       var important = [
         "705", "404", "411", "412", "421", "433",
-        "464", "472", "477", "524", "479", "292"
+        "464", "472", "477", "524", "479", "292",
+        "347"
       ];
 
       var args = message.args;
@@ -206,18 +215,19 @@ define(["app", "underscore", "jquery", "modules/channels/channellist", "modules/
             name: chan
           });
           self.channels.add(channel);
+
+          self.server.addChannel(chan);
+          var view = Chatter.Views.servers;
+          $('#channels > ul').html(view.render().el);
+          view.delegateEvents();
+          var chView = new ChannelView({
+            model: channel
+          });
+          self.views.push(chView);
+          $("#content").append(chView.render().el);
+          channel.focus();
+          Chatter.vent.trigger('self:join', channel);
         }
-        self.server.addChannel(chan);
-        var view = Chatter.Views.servers;
-        $('#channels > ul').html(view.render().el);
-        view.delegateEvents();
-        var chView = new ChannelView({
-          model: channel
-        });
-        self.views.push(chView);
-        $("#content").append(chView.render().el);
-        channel.focus();
-        Chatter.vent.trigger('self:join', channel);
       } else {
         var newnames = channel.get("names");
         newnames[nick] = "";
@@ -263,6 +273,7 @@ define(["app", "underscore", "jquery", "modules/channels/channellist", "modules/
           }
         }
       } else {
+        console.warn("HELLO I QUIT1!!!!!!!!!!!!!!!!!!!!")
         self.connected = false;
         Chatter.vent.trigger("self:quit", self.server);
       }

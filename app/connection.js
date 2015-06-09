@@ -24,7 +24,7 @@ define(["app", "underscore", "jquery", "modules/channels/channellist", "modules/
       for (var i = 0; i < commands.length; i++) {
         var command = commands[i].trim();
         var args = command.split(" ");
-        self.client.send.apply(this, args)
+        self.client.send.apply(self.client, args)
       }
       
       self.join();
@@ -131,7 +131,7 @@ define(["app", "underscore", "jquery", "modules/channels/channellist", "modules/
       // the current channel, or server if necessary
       var important = [
         "705", "404", "411", "412", "421", "433",
-        "464", "472", "477", "524", "479"
+        "464", "472", "477", "524", "479", "292"
       ];
 
       var args = message.args;

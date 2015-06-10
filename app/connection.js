@@ -18,15 +18,38 @@ define(["app", "underscore", "jquery", "modules/channels/channellist", "modules/
     Chatter.Connections[self.server.id] = self;
 
     self.connect(function() {
-      console.debug("Successfully connected to " + self.server.attributes.title);
+      console.debug("Successfully connected to " + self.server.get("title"));
       self.connected = true;
 
-      var commands = self.server.get("onConnect");
-      for (var i = 0; i < commands.length; i++) {
-        var command = commands[i].trim();
-        var args = command.split(" ");
-        self.client.send.apply(self.client, args)
+      self.connectionInterval = function() {
+        if (self.client && self.client.conn && window.navigator.onLine) {
+          if (!self.connected) {
+            self.connect(function() {
+              console.debug("Successfully reconnected to " + self.server.get("title"))
+              self.connected = true;
+            });
+          }
+          return true;
+        } else {
+
+          console.debug("Warning: No longer online...");
+          if (self.connected) {
+
+            self.client.disconnect();
+            Chatter.vent.trigger("client:disconnect:" + self.server.id, self.server);
+
+            self.connected = false;
+
+            self.channels.each(function(channel) {
+              channel.addMessage("Disconnected from server...attempting to reconnect...");
+            });
+          }
+          return false;
+
+        }
       }
+
+      setInterval(self.connectionInterval, 5000);
 
       self.join();
     });
@@ -76,10 +99,6 @@ define(["app", "underscore", "jquery", "modules/channels/channellist", "modules/
 
     self.client.addListener("names", function(ch, names) {
       self.renderNames(ch, names);
-    });
-
-    self.client.addListener("abort", function(ret) {
-      console.warn("ABORTING SNED HELP!!!")
     });
 
 
@@ -273,9 +292,7 @@ define(["app", "underscore", "jquery", "modules/channels/channellist", "modules/
           }
         }
       } else {
-        console.warn("HELLO I QUIT1!!!!!!!!!!!!!!!!!!!!")
-        self.connected = false;
-        Chatter.vent.trigger("self:quit", self.server);
+        Chatter.vent.trigger("client:disconnect:" + self.server.id, self.server);
       }
     });
 

@@ -20,6 +20,17 @@ define(["app", "backbone", "localstorage"], function(Chatter, Backbone, LocalSto
 			window: {
 				minimizeToTray: true
 			}
+		},
+		getValue: function(key) {
+			var parts;
+			if (key.indexOf(".") > -1) {
+				parts = key.split(".");
+			}
+			if (parts) {
+				return this.get(parts[0])[parts[1]];
+			} else {
+				return this.get(key);
+			}
 		}
 	});
 	return Settings;

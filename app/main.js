@@ -100,7 +100,7 @@ requirejs(["app", "router", "modules/servers/serverlist", "modules/servers/serve
         audio.play();
       }
 
-      if (Chatter.Settings.get('notifications.sound')) {
+      if (Chatter.Settings.getValue('notifications.sound')) {
         playSound();
       }
     }
@@ -111,7 +111,7 @@ requirejs(["app", "router", "modules/servers/serverlist", "modules/servers/serve
     });
 
     Chatter.vent.on('message', function(channel, message, isPM) {
-      if (!Chatter.focused && isPM && Chatter.Settings.get('notifications.onPM')) {
+      if (!Chatter.focused && isPM && Chatter.Settings.getValue('notifications.onPM')) {
         win.requestAttention(true);
         Chatter.BadgeCount += 1;
         win.setBadgeLabel(Chatter.BadgeCount);
@@ -359,7 +359,7 @@ requirejs(["app", "router", "modules/servers/serverlist", "modules/servers/serve
       if (keys.length > 0) {
         keys.forEach(function(key) {
           var client = Chatter.Clients[key];
-          client.disconnect(Chatter.Settings.get('channels.quitMessage'), function() {
+          client.disconnect(Chatter.Settings.getValue('channels.quitMessage'), function() {
             if (key === keys[keys.length - 1]) {
               done();
             }

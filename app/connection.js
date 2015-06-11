@@ -35,11 +35,13 @@ define(["app", "underscore", "jquery", "modules/channels/channellist", "modules/
       var connectionInterval = function() {
         if (self.client && self.client.conn && window.navigator.onLine) {
           if (!self.connected) {
+            self.connected = true;
             self.connect(function() {
+              self.onConnect();
               console.debug("Successfully reconnected to " + self.server.get("title"))
+              return true;
             });
           }
-          return true;
         } else {
 
           console.debug("Warning: No longer online...");
@@ -169,7 +171,7 @@ define(["app", "underscore", "jquery", "modules/channels/channellist", "modules/
       var important = [
         "705", "404", "411", "412", "421", "433",
         "464", "472", "477", "524", "479", "292",
-        "347"
+        "347", "304"
       ];
 
       var args = message.args;
@@ -261,7 +263,7 @@ define(["app", "underscore", "jquery", "modules/channels/channellist", "modules/
         var newnames = channel.get("names");
         newnames[nick] = "";
         self.renderNames(chan, newnames);
-        if (!Chatter.Settings.get("channels.hideJoinPart")) {
+        if (!Chatter.Settings.getValue("channels.hideJoinPart")) {
           channel.addMessage("*" + nick + " has joined " + chan);
         }
         Chatter.vent.trigger("join", channel);
@@ -272,7 +274,7 @@ define(["app", "underscore", "jquery", "modules/channels/channellist", "modules/
       var channel = self.findChannel(chan);
 
       if (nick !== self.nick) {
-        if (!Chatter.Settings.get("channels.hideJoinPart")) {
+        if (!Chatter.Settings.getValue("channels.hideJoinPart")) {
           channel.addMessage("*" + nick + " has left " + chan);
         }
         self.removeUser(nick, channel);
@@ -295,7 +297,7 @@ define(["app", "underscore", "jquery", "modules/channels/channellist", "modules/
             name: ch
           });
           if (channel.get("names")[nick]) {
-            if (!Chatter.Settings.get("channels.hideJoinPart")) {
+            if (!Chatter.Settings.getValue("channels.hideJoinPart")) {
               channel.addMessage("*" + nick + " has quit " + ch + ": " + reason);
             }
             Chatter.vent.trigger("quit", channel);
@@ -311,7 +313,7 @@ define(["app", "underscore", "jquery", "modules/channels/channellist", "modules/
       if (channel.get("pm")) {
         self.removeChannel(channel);
       } else {
-        self.client.part(chan, message || Chatter.Settings.get("channels.partMessage"));
+        self.client.part(chan, message || Chatter.Settings.getValue("channels.partMessage"));
       }
     });
 

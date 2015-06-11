@@ -17,16 +17,26 @@ define(["app", "underscore", "jquery", "modules/channels/channellist", "modules/
 
     Chatter.Connections[self.server.id] = self;
 
-    self.connect(function() {
-      console.debug("Successfully connected to " + self.server.get("title"));
+    self.onConnect = function() {
       self.connected = true;
 
-      self.connectionInterval = function() {
+      var commands = self.server.get("onConnect");
+      for (var i = 0; i < commands.length; i++) {
+        var command = commands[i].trim();
+        var args = command.split(" ");
+        self.client.send.apply(self.client, args);
+        self.join();
+      }
+    }
+
+    self.connect(function() {
+      console.debug("Successfully connected to " + self.server.get("title"));
+
+      var connectionInterval = function() {
         if (self.client && self.client.conn && window.navigator.onLine) {
           if (!self.connected) {
             self.connect(function() {
               console.debug("Successfully reconnected to " + self.server.get("title"))
-              self.connected = true;
             });
           }
           return true;
@@ -49,9 +59,9 @@ define(["app", "underscore", "jquery", "modules/channels/channellist", "modules/
         }
       }
 
-      setInterval(self.connectionInterval, 5000);
+      setInterval(connectionInterval, 5000);
 
-      self.join();
+      self.onConnect();
     });
   };
 

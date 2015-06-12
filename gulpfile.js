@@ -31,6 +31,7 @@ var platforms;
 if (options.build === "all") {
   platforms = ["osx", "linux", "win"];
 } else {
+  options.build = options.build.replace("mac", "osx");
   platforms = options.build.split(',');
 }
 

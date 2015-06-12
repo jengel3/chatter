@@ -285,8 +285,30 @@ define(["app", "underscore", "jquery", "modules/channels/channellist", "modules/
       }
     });
 
-    self.client.addListener("setNick", function(newNick) {
-      self.nick = newNick;
+    self.client.addListener("kill", function (nick, reason, channels, message) { 
+      if (nick !== self.nick) {
+        _.each(channels, function(c) {
+          var channel = self.findChannel(c);
+          if (channel.get("names")[nick]) {
+            self.removeUser(nick, channel);
+            if (!Chatter.Settings.getValue("channels.hideJoinPart")) {
+              channel.addMessage("*" + nick + " was killed by the server: " + reason);
+            }
+          }
+        });
+      }
+    });
+
+    self.client.addListener("kick", function (chan, nick, by, reason, message) {
+      var channel = self.findChannel(chan);
+      if (nick === self.nick) {
+        channel.addMessage("You were kicked from " + channel.get("name") + " by " + by + (reason ? ": " + reason : ""));
+        // make it look like we were removed without removing the channel view
+        self.renderNames(chan, {});
+      } else {
+        channel.addMessage("*" + nick + " was kicked by " + by + (reason ? ": " + reason : ""));
+        self.removeUser(nick, channel);
+      }
     });
 
     self.client.addListener("quit", function(nick, reason, chans, message) {
@@ -297,6 +319,7 @@ define(["app", "underscore", "jquery", "modules/channels/channellist", "modules/
             name: ch
           });
           if (channel.get("names")[nick]) {
+            // todo check if both quit and part are called
             if (!Chatter.Settings.getValue("channels.hideJoinPart")) {
               channel.addMessage("*" + nick + " has quit " + ch + ": " + reason);
             }
@@ -306,6 +329,10 @@ define(["app", "underscore", "jquery", "modules/channels/channellist", "modules/
       } else {
         Chatter.vent.trigger("client:disconnect:" + self.server.id, self.server);
       }
+    });
+
+    self.client.addListener("setNick", function(newNick) {
+      self.nick = newNick;
     });
 
     Chatter.vent.on("part:" + self.server.id, function(chan, message) {

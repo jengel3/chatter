@@ -392,16 +392,13 @@ requirejs(["app", "router", "modules/servers/serverlist", "modules/servers/serve
       var pkg = gui.App.manifest;
       $.getJSON("https://api.github.com/repos/Jake0oo0/chatter/releases/latest", function(data) {
         var version = data.tag_name.replace('v', '');
-        console.log("Latest version: " + version, "Current version: " + pkg.version);
         var newVersion = gtVer(version, pkg.version);
 
         if (newVersion) {
-          console.log("New version found!");
           if (Chatter.Active.channel) {
             Chatter.Active.channel.addMessage("New version available! Download it now: https://github.com/Jake0oo0/chatter/releases/latest")
           }
         } else {
-          console.log("No new version found!")
         }
       });
 

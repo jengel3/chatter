@@ -345,6 +345,7 @@ define(["app", "underscore", "jquery", "modules/channels/channellist", "modules/
     });
 
     Chatter.vent.on("privateMessage:" + self.server.id, function(nick, message) {
+      // todo dont create PM windows for nick, chan servs etc
       var channel = self.createPM(nick);
       self.client.say(nick, message);
     });

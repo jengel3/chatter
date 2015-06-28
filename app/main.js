@@ -210,6 +210,9 @@ requirejs(["app", "router", "modules/servers/serverlist", "modules/servers/serve
       win.menu = mb;
     }
 
+    Chatter.Embeds = {};
+    
+
     Chatter.Commands = Commands;
     Chatter.Commands.register = Commands.register;
 

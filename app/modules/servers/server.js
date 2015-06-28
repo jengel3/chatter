@@ -14,7 +14,11 @@ define(["app", "backbone", "localstorage", "underscore", "connection"], function
 			serverPass: "",
 			shouldConnect: true,
 			channels: ["#chatter"],
-			onConnect: []
+			onConnect: [],
+			secure: false,
+			selfSigned: false,
+			certExpired: false
+
 		},
 		connect: function() {
 			this.connection = new Connection(this);

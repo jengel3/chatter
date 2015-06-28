@@ -86,17 +86,27 @@ define(["app", "underscore", "jquery", "modules/channels/channellist", "modules/
   Connection.prototype.setup = function() {
     var self = this;
     var options = {
-      debug: true,
+      debug: false,
       autoConnect: false,
       userName: self.attrs.nick,
       port: self.attrs.port,
-      realName: self.attrs.realName
+      realName: self.attrs.realName,
+      sasl: false
     };
+
+    if (self.attrs.serverPass) {
+      options.sasl = true;
+      options.password = self.attrs.serverPass;
+    }
 
     self.client = new irc.Client(self.attrs.host, self.attrs.nick, options);
     Chatter.Clients[self.server.attributes.id] = self.client;
 
-    self.client.addListener("error", function(message) {});
+    self.client.addListener("error", function(message) {
+      if (options.debug) {
+        console.error(message);
+      }
+    });
 
     self.client.addListener("registered", function(message) {
       if (self.firstConnect) {

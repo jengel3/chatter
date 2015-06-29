@@ -46,7 +46,7 @@ requirejs(["app", "router", "modules/servers/serverlist", "modules/servers/serve
           win.enterFullscreen();
         }
       }
-      if (key === 121 && !$("#server_popup").length) {
+      if (key === 121 && !$("#server_popup").length && Chatter.Active.server) {
         var view = new ServerEditView({
           model: Chatter.Active.server
         });
@@ -331,7 +331,7 @@ requirejs(["app", "router", "modules/servers/serverlist", "modules/servers/serve
     $('#channels > ul').html(view.render().el);
 
     Chatter.servers.each(function(server) {
-      if (server.get('shouldConnect')) {
+      if (server.get('autoConnect')) {
         server.connect();
       }
     });

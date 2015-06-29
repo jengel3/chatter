@@ -32,8 +32,13 @@ define(["app", "backbone", "underscore", "jquery", "modules/servers/server"], fu
 			var inputs = self.$el.find("input");
 			for (var i = 0; i < inputs.length; i++) {
 				var input = $(inputs[i]);
+				var value;
+				if (input.attr('type') === "checkbox") {
+					value = input.prop('checked');
+				} else {
+					value = input.val();
+				}
 				var attr = input.attr("name");
-				var value = input.val();
 				self.model.set(attr, self.parse(attr, value));
 			}
 			if (self.editing) {
@@ -46,7 +51,7 @@ define(["app", "backbone", "underscore", "jquery", "modules/servers/server"], fu
 				var view = Chatter.Views.servers;
 				$("#channels > ul").html(view.render().el);
 				view.delegateEvents();
-				if (self.model.get("shouldConnect")) {
+				if (self.model.get("autoConnect")) {
 					self.model.connect();
 				}
 			}
@@ -65,7 +70,7 @@ define(["app", "backbone", "underscore", "jquery", "modules/servers/server"], fu
 					var view = connection.views[i];
 					view.remove();
 				}
-				connection.client.disconnect("Disconnected from server", function() {
+				connection.client.disconnect(Chatter.Settings.getValue('channels.quitMessage'), function() {
 					delete Chatter.Connections[self.model.id];
 					delete Chatter.Clients[self.model.id];
 					server.destroy();

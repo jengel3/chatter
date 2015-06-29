@@ -163,7 +163,7 @@ ul {
 	margin-right:3px;
 }
 
-#buttons div {
+#buttons div, .round-button {
 	border-radius: 50%;
 	height:15px;
 	width:15px;
@@ -184,6 +184,18 @@ ul {
 
 #buttons .maximize {
 	background-color: darkgreen;
+}
+
+.offline {
+	background-color: red;
+}
+
+.connecting {
+	background-color: orange;
+}
+
+.online {
+	background-color: green;
 }
 
 .input-wrap {
@@ -328,7 +340,7 @@ label {
 .inputs .sub-input {
 	display:block;
 	margin: 30px;
-	margin: 15px 30px 15px 30px;
+	margin: 10px 30px;
 }
 
 .inputs input:nth-child(2) {

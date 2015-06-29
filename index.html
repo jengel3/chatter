@@ -53,6 +53,14 @@
 			<div class='sub-input'>
 				<input name="channels" placeholder="Channels (Comma separated list)" value="<%= channels %>">
 			</div>
+			<div class='sub-input'>
+				<input name="autoConnect" type="checkbox" <% if (autoConnect) { %> checked <% } %>><label>Connect on Start</label>
+			</div>
+			<div class='sub-input'>
+				<input name="secure" type="checkbox" <% if (secure) { %> checked <% } %>><label>Secure (SSL)</label>
+				<input name="selfSigned" type="checkbox" <% if (selfSigned) { %> checked <% } %>><label>Allow Self Signed Certs</label>
+				<input name="certExpired" type="checkbox" <% if (certExpired) { %> checked <% } %>><label>Allow Expired Certs</label>
+			</div>
 		</div>
 		<div class='buttons'>
 			<button class="server_delete delete">Delete</button>
@@ -100,6 +108,14 @@
 		</div>
 	</script>
 
+	<script type='text/template' id='list-template'>
+		<li class='server' data-id=<%= id %>>
+			<span class='server-title'>
+			<span class='status round-button'><%= title %></span>
+			<ul></ul>
+		</li>
+	</script>
+
 	<script type='text/template' id='channel-template'>
 		<div class='left-content'>
 		<div class='top-wrap'>
@@ -116,22 +132,22 @@
 			<div class='users scroll'><ul></ul></div>
 		</div>
 		<% } %>
-		</script>
+	</script>
 
-		<script type='text/template' id='server-template'>
-			<div class="left-content">
-			<div class='top-wrap'>
-				<span class='channel-name'><%= title %></span>
-				<span class='topic'>(<%= host %>:<%= port %>)</span>
-			</div>
-			<div class='messages scroll'></div>
-			<div class='input-wrap'>
-				<input class='message-input'></input>
-			</div>
-			</div>
-		</script>
-		<!-- build:[src] /source.min.js -->
-		<script src="vendor/components/requirejs/require.js" data-main="app/config"></script>
-		<!-- /build -->
-	</body>
-	</html>
+	<script type='text/template' id='server-template'>
+		<div class="left-content">
+		<div class='top-wrap'>
+			<span class='channel-name'><%= title %></span>
+			<span class='topic'>(<%= host %>:<%= port %>)</span>
+		</div>
+		<div class='messages scroll'></div>
+		<div class='input-wrap'>
+			<input class='message-input'></input>
+		</div>
+		</div>
+	</script>
+	<!-- build:[src] /source.min.js -->
+	<script src="vendor/components/requirejs/require.js" data-main="app/config"></script>
+	<!-- /build -->
+</body>
+</html>

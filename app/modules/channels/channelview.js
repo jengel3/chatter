@@ -6,6 +6,7 @@ define(["app", "backbone", "underscore", "jquery"], function(Chatter, Backbone, 
 		events: {
 			"keydown .message-input": "entered"
 		},
+		
 		initialize: function() {
 			this.model.on('change:names', this.setupTabComplete, this);
 			this.initialized = false;
@@ -57,7 +58,6 @@ define(["app", "backbone", "underscore", "jquery"], function(Chatter, Backbone, 
 				channel.set('messages', messageList);
 			}
 		},
-
 		setupTabComplete: function() {
 			var names = Object.keys(this.model.get('names'));
 			if (this.initialized) {

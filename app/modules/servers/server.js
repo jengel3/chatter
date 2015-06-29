@@ -12,7 +12,7 @@ define(["app", "backbone", "localstorage", "underscore", "connection"], function
 			realName: "Chatter Tester",
 			serverUser: "",
 			serverPass: "",
-			shouldConnect: true,
+			autoConnect: true,
 			channels: ["#chatter"],
 			onConnect: [],
 			secure: false,

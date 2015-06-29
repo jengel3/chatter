@@ -7,6 +7,8 @@ define(["app", "underscore", "jquery", "modules/channels/channellist", "modules/
     self.server = server;
     self.nick = server.attributes.nick;
     self.connected = false;
+    self.server.set("status", "connecting");
+    self.server.save();
     self.firstConnect = true;
 
     self.channels = new ChannelList();
@@ -19,6 +21,8 @@ define(["app", "underscore", "jquery", "modules/channels/channellist", "modules/
 
     self.onConnect = function() {
       self.connected = true;
+      self.server.set("status", "connected");
+      self.server.save();
 
       var commands = self.server.get("onConnect");
       for (var i = 0; i < commands.length; i++) {
@@ -51,6 +55,8 @@ define(["app", "underscore", "jquery", "modules/channels/channellist", "modules/
             Chatter.vent.trigger("client:disconnect:" + self.server.id, self.server);
 
             self.connected = false;
+            self.server.set("status", "offline");
+            self.server.save();
 
             self.channels.each(function(channel) {
               channel.addMessage("Disconnected from server...attempting to reconnect...");

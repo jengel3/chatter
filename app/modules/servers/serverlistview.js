@@ -1,13 +1,14 @@
 define(["app", "backbone", "underscore", "jquery"], function(Chatter, Backbone, _, $) {
     "use strict";
     var ServerListView = Backbone.View.extend({
-        template: _.template("<li class=\"server\" data-id=<%= id %>><span class=\"server-title\"><span class=\"slider\">&times; </span><%= title %></span><ul></ul></li>"),
+        template: _.template($("#list-template").html()),
         id: 'ch-list',
         events: {
             "click .server": "server",
             "click .server ul li": "channel",
-            "click .server .slider": "slide"
+            "dblclick .server .server-title": "slide"
         },
+
         render: function() {
             var self = this;
             this.$el.empty();
@@ -30,15 +31,19 @@ define(["app", "backbone", "underscore", "jquery"], function(Chatter, Backbone, 
         },
 
         slide: function(e) {
-            e.stopPropagation();
-            e.preventDefault();
-            var list = $(e.currentTarget).parent().parent().find("ul");
-            if ($(list).is(":visible")) {
-                $(list).slideUp();
-                $(e.currentTarget).html('+ ');
+            var server = Chatter.Active.server;
+            if (!server.connection || !server.connection.connected) {
+                server.connect();
+                console.debug("Connecting to server that was nto set to connect at startup.");
             } else {
-                $(list).slideDown();
-                $(e.currentTarget).html('&times; ');
+                e.stopPropagation();
+                e.preventDefault();
+                var list = $(e.currentTarget).parent().find("ul");
+                if ($(list).is(":visible")) {
+                    $(list).slideUp();
+                } else {
+                    $(list).slideDown();
+                }
             }
         },
 
